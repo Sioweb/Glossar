@@ -13,7 +13,6 @@
 	<p><?= $this->teaser;?></p>
 	<?php }else{?>
 	<p><?= $this->description;?></p>
-	<?php }?>
 	<?php }if($this->link){?>
 	<p><a href="<?= $this->link;?>" title="<?= $this->title;?>"><?= $GLOBALS['glossar']['to_article'];?></a></p>
 	<?php }?>
