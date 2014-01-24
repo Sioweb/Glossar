@@ -1,0 +1,20 @@
+<div class="<?= $this->class; ?> block"<?= $this->cssID; ?><?php if ($this->style): ?> style="<?= $this->style; ?>"<?php endif; ?>>
+	<?php if($this->title){?>
+	<h4>
+		<?php if($this->link){?>
+		<a href="<?= $this->link;?>" title="<?= $this->title;?>">
+		<?php }if($this->link){?>
+			<?= $this->title;?>
+		</a>
+		<?php }?>
+	</h4>
+	<?php }?>
+	<?php if($this->teaser){?>
+	<p><?= $this->teaser;?></p>
+	<?php }else{?>
+	<p><?= $this->description;?></p>
+	<?php }?>
+	<?php }if($this->link){?>
+	<p><a href="<?= $this->link;?>" title="<?= $this->title;?>"><?= $GLOBALS['glossar']['to_article'];?></a></p>
+	<?php }?>
+</div>

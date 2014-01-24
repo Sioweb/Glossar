@@ -1,0 +1,13 @@
+<li>
+	<?php if($this->title){?>
+	<h4><a href="<?= $this->link;?>" title="<?= $this->title;?>"><?php echo $this->title;?></a></h4>
+	<?php }?>
+	<?php if($this->teaser){?>
+	<p><?= $this->teaser;?></p>
+	<?php if($this->description){?>
+	<p><a href="<?= $this->link;?>" title="<?= $this->title;?>"><?= $GLOBALS['glossar']['to_article'];?></a></p>
+	<?php }?>
+	<?php }else{?>
+	<p><?= $this->description;?></p>
+	<?php }?>
+</li>
