@@ -28,7 +28,7 @@ $(function(){
 		$.ajax({
 			type: "POST",
 			url:  "ajax.php",
-			data: { isAjaxRequest: 1, glossar: 1, id: id},
+			data: { isAjaxRequest: 1, glossar: 1, id: id, REQUEST_TOKEN: Contao.request_token},
 			success: function(result)
 			{
 				$(layer).append($($.parseJSON(result).content));

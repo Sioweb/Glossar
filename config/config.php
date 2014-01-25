@@ -23,6 +23,7 @@ if(TL_MODE == 'FE')
 {
 	$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/SWGlossar/assets/glossar.js';
 	$GLOBALS['TL_CSS'][] = 'system/modules/SWGlossar/assets/glossar.css';
+	$GLOBALS['TL_JQUERY'][] = '<script>var Contao = {request_token: "'.$_SESSION['REQUEST_TOKEN'].'"};</script>';
 }
 
 array_insert($GLOBALS['BE_MOD']['content'], 1, array
