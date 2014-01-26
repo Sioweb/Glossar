@@ -46,7 +46,7 @@ class NewsGlossar extends \Frontend
 		$glossarObj->setData($Glossar->row());
 		$glossarObj->class = 'ce_glossar_layer';
 		$link = \PageModel::findByPk($glossarObj->jumpTo);
-		$glossarObj->link = (\Environment::get('ssl') ? 'https://' : 'http://') . \Environment::get('host') . TL_PATH . '/' . $this->generateFrontendUrl($link->row()).'?g='.$glossarObj->alias;
+		$glossarObj->link = $this->generateFrontendUrl($link->row()).'?g='.$glossarObj->alias;
 		
 		
 		return $glossarObj->parse();
