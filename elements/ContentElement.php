@@ -31,6 +31,11 @@ abstract class ContentElement extends \Contao\ContentElement
 			while($Glossar->next())
 			{
 				$this->glossar = $Glossar;
+				if(!$this->glossar->maxWidth)
+					$this->glossar->maxWidth = $GLOBALS['glossar']['css']['maxWidth'];
+				if(!$this->glossar->maxHeight)
+					$this->glossar->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
+
 				if($Glossar->title && $Glossar->jumpTo && preg_match( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . ")\b/is", $this->text ))
 					$this->text = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . ")\b/is", array($this,'replaceTitle'), $this->text );
 			}
@@ -39,8 +44,11 @@ abstract class ContentElement extends \Contao\ContentElement
 
 	private function replaceTitle($treffer)
 	{
- 
-		return '<a class="glossar" data-glossar="'.$this->glossar->id.'" href="{{link_url::'.$this->glossar->jumpTo.'}}?g='.standardize(\String::restoreBasicEntities($treffer[1])).'">'.$treffer[1].'</a>';
+		$link = \PageModel::findByPk($this->glossar->jumpTo);
+		if($link)
+			$link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($treffer[1])));
+
+		return '<a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[1].'</a>';
 	}
 	
 }

@@ -35,6 +35,11 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array
 	)
 ));
 
+$GLOBALS['glossar']['css'] = array(
+	'maxWidth' => 450,
+	'maxHeight' => 300
+);
+
 $GLOBALS['TL_CTE']['texts']['sw_glossar'] = 'ContentGlossar';
 
 

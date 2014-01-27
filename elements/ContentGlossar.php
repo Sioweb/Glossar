@@ -33,15 +33,21 @@ class ContentGlossar extends ContentElement
 	 */
 	public function generate()
 	{
+		// Set the item from the auto_item parameter
+		if (!isset($_GET['items']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item']))
+		{
+			\Input::setGet('items', \Input::get('auto_item'));
+		}
+
 		return parent::generate();
 	}
 	
 	public function compile() 
 	{
-		if(\Input::get('g') == '')
+		if(\Input::get('items') == '')
 			$Glossar = SWGlossarModel::findAll();
 		else
-			$Glossar = SWGlossarModel::findByAlias(\Input::get('g'));
+			$Glossar = SWGlossarModel::findByAlias(\Input::get('items'));
 			
 		/* Gefundene Begriffe durch Links zum Glossar ersetzen */
 		$arrGlossar = array();
@@ -51,10 +57,11 @@ class ContentGlossar extends ContentElement
 			{
 				$newGlossarObj = new \FrontendTemplate('glossar_default');
 				$newGlossarObj->setData($Glossar->row());
+				if(\Input::get('items') != '')
+					$newGlossarObj->teaser = null;
 				$link = \PageModel::findByPk($newGlossarObj->jumpTo);
-				
 				if($link)
-					$newGlossarObj->link = (\Environment::get('ssl') ? 'https://' : 'http://') . \Environment::get('host') . TL_PATH . '/' . $this->generateFrontendUrl($link->row()).'?g='.$newGlossarObj->alias;
+					$newGlossarObj->link = 	$this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$newGlossarObj->alias);
 				$arrGlossar[] = $newGlossarObj->parse();
 			}
 		}

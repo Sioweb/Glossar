@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,alias,jumpTo,teaser,description;'
+		'default'                     => '{title_legend},title,alias,maxWidth,maxHeight,jumpTo,teaser,description;'
 	),
 
 	// Fields
@@ -145,9 +145,25 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array
 			'exclude'                 => true,
 			'inputType'               => 'pageTree',
 			'foreignKey'              => 'tl_page.title',
-			'eval'                    => array('fieldType'=>'radio', 'tl_class'=>'w50'),
+			'eval'                    => array('fieldType'=>'radio', 'tl_class'=>'w50 clr'),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'",
 			'relation'                => array('type'=>'belongsTo', 'load'=>'lazy')
+		),
+		'maxWidth' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['maxWidth'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
+		'maxHeight' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['maxHeight'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'description' => array
 		(
