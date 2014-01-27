@@ -51,7 +51,7 @@ class ContentGlossar extends ContentElement
 		if(\Input::get('items') == '')
 			$Glossar = SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
 		else
-			$Glossar = SWGlossarModel::findByAlias(\Input::get('items'),null,array('order'=>$this->sortGlossarBy));
+			$Glossar = SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
 			
 		/* Gefundene Begriffe durch Links zum Glossar ersetzen */
 		$arrGlossar = array();
