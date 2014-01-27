@@ -44,10 +44,14 @@ class ContentGlossar extends ContentElement
 	
 	public function compile() 
 	{
+		if(!$this->sortGlossarBy)
+			$this->sortGlossarBy = 'alias';
+		$this->sortGlossarBy = explode('_',$this->sortGlossarBy);
+		$this->sortGlossarBy = $this->sortGlossarBy[0].($this->sortGlossarBy[1] ? ' '.strtoupper($this->sortGlossarBy[1]) : '');
 		if(\Input::get('items') == '')
-			$Glossar = SWGlossarModel::findAll();
+			$Glossar = SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
 		else
-			$Glossar = SWGlossarModel::findByAlias(\Input::get('items'));
+			$Glossar = SWGlossarModel::findByAlias(\Input::get('items'),null,array('order'=>$this->sortGlossarBy));
 			
 		/* Gefundene Begriffe durch Links zum Glossar ersetzen */
 		$arrGlossar = array();
