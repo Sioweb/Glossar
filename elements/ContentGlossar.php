@@ -70,7 +70,7 @@ class ContentGlossar extends ContentElement
 			{
 				$initial = substr($Glossar->alias,0,1);
 				$filledLetters[] = $initial;
-				if($initial == \Input::get('pag'))
+				if(\Input::get('pag') == '' || $initial == \Input::get('pag'))
 				{
 					$newGlossarObj = new \FrontendTemplate('glossar_default');
 					$newGlossarObj->setData($Glossar->row());
