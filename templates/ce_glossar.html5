@@ -9,4 +9,10 @@
 <?php foreach($this->glossar as $gKey => $glossar) echo $glossar;?>
 </ul>
 <?php }?>
+
+<?php if($this->alphaPagination):?>
+<?php foreach($this->alphaPagination as $pKey => $pagination):?>
+<a href="<?= $pagination[0];?>" title=""><?= $pagination[1];?></a>
+<?php endforeach;?>
+<?php endif;?>
 </div>

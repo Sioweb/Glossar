@@ -14,4 +14,9 @@
 * @copyright Sioweb - Sascha Weidner
 */
 
-	$GLOBALS['TL_LANG']['tl_content']['sortGlossarBy'] = array('Sortieren','Gibt an, nach welchen Daten die Ausgabe sortiert werden soll.');
+$GLOBALS['TL_LANG']['tl_content']['pagination_legend'] = 'Pagination Einstellungen';
+
+$GLOBALS['TL_LANG']['tl_content']['sortGlossarBy'] = array('Sortieren','Gibt an, nach welchen Daten die Ausgabe sortiert werden soll.');
+
+$GLOBALS['TL_LANG']['tl_content']['addAlphaPagination'] = array('Alphabetische Pagination hinzufügen','Eine Pagination bestehend aus A bis Z.');
+$GLOBALS['TL_LANG']['tl_content']['addOnlyTrueLinks'] = array('Keine leeren Ziffern','Zeigt nur Buchstaben an, die einem Begriff zugeordner werden können.');

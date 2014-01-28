@@ -27,6 +27,16 @@ class SWGlossarModel extends \Model
 	 * @var string
 	 */
 	protected static $strTable = 'tl_sw_glossar';
+
+	public static function findAllInitial($arrOptions,$initial)
+	{
+		$t = static::$strTable;
+
+		$arrColumns = array("left($t.alias,1) = ?");
+
+
+		return static::findBy($arrColumns, $initial, $arrOptions);
+	}
 	
 }
 

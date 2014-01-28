@@ -35,6 +35,8 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array
 	)
 ));
 
+$GLOBALS['TL_AUTO_ITEM'][] = 'alpha';
+
 $GLOBALS['glossar']['css'] = array(
 	'maxWidth' => 450,
 	'maxHeight' => 300

@@ -5,7 +5,7 @@
  * Copyright (C) 2005-2012 Leo Feyer
  *
  */
-
+ 
 /**
 * @file config.php
 * @author Sascha Weidner
@@ -18,10 +18,12 @@
 
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['title'] = array('Suchwort/Stichwort','Wird als Link in den Glossar ersetzt.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['alias'] = array('Alias','Wird als Wert für den Suchstring in der URL ersetzt.');
+	
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['maxWidth'] = array('Maximale Breite','Die maximale Breite, die das Ajax-Layer bekommen kann - Standard 450.');
-	$GLOBALS['TL_LANG']['tl_sw_glossar']['maxHeight'] = array('Maximal3 Höhe','Die maximale Höhe, die das Ajax-Layer bekommen kann - Standard 500.');
+	$GLOBALS['TL_LANG']['tl_sw_glossar']['maxHeight'] = array('Maximale Höhe','Die maximale Höhe, die das Ajax-Layer bekommen kann - Standard 500.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['date'] = array('Datum','Kann verwendet werden, um nach Datum zu sortieren.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['jumpTo'] = array('Weiterleitungsseite','Gibt die Seite mit den Glossar-Einträgen an.');
+	
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['description'] = array('Beschreibung','Erklärung des oben genannten Bergiffes.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['teaser'] = array('Teaser','Ein Vorschau-Artikel für die Glossar-Liste und der Maus-Hover-Ansicht.');
 	
