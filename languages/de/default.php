@@ -8,6 +8,6 @@ $GLOBALS['glossar']['sortGlossarBy'] = array(
 	'id_desc' => 'ID absteigend',
 	'date' => 'Datum aufsteigend',
 	'date_desc' => 'Datum absteigend',
-	'alias' => 'Alfabetisch aufsteigend',
-	'alias_desc' => 'Alfabetisch absteigend'
+	'alias' => 'Alphabetisch aufsteigend',
+	'alias_desc' => 'Alphabetisch absteigend'
 );
