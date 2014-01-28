@@ -91,7 +91,7 @@ class ContentGlossar extends ContentElement
 					'href' => $this->addToUrl('pag='.strtolower(chr($c))),
 					'initial' => chr($c),
 					'active'=>(\Input::get('pag') == strtolower(chr($c))),
-					'trueLink'=>(in_array(strtolower(chr($c)),$filledLetters))
+					'trueLink'=>(in_array(strtolower(chr($c)),$filledLetters) && !$this->addOnlyTrueLinks)
 				);
 			}
 		}
