@@ -10,7 +10,7 @@
 * @file autoload.php
 * @author Sascha Weidner
 * @version 3.0.0
-* @package sioweb.contao.extensions.news
+* @package sioweb.contao.extensions.glossar
 * @copyright Sioweb - Sascha Weidner
 */
 
@@ -49,4 +49,5 @@ TemplateLoader::addFiles(array
 	'ce_glossar'       	   => 'system/modules/SWGlossar/templates',
 	'glossar_default'  	   => 'system/modules/SWGlossar/templates',
 	'glossar_layer'  	   => 'system/modules/SWGlossar/templates',
+	'glossar_error'  	   => 'system/modules/SWGlossar/templates',
 ));

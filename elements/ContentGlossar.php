@@ -49,6 +49,9 @@ class ContentGlossar extends ContentElement
 	
 	public function compile() 
 	{
+		$this->loadLanguageFile('glossar_errors');
+		$glossarErrors = array();
+		
 		if(!$this->sortGlossarBy)
 			$this->sortGlossarBy = 'alias';
 		$this->sortGlossarBy = explode('_',$this->sortGlossarBy);
@@ -95,9 +98,18 @@ class ContentGlossar extends ContentElement
 				);
 			}
 		}
+		
 		$this->Template->alphaPagination = $letters;
 		
+		if(!$arrGlossar && $GLOBALS['glossar']['errors']['no_content'])
+			$glossarErrors[] = $GLOBALS['glossar']['errors']['no_content'];
 		/**/
 		$this->Template->glossar = $arrGlossar;
+		if($glossarErrors)
+		{
+			$errorObj = new \FrontendTemplate('glossar_error');
+			$errorObj->msg = $glossarErrors;
+			$this->Template->errors = $errorObj->parse();
+		}
 	}
 }

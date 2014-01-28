@@ -9,10 +9,15 @@
 <?php foreach($this->glossar as $gKey => $glossar) echo $glossar;?>
 </ul>
 <?php }?>
+<?php if($this->errors){?>
+<?php echo $this->errors;?>
+<?php }?>
 
 <?php if($this->alphaPagination):?>
+<div class="glossar_alpha_pagination">
 <?php foreach($this->alphaPagination as $pKey => $pagination):?>
 <a class="alpha_pagination<?php if($pagination['active']):?> active<?php endif;?><?php if($pagination['trueLink']):?> trueLink<?php endif;?>" href="<?= $pagination['href'];?>" title=""><?= $pagination['initial'];?><?php if($pagination['trueLink']):?><span>*</span><?php endif;?></a>
 <?php endforeach;?>
+</div>
 <?php endif;?>
 </div>

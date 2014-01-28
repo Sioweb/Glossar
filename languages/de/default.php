@@ -1,4 +1,18 @@
-<?php 
+<?php
+
+/*
+ * Contao Open Source CMS
+ * Copyright (C) 2005-2012 Leo Feyer
+ *
+ */
+
+/**
+* @file default.php
+* @author Sascha Weidner
+* @version 3.0.0
+* @package sioweb.contao.extensions.glossar
+* @copyright Sioweb - Sascha Weidner
+*/
 
 $GLOBALS['glossar']['to_article'] = 'Weiterlesen ...';
 $GLOBALS['TL_LANG']['CTE']['sw_glossar'] = array('Glossar','Erzeugt eine Liste mit Glossar-Begriffen.');
