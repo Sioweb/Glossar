@@ -53,9 +53,7 @@ class ContentGlossar extends ContentElement
 			$this->sortGlossarBy = 'alias';
 		$this->sortGlossarBy = explode('_',$this->sortGlossarBy);
 		$this->sortGlossarBy = $this->sortGlossarBy[0].($this->sortGlossarBy[1] ? ' '.strtoupper($this->sortGlossarBy[1]) : '');
-		if(\Input::get('order') != '')
-			$Glossar = SWGlossarModel::findAllInitial(array('order'=>$this->sortGlossarBy),\Input::get('order'));
-		elseif(\Input::get('items') == '')
+		if(\Input::get('items') == '')
 			$Glossar = SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
 		else
 			$Glossar = SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
@@ -67,15 +65,19 @@ class ContentGlossar extends ContentElement
 		{
 			while($Glossar->next())
 			{
-				$filledLetters[] = substr($Glossar->alias,0,1);
-				$newGlossarObj = new \FrontendTemplate('glossar_default');
-				$newGlossarObj->setData($Glossar->row());
-				if(\Input::get('items') != '')
-					$newGlossarObj->teaser = null;
-				$link = \PageModel::findByPk($newGlossarObj->jumpTo);
-				if($link)
-					$newGlossarObj->link = 	$this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$newGlossarObj->alias);
-				$arrGlossar[] = $newGlossarObj->parse();
+				$initial = substr($Glossar->alias,0,1);
+				$filledLetters[] = $initial;
+				if($initial == \Input::get('pag'))
+				{
+					$newGlossarObj = new \FrontendTemplate('glossar_default');
+					$newGlossarObj->setData($Glossar->row());
+					if(\Input::get('items') != '')
+						$newGlossarObj->teaser = null;
+					$link = \PageModel::findByPk($newGlossarObj->jumpTo);
+					if($link)
+						$newGlossarObj->link = 	$this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$newGlossarObj->alias);
+					$arrGlossar[] = $newGlossarObj->parse();
+				}
 			}
 		}
 
@@ -85,7 +87,12 @@ class ContentGlossar extends ContentElement
 			for($c=65;$c<=90;$c++)
 			{
 				if(($this->addOnlyTrueLinks && in_array(strtolower(chr($c)),$filledLetters)) || !$this->addOnlyTrueLinks)
-				$letters[] = array($this->addToUrl('order='.chr($c)),chr($c));
+				$letters[] = array(
+					'href' => $this->addToUrl('pag='.strtolower(chr($c))),
+					'initial' => chr($c),
+					'active'=>(\Input::get('pag') == strtolower(chr($c))),
+					'trueLink'=>(in_array(strtolower(chr($c)),$filledLetters))
+				);
 			}
 		}
 		$this->Template->alphaPagination = $letters;
