@@ -1,11 +1,11 @@
-<div class="<?= $this->class;?> block"<?= $this->cssID;?><?php if($this->style):?> style="<?= $this->style;?>"<?php endif;?>>
+<div class="<?php echo $this->class;?> block"<?php echo $this->cssID;?><?php if($this->style):?> style="<?php echo $this->style;?>"<?php endif;?>>
 	<?php if($this->title):?>
 	<h4>
 		<?php if($this->link):?>
-		<a href="<?= $this->link;?>" title="<?= $this->title;?>">
+		<a href="<?php echo $this->link;?>" title="<?php echo $this->title;?>">
 		<?php endif;?>
 		
-		<?= $this->title;?>
+		<?php echo $this->title;?>
 
 		<?php if($this->link):?>
 		</a>
@@ -14,11 +14,11 @@
 	<?php endif;?>
 
 	<?php if($this->teaser):?>
-	<p><?= $this->teaser;?></p>
+	<p><?php echo $this->teaser;?></p>
 	<?php else:?>
-	<p><?= $this->description;?></p>
+	<p><?php echo $this->description;?></p>
 	<?php endif;?>
 	<?php if($this->link):?>
-	<p><a href="<?= $this->link;?>" title="<?= $this->title;?>"><?= $GLOBALS['glossar']['to_article'];?></a></p>
+	<p><a href="<?php echo $this->link;?>" title="<?php echo $this->title;?>"><?php echo $GLOBALS['glossar']['to_article'];?></a></p>
 	<?php endif;?>
 </div>
