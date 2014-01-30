@@ -23,7 +23,7 @@ $GLOBALS['TL_DCA']['tl_content']['subpalettes']['addAlphaPagination'] = 'addOnly
 $GLOBALS['TL_DCA']['tl_content']['fields']['sortGlossarBy'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['sortGlossarBy'],
-	'default'                 => 'tstamp',
+	'default'                 => 'alias',
 	'inputType'               => 'select',
 	'options'                 => array('id', 'id_desc', 'date', 'date_desc', 'alias', 'alias_desc' ),
 	'reference'               => &$GLOBALS['glossar']['sortGlossarBy'],

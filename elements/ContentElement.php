@@ -37,8 +37,8 @@ abstract class ContentElement extends \Contao\ContentElement
 				if(!$this->glossar->maxHeight)
 					$this->glossar->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
 
-				if($Glossar->title && $Glossar->jumpTo && preg_match( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . "[^ ]*)\b/is", $this->text ))
-					$this->text = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . "[^ ]*)\b/is", array($this,'replaceTitle'), $this->text );
+				if($Glossar->title && $Glossar->jumpTo && preg_match( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ]*": '').")/is", $this->text ))
+					$this->text = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ]*": '').")/is", array($this,'replaceTitle'), $this->text );
 			}
 		return parent::generate();
 	}

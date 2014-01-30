@@ -23,6 +23,7 @@
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['maxHeight'] = array('Maximale Höhe','Die maximale Höhe, die das Ajax-Layer bekommen kann - Standard 500.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['date'] = array('Datum','Kann verwendet werden, um nach Datum zu sortieren.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['jumpTo'] = array('Weiterleitungsseite','Gibt die Seite mit den Glossar-Einträgen an.');
+	$GLOBALS['TL_LANG']['tl_sw_glossar']['noPlural'] = array('Plural-Suche deaktivieren','Das Modul sucht standardmäßig bis zum nächsten vorkommenden leerzeichen.');
 	
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['description'] = array('Beschreibung','Erklärung des oben genannten Bergiffes.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['teaser'] = array('Teaser','Ein Vorschau-Artikel für die Glossar-Liste und der Maus-Hover-Ansicht.');

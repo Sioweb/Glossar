@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,alias,maxWidth,maxHeight,date,jumpTo,teaser,description;'
+		'default'                     => '{title_legend},title,alias,maxWidth,maxHeight,date,noPlural,jumpTo,teaser,description;'
 	),
 
 	// Fields
@@ -176,6 +176,14 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'date', 'doNotCopy'=>true, 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+		'noPlural' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['noPlural'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50 clr'),
+			'sql'                     => "char(1) NOT NULL default ''"
 		),
 		'description' => array
 		(

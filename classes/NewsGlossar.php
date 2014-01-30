@@ -35,8 +35,8 @@ class NewsGlossar extends \Frontend
 				if(!$this->glossar->maxHeight)
 					$this->glossar->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
 
-				if($Glossar->title && $Glossar->jumpTo && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . "[^ ]*)\b/i", $template->teaser ))
-					$template->teaser = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . "[^ ]*)\b/i", array($this,'replaceTitle'), $template->teaser );
+				if($Glossar->title && $Glossar->jumpTo && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ]*": '').")/is", $template->teaser ))
+					$template->teaser = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ]*": '').")/is", array($this,'replaceTitle'), $template->teaser );
 				
 			}
 	}
