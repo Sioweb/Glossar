@@ -20,3 +20,4 @@ $GLOBALS['TL_LANG']['tl_content']['sortGlossarBy'] = array('Sortieren','Gibt an,
 
 $GLOBALS['TL_LANG']['tl_content']['addAlphaPagination'] = array('Alphabetische Pagination hinzufügen','Eine Pagination bestehend aus A bis Z.');
 $GLOBALS['TL_LANG']['tl_content']['addOnlyTrueLinks'] = array('Keine leeren Ziffern','Zeigt nur Buchstaben an, die einem Begriff zugeordner werden können.');
+$GLOBALS['TL_LANG']['tl_content']['showAfterChoose'] = array('Einträge erst nach Auswahl der Pagination anzeigen?','Die Einträge werden versteckt, bis eine Ziffer in der Pagination ausgewählt wurde.');

@@ -56,10 +56,14 @@ class ContentGlossar extends ContentElement
 			$this->sortGlossarBy = 'alias';
 		$this->sortGlossarBy = explode('_',$this->sortGlossarBy);
 		$this->sortGlossarBy = $this->sortGlossarBy[0].($this->sortGlossarBy[1] ? ' '.strtoupper($this->sortGlossarBy[1]) : '');
-		if(\Input::get('items') == '')
-			$Glossar = SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
-		else
-			$Glossar = SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
+
+		if((!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != ''))
+		{
+			if(\Input::get('items') == '')
+				$Glossar = SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
+			else
+				$Glossar = SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
+		}
 			
 		/* Gefundene Begriffe durch Links zum Glossar ersetzen */
 		$arrGlossar = array();
@@ -101,8 +105,9 @@ class ContentGlossar extends ContentElement
 		
 		$this->Template->alphaPagination = $letters;
 		
-		if(!$arrGlossar && $GLOBALS['glossar']['errors']['no_content'])
-			$glossarErrors[] = $GLOBALS['glossar']['errors']['no_content'];
+		if((!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != ''))
+			if(!$arrGlossar && $GLOBALS['glossar']['errors']['no_content'])
+				$glossarErrors[] = $GLOBALS['glossar']['errors']['no_content'];
 		/**/
 		$this->Template->glossar = $arrGlossar;
 		if($glossarErrors)
