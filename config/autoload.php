@@ -30,10 +30,9 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Classes
-	'sioweb\contao\extensions\glossar\NewsGlossar'		=> 'system/modules/SWGlossar/classes/NewsGlossar.php',
+	'sioweb\contao\extensions\glossar\Glossar'		=> 'system/modules/SWGlossar/classes/Glossar.php',
 
 	// Elements
-	'sioweb\contao\extensions\glossar\ContentElement'	=> 'system/modules/SWGlossar/elements/ContentElement.php',
 	'sioweb\contao\extensions\glossar\ContentGlossar' 	=> 'system/modules/SWGlossar/elements/ContentGlossar.php',
 	
 	// Models

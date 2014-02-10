@@ -35,19 +35,19 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array
 	)
 ));
 
-$GLOBALS['TL_AUTO_ITEM'][] = 'alpha';
-
-$GLOBALS['glossar']['css'] = array(
-	'maxWidth' => 450,
-	'maxHeight' => 300
+$GLOBALS['glossar'] = array(
+	'css' => array(
+		'maxWidth' => 450,
+		'maxHeight' => 300,
+	),
+	'illegal' => '\.,;<>',
 );
 
 $GLOBALS['TL_CTE']['texts']['sw_glossar'] = 'ContentGlossar';
 
-
-$GLOBALS['TL_HOOKS']['parseArticles'][] = array('NewsGlossar','searchGlossarArticles');
+$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('Glossar', 'searchGlossarTerms');
 
 if($_POST['glossar'] == 1)
-$GLOBALS['TL_HOOKS']['dispatchAjax'][] = array('NewsGlossar', 'ajaxGlossar');
+$GLOBALS['TL_HOOKS']['dispatchAjax'][] = array('Glossar', 'ajaxGlossar');
 
 

@@ -10,20 +10,22 @@ namespace sioweb\contao\extensions\glossar;
 use Contao;
 
 /**
-* @file NewsGlossar.php
-* @class NewsGlossar
+* @file Glossar.php
+* @class Glossar
 * @author Sascha Weidner
 * @version 3.0.0
 * @package sioweb.contao.extensions.glossar
 * @copyright Sioweb - Sascha Weidner
 */
 
-class NewsGlossar extends \Frontend
+class Glossar extends \Frontend
 { 
 
 	private $Glossar;
-	public function searchGlossarArticles($template, $objArticle, $news)
+	public function searchGlossarTerms($strContent, $strTemplate)
 	{
+		if(!$strContent)
+			return '';
 		$Glossar = SWGlossarModel::findAll(array('order'=>' CHAR_LENGTH(title) DESC'));
 		/* Gefundene Begriffe durch Links zum Glossar ersetzen */
 		if($Glossar)
@@ -35,10 +37,11 @@ class NewsGlossar extends \Frontend
 				if(!$this->glossar->maxHeight)
 					$this->glossar->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
 
-				if($Glossar->title && $Glossar->jumpTo && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ]*": '').")/is", $template->teaser ))
-					$template->teaser = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ]*": '').")/is", array($this,'replaceTitle'), $template->teaser );
+				if($Glossar->title && $Glossar->jumpTo && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", $strContent ))
+					$strContent = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", array($this,'replaceTitle'), $strContent );
 				
 			}
+		return $strContent;
 	}
 	
 	public function ajaxGlossar()
@@ -64,7 +67,7 @@ class NewsGlossar extends \Frontend
 		$link = \PageModel::findByPk($this->glossar->jumpTo);
 		if($link)
 			$link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($this->glossar->alias)));
-
+		#echo '<pre>'.print_r($treffer,1).'</pre>';
 		return '<a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[1].'</a>';
 	}
 }
