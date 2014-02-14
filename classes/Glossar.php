@@ -24,7 +24,7 @@ class Glossar extends \Frontend
 	private $Glossar;
 	public function searchGlossarTerms($strContent, $strTemplate)
 	{
-		if(!$strContent || !in_array($strTemplate,$GLOBALS['glossar']['templates']))
+		if(!$strContent)
 			return $strContent;
 		$Glossar = SWGlossarModel::findAll(array('order'=>' CHAR_LENGTH(title) DESC'));
 		/* Gefundene Begriffe durch Links zum Glossar ersetzen */
@@ -36,8 +36,9 @@ class Glossar extends \Frontend
 					$this->glossar->maxWidth = $GLOBALS['glossar']['css']['maxWidth'];
 				if(!$this->glossar->maxHeight)
 					$this->glossar->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
-
-				if($Glossar->title && $Glossar->jumpTo && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", $strContent ))
+				
+				$third = array();
+				if($Glossar->title && $Glossar->jumpTo && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", $strContent, $third))
 					$strContent = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", array($this,'replaceTitle'), $strContent );
 				
 			}
