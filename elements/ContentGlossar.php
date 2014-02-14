@@ -17,7 +17,7 @@ namespace sioweb\contao\extensions\glossar;
 * @copyright Sioweb - Sascha Weidner
 */
  
-class ContentGlossar extends ContentElement
+class ContentGlossar extends \ContentElement
 {
 	
 	/**

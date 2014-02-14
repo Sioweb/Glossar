@@ -24,8 +24,8 @@ class Glossar extends \Frontend
 	private $Glossar;
 	public function searchGlossarTerms($strContent, $strTemplate)
 	{
-		if(!$strContent)
-			return '';
+		if(!$strContent || !in_array($strTemplate,$GLOBALS['glossar']['templates']))
+			return $strContent;
 		$Glossar = SWGlossarModel::findAll(array('order'=>' CHAR_LENGTH(title) DESC'));
 		/* Gefundene Begriffe durch Links zum Glossar ersetzen */
 		if($Glossar)

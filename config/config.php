@@ -41,6 +41,12 @@ $GLOBALS['glossar'] = array(
 		'maxHeight' => 300,
 	),
 	'illegal' => '\.,;<>',
+	'templates' => array(
+		'ce_glossar',
+		'glossar_default',
+		'glossar_error',
+		'glossar_layer'
+	)
 );
 
 $GLOBALS['TL_CTE']['texts']['sw_glossar'] = 'ContentGlossar';
