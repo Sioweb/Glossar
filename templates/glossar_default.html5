@@ -1,11 +1,23 @@
 <li>
 	<?php if($this->title):?>
-	<h4><a href="<?php echo $this->link;?>" title="<?= $this->title;?>"><?php echo $this->title;?></a></h4>
+	<h4>
+		<?php if($this->link):?>
+		<a href="<?php echo $this->link;?>" title="<?= $this->title;?>">
+		<?php endif;?>
+			<?php echo $this->title;?>
+		<?php if($this->link):?>
+		</a>
+		<?php endif;?>
+	</h4>
 	<?php endif;?>
 	<?php if($this->teaser):?>
 	<p><?php echo $this->teaser;?></p>
-	<?php if($this->description):?>
-	<p><a href="<?php echo $this->link;?>" title="<?php echo $this->title;?>"><?php echo $GLOBALS['glossar']['to_article'];?></a></p>
+	<?php if($this->description && $this->link):?>
+	<p>
+		<a href="<?php echo $this->link;?>" title="<?php echo $this->title;?>">
+			<?php echo $GLOBALS['glossar']['to_article'];?>
+		</a>
+	</p>
 	<?php endif;?>
 	<?php else:?>
 	<p><?php echo $this->description;?></p>

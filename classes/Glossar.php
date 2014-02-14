@@ -38,9 +38,13 @@ class Glossar extends \Frontend
 					$this->glossar->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
 				
 				$third = array();
-				if($Glossar->title && $Glossar->jumpTo && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", $strContent, $third))
-					$strContent = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", array($this,'replaceTitle'), $strContent );
-				
+
+				$replaceFunction = 'replaceTitle2Link';
+				if(!$Glossar->jumpTo)
+					$replaceFunction = 'replaceTitle2Span';
+
+				if($Glossar->title && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", $strContent, $third))
+					$strContent = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", array($this,$replaceFunction), $strContent );
 			}
 		return $strContent;
 	}
@@ -55,15 +59,22 @@ class Glossar extends \Frontend
 		$glossarObj = new \FrontendTemplate('glossar_layer');
 		$glossarObj->setData($Glossar->row());
 		$glossarObj->class = 'ce_glossar_layer';
-		$link = \PageModel::findByPk($glossarObj->jumpTo);
-		$glossarObj->link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$glossarObj->alias);
-		
+		if($glossarObj->jumpTo)
+		{
+			$link = \PageModel::findByPk($glossarObj->jumpTo);
+			$glossarObj->link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$glossarObj->alias);
+		}
 		
 		return $glossarObj->parse();
 		exit;  
 	}
 
-	private function replaceTitle($treffer)
+	private function replaceTitle2Span($treffer)
+	{
+		return '<span class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'">'.$treffer[1].'</span>';
+	}
+
+	private function replaceTitle2Link($treffer)
 	{
 		$link = \PageModel::findByPk($this->glossar->jumpTo);
 		if($link)
