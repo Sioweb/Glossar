@@ -98,7 +98,7 @@ class ContentGlossar extends \ContentElement
 			{
 				if(($this->addOnlyTrueLinks && in_array(strtolower(chr($c)),$filledLetters)) || !$this->addOnlyTrueLinks)
 				$letters[] = array(
-					'href' => $this->addToUrl('pag='.strtolower(chr($c))),
+					'href' => $this->addToUrl('pag='.strtolower(chr($c)).'&amp;alpha=&amp;items=&amp;auto_item='),
 					'initial' => chr($c),
 					'active'=>(\Input::get('pag') == strtolower(chr($c))),
 					'trueLink'=>(in_array(strtolower(chr($c)),$filledLetters) && !$this->addOnlyTrueLinks)

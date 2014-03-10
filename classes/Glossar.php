@@ -40,11 +40,17 @@ class Glossar extends \Frontend
 				$third = array();
 
 				$replaceFunction = 'replaceTitle2Link';
-				if(!$Glossar->jumpTo)
+				if(!$Glossar->jumpTo && !$GLOBALS['TL_CONFIG']['jumpToGlossar'])
 					$replaceFunction = 'replaceTitle2Span';
 
-				if($Glossar->title && preg_match_all( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", $strContent, $third))
-					$strContent = preg_replace_callback ( "/(?!(?:[^<]+>|[^>]+<\/a>))\b(" . $Glossar->title . (!$Glossar->noPlural ?"[^ ".$GLOBALS['glossar']['illegal']."]*": '').")/is", array($this,$replaceFunction), $strContent );
+				$ignoredTags = array('a');
+				if($GLOBALS['TL_CONFIG']['ignoreInTags'])
+					$ignoredTags = explode(',',$GLOBALS['TL_CONFIG']['ignoreInTags']);
+				if($this->glossar->ignoreInTags)
+					$ignoredTags = explode(',',$this->glossar->ignoreInTags);
+
+				if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . (!$Glossar->noPlural ? '[^ '.$GLOBALS['glossar']['illegal'].']*': '').')/is', $strContent, $third))
+					$strContent = preg_replace_callback ( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . (!$Glossar->noPlural ? '[^ '.$GLOBALS['glossar']['illegal'].']*': '').')/is', array($this,$replaceFunction), $strContent );
 			}
 		return $strContent;
 	}
@@ -59,6 +65,11 @@ class Glossar extends \Frontend
 		$glossarObj = new \FrontendTemplate('glossar_layer');
 		$glossarObj->setData($Glossar->row());
 		$glossarObj->class = 'ce_glossar_layer';
+		if($GLOBALS['TL_CONFIG']['jumpToGlossar'])
+		{
+			$link = \PageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
+			$glossarObj->link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$glossarObj->alias);
+		}
 		if($glossarObj->jumpTo)
 		{
 			$link = \PageModel::findByPk($glossarObj->jumpTo);
@@ -71,15 +82,18 @@ class Glossar extends \Frontend
 
 	private function replaceTitle2Span($treffer)
 	{
-		return '<span class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'">'.$treffer[1].'</span>';
+		return '<span class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'">'.$treffer[2].'</span>';
 	}
 
 	private function replaceTitle2Link($treffer)
 	{
-		$link = \PageModel::findByPk($this->glossar->jumpTo);
+		if($GLOBALS['TL_CONFIG']['jumpToGlossar'])
+			$link = \PageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
+		else
+			$link = \PageModel::findByPk($this->glossar->jumpTo);
 		if($link)
 			$link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($this->glossar->alias)));
 		#echo '<pre>'.print_r($treffer,1).'</pre>';
-		return '<a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[1].'</a>';
+		return '<a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[2].'</a>';
 	}
 }

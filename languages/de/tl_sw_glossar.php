@@ -21,6 +21,7 @@
 	
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['maxWidth'] = array('Maximale Breite','Die maximale Breite, die das Ajax-Layer bekommen kann - Standard 450.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['maxHeight'] = array('Maximale Höhe','Die maximale Höhe, die das Ajax-Layer bekommen kann - Standard 500.');
+	$GLOBALS['TL_LANG']['tl_sw_glossar']['ignoreInTags'] = array('Diese Tags ignorieren','Befindet der Begriff in diesen Tags wird er nicht ersetzt.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['date'] = array('Datum','Kann verwendet werden, um nach Datum zu sortieren.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['jumpTo'] = array('Weiterleitungsseite','Gibt die Seite mit den Glossar-Einträgen an.');
 	$GLOBALS['TL_LANG']['tl_sw_glossar']['noPlural'] = array('Plural-Suche deaktivieren','Das Modul sucht standardmäßig bis zum nächsten vorkommenden leerzeichen.');
