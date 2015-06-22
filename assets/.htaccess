@@ -1,2 +1,8 @@
-order deny,allow
-allow from all
+#Ohne diese Datei, kann das Modul nicht auf die Assets zugreifen.
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Allow from all
+</IfModule>
+<IfModule mod_authz_core.c>
+  Require all granted
+</IfModule>

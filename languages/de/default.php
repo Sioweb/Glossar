@@ -15,7 +15,7 @@
 */
 
 $GLOBALS['glossar']['to_article'] = 'Weiterlesen ...';
-$GLOBALS['TL_LANG']['CTE']['sw_glossar'] = array('Glossar','Erzeugt eine Liste mit Glossar-Begriffen.');
+$GLOBALS['TL_LANG']['CTE']['glossar'] = array('Glossar','Erzeugt eine Liste mit Glossar-Begriffen.');
 
 $GLOBALS['glossar']['sortGlossarBy'] = array(
 	'id' => 'ID aufsteigend',

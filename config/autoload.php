@@ -1,52 +1,40 @@
 <?php
 
-/*
+/**
  * Contao Open Source CMS
- * Copyright (C) 2005-2012 Leo Feyer
- *
  */
 
 /**
-* @file autoload.php
-* @author Sascha Weidner
-* @version 3.0.0
-* @package sioweb.contao.extensions.glossar
-* @copyright Sioweb - Sascha Weidner
-*/
-
-
-/**
- * Register the namespaces
+ * @file autoload.php
+ * @author Sascha Weidner
+ * @version 3.0.0
+ * @package sioweb.contao.extensions.glossar
+ * @copyright Sascha Weidner, Sioweb
  */
+
+
 ClassLoader::addNamespaces(array
 (
-	'sioweb\contao\extensions\glossar'
+  'sioweb\contao\extensions\glossar'
 ));
 
-
-/**
- * Register the classes
- */
 ClassLoader::addClasses(array
 (
-	// Classes
-	'sioweb\contao\extensions\glossar\Glossar'		=> 'system/modules/SWGlossar/classes/Glossar.php',
-
-	// Elements
-	'sioweb\contao\extensions\glossar\ContentGlossar' 	=> 'system/modules/SWGlossar/elements/ContentGlossar.php',
-	
-	// Models
-	'sioweb\contao\extensions\glossar\SWGlossarModel'	=> 'system/modules/SWGlossar/models/SWGlossarModel.php',
+  // classes
+  'sioweb\contao\extensions\glossar\RebuildGlossar'   => 'system/modules/Glossar/classes/RebuildGlossar.php',
+  'sioweb\contao\extensions\glossar\Glossar'          => 'system/modules/Glossar/classes/Glossar.php',
+  // Elements
+  'sioweb\contao\extensions\glossar\ContentGlossar'   => 'system/modules/Glossar/elements/ContentGlossar.php',
+  // Models
+  'SWGlossarModel'                                    => 'system/modules/Glossar/models/SWGlossarModel.php',
+  'PageModel'                                         => 'system/modules/Glossar/models/PageModel.php',
 ));
 
-
-/**
- * Register the templates
- */
 TemplateLoader::addFiles(array
 (
-	'ce_glossar'       	   => 'system/modules/SWGlossar/templates',
-	'glossar_default'  	   => 'system/modules/SWGlossar/templates',
-	'glossar_layer'  	   => 'system/modules/SWGlossar/templates',
-	'glossar_error'  	   => 'system/modules/SWGlossar/templates',
+  'ce_glossar'        => 'system/modules/Glossar/templates',
+  'glossar_default'   => 'system/modules/Glossar/templates',
+  'glossar_layer'     => 'system/modules/Glossar/templates',
+  'glossar_error'     => 'system/modules/Glossar/templates',
+  'be_rebuild_glossar' => 'system/modules/Glossar/templates/backend',
 ));

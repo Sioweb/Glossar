@@ -60,13 +60,11 @@ function loadLayer(glossar)
 	if(LayerAjaxRequest)
 		LayerAjaxRequest.abort();
 
-	LayerAjaxRequest = $.ajax(
-	{
+	LayerAjaxRequest = $.ajax({
 		type: "POST",
-		url:  "ajax.php",
+		url:  "index.php",
 		data: { isAjaxRequest: 1, glossar: 1, id: glossar.data('glossar'), REQUEST_TOKEN: Contao.request_token},
-		success: function(result)
-		{
+		success: function(result) {
 			layer.addClass('layer_loaded').append($($.parseJSON(result).content));
 			layer.append('<div class="ce_glossar_close">X</div>').children('.ce_glossar_close')
 				.click(function(){

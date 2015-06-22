@@ -1,0 +1,26 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/core/languages/en/modules.php" source-language="en">
+    <body>
+      <trans-unit id="CTE.sioweb">
+        <source>Sioweb</source>
+        <target>Sioweb</target>
+      </trans-unit>
+      <trans-unit id="MOD.glossar.0">
+        <source>Glossar</source>
+        <target>Glossar</target>
+      </trans-unit>
+      <trans-unit id="MOD.glossar.1">
+        <source>Ersetzt Schlagworte in Haupt- und News-Texten durch Links zu einem Glossar</source>
+        <target>Ersetzt Schlagworte in Haupt- und News-Texten durch Links zu einem Glossar</target>
+      </trans-unit>
+      <trans-unit id="CTE.glossar.0">
+        <source>Glossar</source>
+        <target>Glossar</target>
+      </trans-unit>
+      <trans-unit id="CTE.glossar.1">
+        <source>Manage glossar and content elements</source>
+        <target>Glossar und Inhaltselemente verwalten</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

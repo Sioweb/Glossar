@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/core/languages/en/tl_settings.php" source-language="en">
+    <body>
+      <trans-unit id="tl_settings.enableGlossar.0">
+        <source>Activate Glossar</source>
+        <target>Glossar aktivieren</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.enableGlossar.1">
+        <source>Activates glossar for the whole site</source>
+        <target>Der Glossar wird auf allen Seiten aktiviert.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.disableGlossarCache.0">
+        <source>Deactivate Glossar cache</source>
+        <target>Cache umgehen</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.disableGlossarCache.1">
+        <source>Deactivates the glossar cache</source>
+        <target>Der Glossar wird deaktiviert. Bei jedem Seitenaufbau wird der Glossar neu generiert.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.ignoreInTags.0">
+        <source>Ignore this tags</source>
+        <target>Tags ingonieren</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.ignoreInTags.1">
+        <source>Ignores those tags</source>
+        <target>Die angegebenen Tags, werden nicht durchsucht. Nützlich sind Überschriften und Links.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.jumpToGlossar.0">
+        <source>Glossar page</source>
+        <target>Glossar-Seite</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.jumpToGlossar.1">
+        <source>Default site if no page is selected</source>
+        <target>Standardseite für Einträge denen keine andere Weiterleitungsseite gegben wurde.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.glossar_legend">
+        <source>Glossar settings</source>
+        <target>Glossar Einstellungen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
