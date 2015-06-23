@@ -20,7 +20,7 @@ if (Input::get('do') == 'glossar') {
   $GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_sw_glossar';
 }
 
-$GLOBALS['TL_DCA']['tl_content']['palettes']['glossar'] = '{type_legend},type,sortGlossarBy;{pagination_legend:hide},addAlphaPagination';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['sw_glossar'] = '{type_legend},type,sortGlossarBy;{pagination_legend:hide},addAlphaPagination';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addAlphaPagination';
 $GLOBALS['TL_DCA']['tl_content']['subpalettes']['addAlphaPagination'] = 'showAfterChoose,addOnlyTrueLinks';
 
