@@ -51,9 +51,9 @@ class ContentGlossar extends \ContentElement {
     $this->sortGlossarBy = $this->sortGlossarBy[0].($this->sortGlossarBy[1] ? ' '.strtoupper($this->sortGlossarBy[1]) : '');
 
     if(\Input::get('items') == '')
-      $Glossar = SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
+      $Glossar = \SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
     else
-      $Glossar = SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
+      $Glossar = \SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
     
     
 
@@ -72,11 +72,18 @@ class ContentGlossar extends \ContentElement {
             if(\Input::get('items') != '')
               $newGlossarObj->teaser = null;
 
-            $link = \PageModel::findByPk($newGlossarObj->jumpTo);
+            if(!$newGlossarObj->jumpTo)
+              $newGlossarObj->jumpTo = $GLOBALS['TL_CONFIG']['jumpToGlossar'];
+
+            if($newGlossarObj->jumpTo)
+              $link = \PageModel::findByPk($newGlossarObj->jumpTo);
+
             if($link)
               $newGlossarObj->link =  $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$newGlossarObj->alias);
             
-            $arrGlossar[] = $newGlossarObj->parse();
+            if(\Input::get('items') == '')
+              $arrGlossar[] = $newGlossarObj->parse();
+            else $arrGlossar[] = $this->getGlossarElements($newGlossarObj->id);
           }
         }
       }
@@ -101,11 +108,48 @@ class ContentGlossar extends \ContentElement {
       if(!$arrGlossar && $GLOBALS['glossar']['errors']['no_content'])
         $glossarErrors[] = $GLOBALS['glossar']['errors']['no_content'];
 
+    if(\Input::get('items') != '') {
+      $this->Template->content = 1;
+      $arrGlossar = array_shift($arrGlossar);
+    }
     $this->Template->glossar = $arrGlossar;
     if($glossarErrors) {
       $errorObj = new \FrontendTemplate('glossar_error');
       $errorObj->msg = $glossarErrors;
       $this->Template->errors = $errorObj->parse();
     }
+  }
+
+  private function getGlossarElements($id) {
+    $arrElements = array();
+    $objCte = \ContentModel::findPublishedByPidAndTable($id, 'tl_sw_glossar');
+
+    if ($objCte !== null) {
+      $intCount = 0;
+      $intLast = $objCte->count() - 1;
+
+      while ($objCte->next()) {
+        $arrCss = array();
+
+        /** @var \ContentModel $objRow */
+        $objRow = $objCte->current();
+
+        // Add the "first" and "last" classes (see #2583)
+        if ($intCount == 0 || $intCount == $intLast) {
+          if ($intCount == 0) {
+            $arrCss[] = 'first';
+          }
+
+          if ($intCount == $intLast) {
+            $arrCss[] = 'last';
+          }
+        }
+
+        $objRow->classes = $arrCss;
+        $arrElements[] = $this->getContentElement($objRow, $this->strColumn);
+        ++$intCount;
+      }
+    }
+    return $arrElements;
   }
 }
