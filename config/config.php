@@ -24,11 +24,23 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array(
   )
 ));
 
-if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
-  \Config::set('ignoreInTags','title,a,h1,h2,h3,h4,h5,h6,nav');
+$function = 'add';
 
-if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
-  \Config::set('illegalChars','")(=?.,;~:\'\>\<+\/\\');
+  $function = 'set';
+
+if(method_exists('Contao\Config','set')) {
+  if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
+    \Config::set('ignoreInTags','title,a,h1,h2,h3,h4,h5,h6,nav');
+
+  if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
+    \Config::set('illegalChars','")(=?.,;~:\'\>\<+\/\\');
+} elseif(method_exists('Contao\Config','add')) {
+  if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
+    \Config::add('$GLOBALS[\'TL_CONFIG\'][\'ignoreInTags\']','title,a,h1,h2,h3,h4,h5,h6,nav');
+
+  if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
+    \Config::add('$GLOBALS[\'TL_CONFIG\'][\'illegalChars\']','")(=?.,;~:\'\>\<+\/');
+}
 
 $GLOBALS['TL_CTE']['texts']['glossar'] = 'ContentGlossar';
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('Glossar', 'searchGlossarTerms');
