@@ -19,13 +19,20 @@ if($semicolon != ';')
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'].$semicolon.'{glossar_legend},enableGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'enableGlossar';
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'disableGlossarCache,ignoreInTags,jumpToGlossar';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'disableGlossarCache,ignoreInTags,illegalChars,jumpToGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['ignoreInTags'] = array
 (
   'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['ignoreInTags'],
   'exclude'                 => true,
-  'default'                 => 'title,a',
+  'inputType'               => 'text',
+  'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr long'),
+  'sql'                     => "text NULL"
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['illegalChars'] = array
+(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['illegalChars'],
+  'exclude'                 => true,
   'inputType'               => 'text',
   'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr long'),
   'sql'                     => "text NULL"

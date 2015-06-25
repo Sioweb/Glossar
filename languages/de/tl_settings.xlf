@@ -28,6 +28,15 @@
         <target>Die angegebenen Tags, werden nicht durchsucht. Nützlich sind Überschriften und Links.</target>
       </trans-unit>
 
+      <trans-unit id="tl_settings.illegalChars.0">
+        <source>Ingore this Chars</source>
+        <target>Pluralsuche</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.illegalChars.1">
+        <source>Those chars will be ignored in plural search. As example Contao(CMS) only Contao will be replaces if you set ( as illegal char.</source>
+        <target>Diese Zeichen werden bei der Pluralsuche ignoriert. Als Beispiel: Bei Contao(CMS) wird nur Contao ersetzt, wenn die offene Klammer ( hier definiert wird.</target>
+      </trans-unit>
+
       <trans-unit id="tl_settings.jumpToGlossar.0">
         <source>Glossar page</source>
         <target>Glossar-Seite</target>

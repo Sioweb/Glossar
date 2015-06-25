@@ -24,6 +24,9 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array(
   )
 ));
 
+if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
+  \Config::set('ignoreInTags','title,a,h1,h2,h3,h4,h5,h6,nav');
+
 $GLOBALS['TL_CTE']['texts']['glossar'] = 'ContentGlossar';
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('Glossar', 'searchGlossarTerms');
 
@@ -42,11 +45,11 @@ if(\Config::get('enableGlossar') == 1) {
       'maxWidth' => 450,
       'maxHeight' => 300,
     ),
-    'illegal' => '\.,;<>',
+    'illegal' => '\-_\.',
     'templates' => array(
       'ce_glossar',
-      'glossar_default'
-,      'glossar_error',
+      'glossar_default',
+      'glossar_error',
       'glossar_layer'
     )
   );
