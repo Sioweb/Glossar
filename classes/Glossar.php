@@ -50,8 +50,8 @@ class Glossar extends \Frontend {
       if($this->glossar->ignoreInTags)
         $ignoredTags = explode(',',$this->glossar->ignoreInTags);
 
-      if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . (!$Glossar->noPlural ? '[^ '.$GLOBALS['glossar']['illegal'].']*': '').')/is', $strContent, $third)) {
-        $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . (!$Glossar->noPlural ? '[^ '.$GLOBALS['glossar']['illegal'].']*': '').')/is', array($this,$replaceFunction), $strContent);
+      if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ ")('.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', $strContent, $third)) {
+        $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ ")('.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', array($this,$replaceFunction), $strContent);
       }
     }
     return $strContent;
