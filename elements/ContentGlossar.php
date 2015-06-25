@@ -65,7 +65,7 @@ class ContentGlossar extends \ContentElement {
         $initial = substr($Glossar->alias,0,1);
         $filledLetters[] = $initial;
 
-        if((!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != '')) {
+        if(\Input::get('items') != '' || (!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != '')) {
           if(\Input::get('pag') == '' || $initial == \Input::get('pag') ) {
             $newGlossarObj = new \FrontendTemplate('glossar_default');
             $newGlossarObj->setData($Glossar->row());
@@ -104,7 +104,7 @@ class ContentGlossar extends \ContentElement {
     
     $this->Template->alphaPagination = $letters;
     
-    if((!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != ''))
+    if(\Input::get('items') != '' || (!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != ''))
       if(!$arrGlossar && $GLOBALS['glossar']['errors']['no_content'])
         $glossarErrors[] = $GLOBALS['glossar']['errors']['no_content'];
 
