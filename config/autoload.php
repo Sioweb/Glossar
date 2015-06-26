@@ -31,9 +31,13 @@ ClassLoader::addClasses(array
   'PageModel'                                         => 'system/modules/Glossar/models/PageModel.php',
 ));
 
+$version = '';
+if(VERSION <= 3.2)
+  $version = '/3.2';
+
 TemplateLoader::addFiles(array
 (
-  'ce_glossar'        => 'system/modules/Glossar/templates',
+  'ce_glossar'        => 'system/modules/Glossar/templates'.$version,
   'glossar_default'   => 'system/modules/Glossar/templates',
   'glossar_layer'     => 'system/modules/Glossar/templates',
   'glossar_error'     => 'system/modules/Glossar/templates',
