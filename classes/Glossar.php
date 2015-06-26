@@ -23,8 +23,16 @@ class Glossar extends \Frontend {
   public function searchGlossarTerms($strContent, $strTemplate) {
     global $objPage;
 
+    if (!isset($_GET['items']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item']))
+      \Input::setGet('items', \Input::get('auto_item'));
+
     if($objPage->disableGlossar == 1)
       return $strContent;
+
+    if(\Input::get('items') != '') {
+      $News = \NewsModel::findByAlias(\Input::get('items'));
+      $objPage->glossar = $News->glossar;
+    }
 
     $Glossar = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
 

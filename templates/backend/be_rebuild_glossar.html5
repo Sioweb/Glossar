@@ -19,11 +19,25 @@
     <script>
       window.addEvent('domready', function() {
         var urls = $$('.page_url'),
+            news_urls = $$('.news_url'),
             last = urls.length-1, url;
         urls.each(function(el, i) {
           el.getAttribute('data-url') && new Request({
             'url': el.getAttribute('data-url'),
             data: {rebuild_glossar: 1},
+            onComplete: function() {
+              el.addClass('tl_green');
+              if (i == last) {
+                $('index_loading').setStyle('display', 'none');
+                $('index_complete').setStyle('display', 'block');
+              }
+            }
+          }).get();
+        });
+        news_urls.each(function(el, i) {
+          el.getAttribute('data-url') && new Request({
+            'url': el.getAttribute('data-url'),
+            data: {rebuild_glossar: 1,glossar_news: 1},
             onComplete: function() {
               el.addClass('tl_green');
               if (i == last) {
