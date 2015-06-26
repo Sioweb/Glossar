@@ -83,7 +83,15 @@ class ContentGlossar extends \ContentElement {
             
             if(\Input::get('items') == '')
               $arrGlossar[] = $newGlossarObj->parse();
-            else $arrGlossar[] = $this->getGlossarElements($newGlossarObj->id);
+            else {
+              $elements = $this->getGlossarElements($newGlossarObj->id);
+              if(empty($elements) && $Glossar->description) {
+                $descriptionObj = new \FrontendTemplate('glossar_description');
+                $descriptionObj->content = $Glossar->description;
+                $elements = array($descriptionObj->parse());
+              }
+              $arrGlossar[] = $elements;
+            }
           }
         }
       }
@@ -112,6 +120,7 @@ class ContentGlossar extends \ContentElement {
       $this->Template->content = 1;
       $arrGlossar = array_shift($arrGlossar);
     }
+
     $this->Template->glossar = $arrGlossar;
     if($glossarErrors) {
       $errorObj = new \FrontendTemplate('glossar_error');

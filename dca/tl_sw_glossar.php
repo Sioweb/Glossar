@@ -205,7 +205,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'exclude'                 => true,
       'search'                  => true,
       'inputType'               => 'textarea',
-      'eval'                    => array('tl_class'=>'clr long'),
+      'eval'                    => array('rte'=>'tinyMCE', 'style'=>'height: 50px;', 'tl_class'=>'clr long'),
       'sql'                     => "text NULL"
     ),
   )

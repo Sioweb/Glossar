@@ -37,9 +37,10 @@ if(VERSION <= 3.2)
 
 TemplateLoader::addFiles(array
 (
-  'ce_glossar'        => 'system/modules/Glossar/templates'.$version,
-  'glossar_default'   => 'system/modules/Glossar/templates',
-  'glossar_layer'     => 'system/modules/Glossar/templates',
-  'glossar_error'     => 'system/modules/Glossar/templates',
-  'be_rebuild_glossar' => 'system/modules/Glossar/templates/backend',
+  'ce_glossar'          => 'system/modules/Glossar/templates'.$version,
+  'glossar_default'     => 'system/modules/Glossar/templates',
+  'glossar_layer'       => 'system/modules/Glossar/templates',
+  'glossar_error'       => 'system/modules/Glossar/templates',
+  'glossar_description' => 'system/modules/Glossar/templates',
+  'be_rebuild_glossar'  => 'system/modules/Glossar/templates/backend',
 ));
