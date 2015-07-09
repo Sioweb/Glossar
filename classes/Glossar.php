@@ -107,4 +107,28 @@ class Glossar extends \Frontend {
       $link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($this->glossar->alias)));
     return '<a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[2].'</a>';
   }
+  
+  public function getSearchablePages($arrPages, $intRoot=0, $blnIsSitemap=false) {
+    
+    $Glossar = \SWGlossarModel::findAll();
+
+    if($Glossar === null)
+      return false;
+
+    while($Glossar->next()) {
+      $url = $GLOBALS['TL_CONFIG']['jumpToGlossar'];
+      if($Glossar->jumpTo) $url = $Glossar->jumpTo;
+
+      $objParent = \PageModel::findWithDetails($url);
+      $domain = ($objParent->rootUseSSL ? 'https://' : 'http://') . ($objParent->domain ?: \Environment::get('host')) . TL_PATH . '/';
+
+      if(!empty($url)) {
+        $link = \PageModel::findByPk($url);
+        $arrPages[] = $domain.$this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$Glossar->alias);
+      }
+    }
+    
+
+    return $arrPages;
+  }
 }

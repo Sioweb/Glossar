@@ -44,6 +44,7 @@ if(method_exists('Contao\Config','set')) {
 
 $GLOBALS['TL_CTE']['texts']['glossar'] = 'ContentGlossar';
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('Glossar', 'searchGlossarTerms');
+$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('Glossar','getSearchablePages');
 
 if(\Config::get('enableGlossar') == 1) {
   if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1)
