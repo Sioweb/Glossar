@@ -101,7 +101,9 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   // Palettes
   'palettes' => array
   (
-    'default'                     => '{title_legend},title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,termAsHeadline,jumpTo,teaser,description;'
+    '__selector__'                => array('type'),
+    'default'                     => '{title_legend},type,title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,termAsHeadline,jumpTo,teaser,description',
+    'abbr'                        => '{title_legend},type,title,alias,ignoreInTags,termAsHeadline,explanation'
   ),
 
   // Fields
@@ -114,6 +116,16 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'tstamp' => array
     (
       'sql'                     => "int(10) unsigned NOT NULL default '0'"
+    ),
+    'type' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['type'],
+      'default'                 => 'alias',
+      'inputType'               => 'select',
+      'options'                 => array_keys($GLOBALS['glossar']['types']),
+      'reference'               => &$GLOBALS['glossar']['types'],
+      'eval'                    => array('tl_class'=>'w50 clr long','submitOnChange'=>true),
+      'sql'                     => "varchar(20) NOT NULL default ''"
     ),
     'title' => array
     (
@@ -215,6 +227,15 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'inputType'               => 'textarea',
       'eval'                    => array('rte'=>'tinyMCE', 'style'=>'height: 50px;', 'tl_class'=>'clr long'),
       'sql'                     => "text NULL"
+    ),
+    'explanation' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['explanation'],
+      'exclude'                 => true,
+      'search'                  => true,
+      'inputType'               => 'text',
+      'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr long'),
+      'sql'                     => "varchar(255) NOT NULL default ''"
     ),
   )
 );

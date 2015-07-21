@@ -23,7 +23,7 @@ $GLOBALS['glossar']['sortGlossarBy'] = array(
   'date' => 'Datum aufsteigend',
   'date_desc' => 'Datum absteigend',
   'alias' => 'Alphabetisch aufsteigend',
-  'alias_desc' => 'Alphabetisch absteigend'
+  'alias_desc' => 'Alphabetisch absteigend',
 );
 
 $GLOBALS['glossar']['headlineUnit'] = array(
@@ -32,5 +32,10 @@ $GLOBALS['glossar']['headlineUnit'] = array(
   'h3' => 'H3',
   'h4' => 'H4',
   'h5' => 'H5',
-  'h6' => 'H6'
+  'h6' => 'H6',
+);
+
+$GLOBALS['glossar']['types'] = array(
+  'default' => 'Glossar',
+  'abbr' => 'ABBR - Abkürzung',
 );

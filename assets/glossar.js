@@ -1,25 +1,22 @@
 (function($){
 var openLayerTimeout = false,
-	glossarTimeout = false,
-	LayerAjaxRequest = false,
-	layer = false;
+		glossarTimeout = false,
+		LayerAjaxRequest = false,
+		layer = false;
 
 $(function(){
 
 	layer = $('body')
-				.append('<div class="glossar_layer">')
-				.find('.glossar_layer');
+		.append('<div class="glossar_layer">')
+		.find('.glossar_layer');
 
-	$('.glossar').each(function(key, elem)
-	{
-		$(elem).mouseenter(function()
-		{
+	$('span.glossar,a.glossar').each(function(key, elem) {
+		$(elem).mouseenter(function() {
 			var glossar = $(this);
 
 			removeLayer();
-
 			layer.append('<div class="layer_loading"><div class="layer_ring"></div><div class="layer_content"><span></span></div></div>');
-			
+		
 			layer
 				.addClass('layer_load')
 				.css({
@@ -30,21 +27,17 @@ $(function(){
 				});
 
 			openLayerTimeout = setTimeout(function(){loadLayer(glossar);},1000);
-		})
-		.mouseout(function()
-		{
+		}).mouseout(function() {
 			glossarTimeout = setTimeout(removeLayer,200);
 		});
 	});
 });
 
-
-function loadLayer(glossar)
-{
+function loadLayer(glossar) {
 	var left = false,
-		top = false,
-		maxWidth = glossar.data('maxwidth'),
-		maxHeight = glossar.data('maxheight');
+			top = false,
+			maxWidth = glossar.data('maxwidth'),
+			maxHeight = glossar.data('maxheight');
 
 	left = ((glossar.offset().left + maxWidth) < $(window).width() ? true : false);
 
@@ -83,16 +76,12 @@ function loadLayer(glossar)
 			});
 		}
 	});
-/**/
 }
 
-function removeLayer()
-{
+function removeLayer() {
 	clearTimeout(glossarTimeout);
 	clearTimeout(openLayerTimeout);
 	$('.layer_loading,.ce_glossar_close').remove();
 	layer.css({position: 'absolute'}).removeClass('layer_loaded layer_load').children('.ce_glossar_layer').remove();
 }
-
-
 })(jQuery);

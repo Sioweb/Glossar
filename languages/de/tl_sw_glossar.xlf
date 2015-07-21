@@ -1,6 +1,14 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/core/languages/en/tl_sw_glossar.php" source-language="en">
     <body>
+      <trans-unit id="tl_sw_glossar.type.0">
+        <source>Begriffsart</source>
+        <target>Begriffsart</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.type.1">
+        <source>Der Inhalt kann nach verschiedenen Typen durchsucht werden.</source>
+        <target>Der Inhalt kann nach verschiedenen Typen durchsucht werden.</target>
+      </trans-unit>
       <trans-unit id="tl_sw_glossar.title.0">
         <source>Suchwort/Stichwort</source>
         <target>Suchwort/Stichwort</target>
@@ -88,6 +96,14 @@
       <trans-unit id="tl_sw_glossar.description.1">
         <source>Dieses Feld besteht nur noch diese Version. Bitte alle Texte in den Inhalt schreiben.</source>
         <target>Dieses Feld besteht nur noch diese Version. Bitte alle Texte in den Inhalt schreiben.</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.explanation.0">
+        <source>Beschreibung der Abkürzung</source>
+        <target>Beschreibung der Abkürzung</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.explanation.1">
+        <source>Die Beschreibung wird als abbr-Tag um die Abkürzung gelegt.</source>
+        <target>Die Beschreibung wird als abbr-Tag um die Abkürzung gelegt.</target>
       </trans-unit>
 
       <trans-unit id="tl_sw_glossar.title_legend">

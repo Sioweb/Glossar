@@ -58,12 +58,17 @@ class Glossar extends \Frontend {
       if($this->glossar->ignoreInTags)
         $ignoredTags = explode(',',$this->glossar->ignoreInTags);
 
-      $IllegalPlural = '';
-      if(\Config::get('illegalChars'))
-        $IllegalPlural = \Config::get('illegalChars');
-      $IllegalPlural = html_entity_decode($IllegalPlural);
-      if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', $strContent, $third)) {
-        $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', array($this,$replaceFunction), $strContent);
+      if(empty($Glossar->type) || $Glossar->type == 'default') {
+        $IllegalPlural = '';
+        if(\Config::get('illegalChars'))
+          $IllegalPlural = \Config::get('illegalChars');
+        $IllegalPlural = html_entity_decode($IllegalPlural);
+        if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', $strContent, $third)) {
+          $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', array($this,$replaceFunction), $strContent);
+        }
+      }
+      if($Glossar->type == 'abbr' && $Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', $strContent, $third)) {
+        $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', array($this,'replaceAbbr'), $strContent);
       }
     }
     return $strContent;
@@ -92,6 +97,10 @@ class Glossar extends \Frontend {
     
     echo json_encode(array('content'=>$glossarObj->parse()));
     die();
+  }
+
+  private function replaceAbbr($treffer) {
+    return '<abbr class="glossar" title="'.$this->glossar->explanation.'">'.$treffer[2].'</abbr>';
   }
 
   private function replaceTitle2Span($treffer) {
