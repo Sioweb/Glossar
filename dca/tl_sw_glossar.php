@@ -101,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   // Palettes
   'palettes' => array
   (
-    'default'                     => '{title_legend},title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,jumpTo,teaser,description;'
+    'default'                     => '{title_legend},title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,termAsHeadline,jumpTo,teaser,description;'
   ),
 
   // Fields
@@ -185,6 +185,14 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'noPlural' => array
     (
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['noPlural'],
+      'exclude'                 => true,
+      'inputType'               => 'checkbox',
+      'eval'                    => array('tl_class'=>'w50 clr'),
+      'sql'                     => "char(1) NOT NULL default ''"
+    ),
+    'termAsHeadline' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['termAsHeadline'],
       'exclude'                 => true,
       'inputType'               => 'checkbox',
       'eval'                    => array('tl_class'=>'w50 clr'),

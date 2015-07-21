@@ -65,6 +65,14 @@
         <source>Das Modul sucht standardmäßig bis zum nächsten vorkommenden leerzeichen.</source>
         <target>Das Modul sucht standardmäßig bis zum nächsten vorkommenden leerzeichen.</target>
       </trans-unit>
+      <trans-unit id="tl_sw_glossar.termAsHeadline.0">
+        <source>Begriff als Headline verhindern</source>
+        <target>Begriff als Headline verhindern</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.termAsHeadline.1">
+        <source>Dieser Begriff wird nicht als Überschrift verwendet, falls das Inhaltselement Begriffe als Überschrift einsetzt.</source>
+        <target>Dieser Begriff wird nicht als Überschrift verwendet, falls das Inhaltselement Begriffe als Überschrift einsetzt.</target>
+      </trans-unit>
       <trans-unit id="tl_sw_glossar.teaser.0">
         <source>Teaser</source>
         <target>Teaser</target>

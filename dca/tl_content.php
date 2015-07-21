@@ -20,9 +20,11 @@ if (Input::get('do') == 'glossar') {
   $GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_sw_glossar';
 }
 
-$GLOBALS['TL_DCA']['tl_content']['palettes']['glossar'] = '{type_legend},type,sortGlossarBy;{pagination_legend:hide},addAlphaPagination';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['glossar'] = '{type_legend},type,sortGlossarBy,termAsHeadline;{pagination_legend:hide},addAlphaPagination';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addAlphaPagination';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'termAsHeadline';
 $GLOBALS['TL_DCA']['tl_content']['subpalettes']['addAlphaPagination'] = 'showAfterChoose,addOnlyTrueLinks';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['termAsHeadline'] = 'headlineUnit';
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['sortGlossarBy'] = array
 (
@@ -32,6 +34,16 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['sortGlossarBy'] = array
   'options'                 => array('id', 'id_desc', 'date', 'date_desc', 'alias', 'alias_desc' ),
   'reference'               => &$GLOBALS['glossar']['sortGlossarBy'],
   'eval'                    => array('tl_class'=>'w50'),
+  'sql'                     => "varchar(20) NOT NULL default ''"
+);
+$GLOBALS['TL_DCA']['tl_content']['fields']['headlineUnit'] = array
+(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_content']['headlineUnit'],
+  'default'                 => 'alias',
+  'inputType'               => 'select',
+  'options'                 => array_keys($GLOBALS['glossar']['headlineUnit']),
+  'reference'               => &$GLOBALS['glossar']['headlineUnit'],
+  'eval'                    => array('tl_class'=>'w50 clr'),
   'sql'                     => "varchar(20) NOT NULL default ''"
 );
 
@@ -57,5 +69,14 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['showAfterChoose'] = array
   'exclude'                 => true,
   'inputType'               => 'checkbox',
   'eval'                    => array('submitOnChange'=>true),
+  'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['termAsHeadline'] = array
+(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_content']['termAsHeadline'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
+  'eval'                    => array('tl_class'=>'w50 clr','submitOnChange'=>true),
   'sql'                     => "char(1) NOT NULL default ''"
 );

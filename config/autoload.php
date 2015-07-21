@@ -27,6 +27,7 @@ ClassLoader::addClasses(array
   // Elements
   'sioweb\contao\extensions\glossar\ContentGlossar'   => 'system/modules/Glossar/elements/ContentGlossar.php',
   // Models
+  'StdModel'                                          => 'system/modules/Glossar/models/StdModel.php',
   'SWGlossarModel'                                    => 'system/modules/Glossar/models/SWGlossarModel.php',
   'PageModel'                                         => 'system/modules/Glossar/models/PageModel.php',
 ));

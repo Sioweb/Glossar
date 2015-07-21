@@ -117,6 +117,14 @@ class ContentGlossar extends \ContentElement {
         $glossarErrors[] = $GLOBALS['glossar']['errors']['no_content'];
 
     if(\Input::get('items') != '') {
+      if($this->termAsHeadline && !$Glossar->termAsHeadline) {
+        $Headline = new \StdModel();
+        $Headline->headline = serialize(array('value'=>$Glossar->title,'unit'=>$this->headlineUnit));
+        // $Headline->cssID = serialize(array('','glossar_headline'));
+        $Headline->type = 'glossar_headline';
+        $objHeadline = new \ContentHeadline($Headline);
+        $this->Template->termAsHeadline = $objHeadline->generate();
+      }
       $this->Template->content = 1;
       $arrGlossar = array_shift($arrGlossar);
     }
