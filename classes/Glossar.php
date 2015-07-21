@@ -58,7 +58,7 @@ class Glossar extends \Frontend {
       if($this->glossar->ignoreInTags)
         $ignoredTags = explode(',',$this->glossar->ignoreInTags);
 
-      if(empty($Glossar->type) || $Glossar->type == 'default') {
+      if(empty($Glossar->type) || $Glossar->type == 'default' || $Glossar->type == 'glossar') {
         $IllegalPlural = '';
         if(\Config::get('illegalChars'))
           $IllegalPlural = \Config::get('illegalChars');
@@ -67,8 +67,8 @@ class Glossar extends \Frontend {
           $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', array($this,$replaceFunction), $strContent);
         }
       }
-      if($Glossar->type == 'abbr' && $Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', $strContent, $third)) {
-        $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', array($this,'replaceAbbr'), $strContent);
+      if($Glossar->type == 'abbr' && $Glossar->title && preg_match_all('/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . ')/is', $strContent, $third)) {
+        $strContent = preg_replace_callback('/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . ')/is', array($this,'replaceAbbr'), $strContent);
       }
     }
     return $strContent;

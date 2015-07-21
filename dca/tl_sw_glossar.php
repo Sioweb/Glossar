@@ -63,6 +63,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['edit'],
         'href'                => 'table=tl_content',
         'icon'                => 'edit.gif',
+        'button_callback'     => array('tl_sw_glossar', 'editTerm'),
       ),
       'editheader' => array
       (
@@ -103,7 +104,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   (
     '__selector__'                => array('type'),
     'default'                     => '{title_legend},type,title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,termAsHeadline,jumpTo,teaser,description',
-    'abbr'                        => '{title_legend},type,title,alias,ignoreInTags,termAsHeadline,explanation'
+    'abbr'                        => '{title_legend},type,title,alias,ignoreInTags,explanation'
   ),
 
   // Fields
@@ -241,6 +242,13 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
 );
 
 class tl_sw_glossar extends Backend {
+
+  public function editTerm($row, $href, $label, $title, $icon, $attributes) {
+    if(empty($row['type']) || $row['type'] == 'default' || $row['type'] == 'glossar')
+      return '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
+    return '';
+  }
+
   /**
    * Auto-generate an article alias if it has not been set yet
    * @param mixed
@@ -248,8 +256,7 @@ class tl_sw_glossar extends Backend {
    * @return string
    * @throws \Exception
    */
-  public function generateAlias($varValue, DataContainer $dc)
-  {
+  public function generateAlias($varValue, DataContainer $dc) {
     $autoAlias = false; 
 
     // Generate an alias if there is none
