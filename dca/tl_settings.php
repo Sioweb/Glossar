@@ -19,7 +19,7 @@ if($semicolon != ';')
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'].$semicolon.'{glossar_legend},enableGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'enableGlossar';
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'disableGlossarCache,ignoreInTags,illegalChars,jumpToGlossar';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'disableGlossarCache,glossar_no_fallback,ignoreInTags,illegalChars,jumpToGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['ignoreInTags'] = array
 (
@@ -53,6 +53,13 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['enableGlossar'] = array(
   'exclude'                 => true,
   'inputType'               => 'checkbox',
   'eval'                    => array('submitOnChange'=>true),
+  'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['glossar_no_fallback'] = array(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['glossar_no_fallback'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
   'sql'                     => "char(1) NOT NULL default ''"
 );
 

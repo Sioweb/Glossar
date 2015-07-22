@@ -19,8 +19,10 @@ array_insert($GLOBALS['TL_MAINTENANCE'],1,array(
 
 array_insert($GLOBALS['BE_MOD']['content'], 1, array(
   'glossar' => array(
-    'tables' => array('tl_sw_glossar','tl_content'),
-    'icon'   => 'system/modules/Glossar/assets/sioweb16x16.png'
+    'tables' => array('tl_glossar','tl_sw_glossar','tl_content'),
+    'icon'   => 'system/modules/Glossar/assets/sioweb16x16.png',
+    'importGlossar' => array('Glossar', 'importGlossar'),
+    'exportGlossar' => array('Glossar', 'exportGlossar'),
   )
 ));
 

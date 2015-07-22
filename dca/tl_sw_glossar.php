@@ -19,6 +19,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   'config' => array
   (
     'dataContainer'               => 'Table',
+    'ptable'                      => 'tl_glossar',
     'ctable'                      => array('tl_content'),
     'switchToEdit'                => true,
     'enableVersioning'            => true,
@@ -26,7 +27,8 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     (
       'keys' => array
       (
-        'id' => 'primary'
+        'id' => 'primary',
+        'pid' => 'index'
       )
     )
   ),
@@ -37,8 +39,8 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'sorting' => array
     (
       'mode'                    => 2,
-      'fields'                  => array('title'),
-      'flag'                    => 1,
+      'fields'                  => array('type,title'),
+      'flag'                    => 2,
       'panelLayout'             => 'sort,search,limit'
     ),
     'label' => array
@@ -54,7 +56,19 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
         'href'                => 'act=select',
         'class'               => 'header_edit_all',
         'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
-      )
+      ),
+      // 'import' => array
+      // (
+      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['import'],
+      //   'href'                => 'key=importGlossar',
+      //   'class'               => 'header_edit_all',
+      // ),
+      // 'export' => array
+      // (
+      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
+      //   'href'                => 'key=exportGlossar',
+      //   'class'               => 'header_edit_all',
+      // )
     ),
     'operations' => array
     (
@@ -113,6 +127,10 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'id' => array
     (
       'sql'                     => "int(10) unsigned NOT NULL auto_increment"
+    ),
+    'pid' => array
+    (
+      'sql'                     => "int(10) unsigned NOT NULL default '1'"
     ),
     'tstamp' => array
     (

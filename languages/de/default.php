@@ -17,6 +17,11 @@
 $GLOBALS['glossar']['to_article'] = 'Weiterlesen ...';
 $GLOBALS['TL_LANG']['CTE']['glossar'] = array('Glossar','Erzeugt eine Liste mit Glossar-Begriffen.');
 
+$GLOBALS['TL_LANG']['ERR']['multipleGlossarFallback'] = 'Sie können nur einen Glossar als Fallback einstellen!';
+
+$GLOBALS['TL_LANG']['MSC']['import'] = 'Importieren';
+$GLOBALS['TL_LANG']['MSC']['export'] = 'Exportieren';
+
 $GLOBALS['glossar']['sortGlossarBy'] = array(
   'id' => 'ID aufsteigend',
   'id_desc' => 'ID absteigend',
@@ -38,4 +43,10 @@ $GLOBALS['glossar']['headlineUnit'] = array(
 $GLOBALS['glossar']['types'] = array(
   'default' => 'Glossar',
   'abbr' => 'ABBR - Abkürzung',
+);
+
+$GLOBALS['glossar']['paginationPositions'] = array(
+  'both' => 'Über und unter den Begriffen',
+  'before' => 'Nur über den Begriffen',
+  'after' => 'Nur unter den Begriffen',
 );

@@ -15,3 +15,6 @@
 $GLOBALS['TL_DCA']['tl_news']['fields']['glossar'] = array(
   'sql' => "text NULL"
 );
+$GLOBALS['TL_DCA']['tl_news']['fields']['fallback_glossar'] = array(
+  'sql' => "text NULL"
+);

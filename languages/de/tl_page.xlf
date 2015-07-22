@@ -9,6 +9,14 @@
         <source>Deactivates glossar for this site</source>
         <target>Der Glossar wird auf dieser Seite deaktiviert.</target>
       </trans-unit>
+      <trans-unit id="tl_page.glossar_no_fallback.0">
+        <source>Keine Fallback-Begriffe</source>
+        <target>Keine Fallback-Begriffe</target>
+      </trans-unit>
+      <trans-unit id="tl_page.glossar_no_fallback.1">
+        <source>Auf dieser Seite werden keine Glossar-Begriffe aus anderen Sprachen ersetzt.</source>
+        <target>Auf dieser Seite werden keine Glossar-Begriffe aus anderen Sprachen ersetzt.</target>
+      </trans-unit>
       <trans-unit id="tl_page.glossar_legend">
         <source>Glossar settings</source>
         <target>Glossar Einstellungen</target>

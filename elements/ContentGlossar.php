@@ -51,7 +51,9 @@ class ContentGlossar extends \ContentElement {
     $this->sortGlossarBy = $this->sortGlossarBy[0].($this->sortGlossarBy[1] ? ' '.strtoupper($this->sortGlossarBy[1]) : '');
 
     if(\Input::get('items') == '')
-      $Glossar = \SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
+      if(empty($this->glossar))
+        $Glossar = \SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
+      else $Glossar = \SWGlossarModel::findByPid($this->glossar,array('order'=>$this->sortGlossarBy));
     else
       $Glossar = \SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
     
@@ -131,6 +133,7 @@ class ContentGlossar extends \ContentElement {
       $arrGlossar = array_shift($arrGlossar);
     }
 
+    $this->Template->ppos = $this->paginationPosition;
     $this->Template->glossar = $arrGlossar;
     if($glossarErrors) {
       $errorObj = new \FrontendTemplate('glossar_error');

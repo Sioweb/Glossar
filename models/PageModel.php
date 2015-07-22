@@ -19,7 +19,7 @@ class PageModel extends \Contao\PageModel {
     $t = static::$strTable;
 
     $arrValues = array(1,'regular');
-    $arrColumns = array("published = ? AND type = ? AND disableGlossar = 0");
+    $arrColumns = array("published = ? AND (type = 'root' OR type = ?) AND disableGlossar = 0");
     return static::findBy($arrColumns, $arrValues, $arrOptions);
   }
 }}

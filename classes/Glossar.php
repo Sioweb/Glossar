@@ -35,11 +35,23 @@ class Glossar extends \Frontend {
     }
 
     $Glossar = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
+    $strContent = $this->replace($strContent,$Glossar);
+
+    if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1)
+      return $strContent;
+
+    /* Replace the fallback languages */
+    $Glossar = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->fallback_glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
+    $strContent = $this->replace($strContent,$Glossar);
+    
+    return $strContent;
+  }
+
+  private function replace($strContent,$Glossar) {
 
     if(!$strContent || !$Glossar)
       return $strContent;
 
-    $arrGlossar[] = array();
     while($Glossar->next()) {
       $this->glossar = $Glossar;
 
@@ -110,11 +122,11 @@ class Glossar extends \Frontend {
   private function replaceTitle2Link($treffer) {
     if($GLOBALS['TL_CONFIG']['jumpToGlossar'])
       $link = \PageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
-    else
+    if($this->glossar->jumpTo)
       $link = \PageModel::findByPk($this->glossar->jumpTo);
     if($link)
       $link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($this->glossar->alias)));
-    return '<a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[2].'</a>';
+    return $this->glossar->jumpTo.': <a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[2].'</a>';
   }
   
   public function getSearchablePages($arrPages, $intRoot=0, $blnIsSitemap=false) {
@@ -139,5 +151,22 @@ class Glossar extends \Frontend {
     
 
     return $arrPages;
+  }
+
+  public function importGlossar() {
+    return 'Import!';
+  }
+
+  public function exportGlossar() {
+    $objGlossar = new \BackendTemplate('be_glossar_export');
+    $objGlossar->setData(array(
+      'headline'        => 'Export',
+      'glossarMessage'  => '',
+      'glossarSubmit'   => 'Export',
+      'glossarLabel'    => 'Format wählen',
+      'glossarHelp'     => 'Bitte wählen Sie das Format aus, mit der der Exporter Ihre Einträge exportieren soll.',
+    ));
+
+    return $objGlossar->parse();
   }
 }

@@ -30,8 +30,10 @@ ClassLoader::addClasses(array
   'StdModel'                                          => 'system/modules/Glossar/models/StdModel.php',
   'SWGlossarModel'                                    => 'system/modules/Glossar/models/SWGlossarModel.php',
   'PageModel'                                         => 'system/modules/Glossar/models/PageModel.php',
+  'GlossarModel'                                      => 'system/modules/Glossar/models/GlossarModel.php',
 ));
 
+/* Support for older CTO Versions */
 $version = '';
 if(VERSION <= 3.2)
   $version = '/3.2';
@@ -43,5 +45,8 @@ TemplateLoader::addFiles(array
   'glossar_layer'       => 'system/modules/Glossar/templates',
   'glossar_error'       => 'system/modules/Glossar/templates',
   'glossar_description' => 'system/modules/Glossar/templates',
+
   'be_rebuild_glossar'  => 'system/modules/Glossar/templates/backend',
+  'be_glossar_import'   => 'system/modules/Glossar/templates/backend',
+  'be_glossar_export'   => 'system/modules/Glossar/templates/backend',
 ));

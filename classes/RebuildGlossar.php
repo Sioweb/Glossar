@@ -25,25 +25,67 @@ class RebuildGlossar extends \Backend implements \executable {
     if (!isset($_GET['items']) && \Config::get('useAutoItem') && isset($_GET['auto_item']))
       \Input::setGet('items', \Input::get('auto_item'));
 
-    $Glossar = \SWGlossarModel::findAll(array('order'=>' CHAR_LENGTH(title) DESC'));
-    if(empty($Glossar))
+    $Glossar = \GlossarModel::findAll();
+    if(empty($Glossar)) {
+      $this->clearGlossar();
       return;
+    }
 
-    while($Glossar->next())
-      $arrGlossar[] = $Glossar->title;
+    $arrGlossar = array(); 
+    while($Glossar->next()) {
+      $arrGlossar[$Glossar->id] = $Glossar->language;
+    }
 
-    preg_match_all('#'.implode('|',$arrGlossar).'#is', $strContent, $matches);
-    $matches = array_unique($matches[0]);
+    $Term = \SWGlossarModel::findAll(array('order'=>' CHAR_LENGTH(title) DESC'));
+    if(empty($Term)) {
+      $this->clearGlossar();
+      return;
+    }
+
+    $arrTerms = array('glossar'=>array(),'fallback'=>array(),'both'=>array()); 
+    while($Term->next()) {
+      if($arrGlossar[$Term->pid] == $objPage->language)
+        $arrTerms['glossar'][] = $Term->title;
+      else $arrTerms['fallback'][] = $Term->title;
+      $arrTerms['both'][] = $Term->title;
+    }
+
+    foreach($arrTerms as &$pointer_terms)
+      $pointer_terms = array_unique($pointer_terms);
 
     if(\Input::get('glossar_news') == 1) {
+
+      preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
+      $matches = array_unique($matches[0]);
+
       $News = \NewsModel::findByAlias(\Input::get('items'));
       $News->glossar = implode('|',$matches);
       $News->save();
     } else {
+      $strFallback = $strGlossar = '';
+      if(!empty($arrTerms['glossar'])) {
+        $matches = array();
+        preg_match_all('#'.implode('|',$arrTerms['glossar']).'#is', $strContent, $matches);
+        $matches = array_unique(array_map("strtolower",$matches[0]));
+        $strGlossar = implode('|',$matches);
+      }
+      if(!empty($arrTerms['fallback'])) {
+        $matches = array();
+        preg_match_all('#'.implode('|',$arrTerms['fallback']).'#is', $strContent, $matches);
+        // $matches = array_unique($matches[0]);
+        $matches = array_unique(array_map("strtolower",$matches[0]));
+        $strFallback = implode('|',$matches);
+      }
+
       $Page = \PageModel::findByPk($objPage->id);
-      $Page->glossar = implode('|',$matches);
+      $Page->glossar = $strGlossar;
+      $Page->fallback_glossar = $strFallback;
       $Page->save();
     }
+  }
+
+  private function clearGlossar() {
+    /** @todo Clear all Glossar caches */
   }
 
   /**
@@ -132,14 +174,15 @@ class RebuildGlossar extends \Backend implements \executable {
       $rand = rand();
 
       // Display the pages
-      for ($i=0, $c=count($arrPages); $i<$c; $i++) {
-        $strBuffer .= '<span class="page_url" data-url="' . $arrPages[$i] . '#' . $rand . $i . '">' . \String::substr($arrPages[$i], 100) . '</span><br>';
-        unset($arrPages[$i]); // see #5681
-      }
+      foreach($arrPages as $lang => $arrPage)
+        for ($i=0, $c=count($arrPage); $i<$c; $i++) {
+          $strBuffer .= '<span class="page_url" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
+          unset($arrPages[$lang][$i]); // see #5681
+        }
 
       // Display the pages
       for ($i=0, $c=count($arrNewsPages); $i<$c; $i++) {
-        $strBuffer .= '<span class="news_url" data-url="' . $arrNewsPages[$i] . '#' . $rand . $i . '">' . \String::substr($arrNewsPages[$i], 100) . '</span><br>';
+        $strBuffer .= '<span class="news_url" data-language="de" data-url="' . $arrNewsPages[$i] . '#' . $rand . $i . '">' . \String::substr($arrNewsPages[$i], 100) . '</span><br>';
         unset($arrNewsPages[$i]); // see #5681
       }
 
@@ -159,8 +202,7 @@ class RebuildGlossar extends \Backend implements \executable {
     // Get active front end users
     $objUser = $this->Database->execute("SELECT id, username FROM tl_member WHERE disable!=1 AND (start='' OR start<$time) AND (stop='' OR stop>$time) ORDER BY username");
 
-    while ($objUser->next())
-    {
+    while ($objUser->next()) {
       $arrUser[$objUser->id] = $objUser->username . ' (' . $objUser->id . ')';
     }
 
@@ -179,17 +221,19 @@ class RebuildGlossar extends \Backend implements \executable {
     $objPages = \PageModel::findActiveAndEnabledGlossarPages();
     if(!empty($objPages))
       while($objPages->next()) {
+
+        if ($objPages->type == 'root')
+          $strLanguage = $objPages->language;
         $domain = \Environment::get('base');
 
-        $strLanguage = 'de';
         if ((!$objPages->start || $objPages->start < $time) && (!$objPages->stop || $objPages->stop > $time)) {
-          $arrPages[] = $domain . static::generateFrontendUrl($objPages->row(), null, $strLanguage);
+          $arrPages[$strLanguage][] = $domain . static::generateFrontendUrl($objPages->row(), null, $strLanguage);
 
           $objArticle = \ArticleModel::findBy(array("tl_article.pid=? AND (tl_article.start='' OR tl_article.start<$time) AND (tl_article.stop='' OR tl_article.stop>$time) AND tl_article.published=1 AND tl_article.showTeaser=1"),array($objPages->id),array('order'=>'sorting'));
 
           if(!empty($objArticle))
             while ($objArticle->next())
-              $arrPages[] = $domain . static::generateFrontendUrl($objPages->row(), '/articles/' . (($objArticle->alias != '' && !\Config::get('disableAlias')) ? $objArticle->alias : $objArticle->id), $strLanguage);
+              $arrPages[$strLanguage][] = $domain . static::generateFrontendUrl($objPages->row(), '/articles/' . (($objArticle->alias != '' && !\Config::get('disableAlias')) ? $objArticle->alias : $objArticle->id), $strLanguage);
         }
       }
     return $arrPages;
@@ -227,8 +271,12 @@ class RebuildGlossar extends \Backend implements \executable {
     if(empty($Article))
       return array();
 
+
     $finishedIDs = $arrNewsPages = array();
     while($Article->next()) {
+
+      // $root = $this->getRootPage($Article->pid);
+
       $domain = \Environment::get('base');
       $strLanguage = 'de';
       $objPages = $Article->getRelated('pid');
@@ -251,5 +299,14 @@ class RebuildGlossar extends \Backend implements \executable {
     }
 
     return $arrNewsPages;
+  }
+
+  private function getRootPage($id) {
+    $Page = \PageModel::findByPk($id);
+    if(empty($Page))
+      return;
+    if($Page->type == 'root')
+      return $Page;
+    else return $this->getRootPage($Page->pid);
   }
 }
