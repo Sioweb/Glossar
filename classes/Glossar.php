@@ -70,13 +70,18 @@ class Glossar extends \Frontend {
       if($this->glossar->ignoreInTags)
         $ignoredTags = explode(',',$this->glossar->ignoreInTags);
 
+      if(\Config::get('strictSearch') == 1)
+        $Glossar->strictSearch = 1;
+
       if(empty($Glossar->type) || $Glossar->type == 'default' || $Glossar->type == 'glossar') {
         $IllegalPlural = '';
         if(\Config::get('illegalChars'))
           $IllegalPlural = \Config::get('illegalChars');
         $IllegalPlural = html_entity_decode($IllegalPlural);
-        if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', $strContent, $third)) {
-          $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . '[^ '.$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'').']*)/is', array($this,$replaceFunction), $strContent);
+
+        $plural = preg_replace('/[.]+(?<!\\.)/is','\\.',$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:''));
+        if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(' . $Glossar->title . (!$Glossar->noPlural?'[^ '.$plural.']*':'') . ($Glossar->strictSearch?'\b':'').')/is', $strContent, $third)) {
+          $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(' . $Glossar->title . (!$Glossar->noPlural?'[^ '.$plural.']*':'') . ($Glossar->strictSearch?'\b':'').')/is', array($this,$replaceFunction), $strContent);
         }
       }
       if($Glossar->type == 'abbr' && $Glossar->title && preg_match_all('/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . ')/is', $strContent, $third)) {
@@ -126,7 +131,7 @@ class Glossar extends \Frontend {
       $link = \PageModel::findByPk($this->glossar->jumpTo);
     if($link)
       $link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($this->glossar->alias)));
-    return $this->glossar->jumpTo.': <a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[2].'</a>';
+    return '<a class="glossar" data-maxwidth="'.($this->glossar->maxWidth ? $this->glossar->maxWidth : 0).'" data-maxheight="'.($this->glossar->maxHeight ? $this->glossar->maxHeight : 0).'" data-glossar="'.$this->glossar->id.'" href="'.$link.'">'.$treffer[2].'</a>';
   }
   
   public function getSearchablePages($arrPages, $intRoot=0, $blnIsSitemap=false) {
@@ -148,7 +153,6 @@ class Glossar extends \Frontend {
         $arrPages[] = $domain.$this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$Glossar->alias);
       }
     }
-    
 
     return $arrPages;
   }
@@ -158,6 +162,23 @@ class Glossar extends \Frontend {
   }
 
   public function exportGlossar() {
+    $objGlossar = new \BackendTemplate('be_glossar_export');
+    $objGlossar->setData(array(
+      'headline'        => 'Export',
+      'glossarMessage'  => '',
+      'glossarSubmit'   => 'Export',
+      'glossarLabel'    => 'Format wählen',
+      'glossarHelp'     => 'Bitte wählen Sie das Format aus, mit der der Exporter Ihre Einträge exportieren soll.',
+    ));
+
+    return $objGlossar->parse();
+  }
+
+  public function importTerms() {
+    return 'Import!';
+  }
+
+  public function exportTerms() {
     $objGlossar = new \BackendTemplate('be_glossar_export');
     $objGlossar->setData(array(
       'headline'        => 'Export',

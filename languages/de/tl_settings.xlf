@@ -28,6 +28,15 @@
         <target>Es werden keine Glossar-Begriffe aus anderen Sprachen ersetzt.</target>
       </trans-unit>
 
+      <trans-unit id="tl_settings.strictSearch.0">
+        <source>Strikte Suche</source>
+        <target>Strikte Suche</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.strictSearch.1">
+        <source>Es werden nur die angegebenen Begriffe gefunden, wenn diese als einzelnes Wort im INhalt stehen.</source>
+        <target>Es werden nur die angegebenen Begriffe gefunden, wenn diese als einzelnes Wort im INhalt stehen.</target>
+      </trans-unit>
+
       <trans-unit id="tl_settings.ignoreInTags.0">
         <source>Ignore this tags</source>
         <target>Tags ingonieren</target>

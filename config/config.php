@@ -23,6 +23,8 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array(
     'icon'   => 'system/modules/Glossar/assets/sioweb16x16.png',
     'importGlossar' => array('Glossar', 'importGlossar'),
     'exportGlossar' => array('Glossar', 'exportGlossar'),
+    'importTerms' => array('Glossar', 'importTerms'),
+    'exportTerms' => array('Glossar', 'exportTerms'),
   )
 ));
 
@@ -41,7 +43,7 @@ if(method_exists('Contao\Config','set')) {
     \Config::add('$GLOBALS[\'TL_CONFIG\'][\'ignoreInTags\']','title,a,h1,h2,h3,h4,h5,h6,nav');
 
   if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
-    \Config::add('$GLOBALS[\'TL_CONFIG\'][\'illegalChars\']','")(=?.,;~:\'\>\<+\/');
+    \Config::add('$GLOBALS[\'TL_CONFIG\'][\'illegalChars\']','")(=?.,;~:\'\>+\/!$€`´\'%&');
 }
 
 $GLOBALS['TL_CTE']['texts']['glossar'] = 'ContentGlossar';

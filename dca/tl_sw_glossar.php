@@ -60,13 +60,13 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       // 'import' => array
       // (
       //   'label'               => &$GLOBALS['TL_LANG']['MSC']['import'],
-      //   'href'                => 'key=importGlossar',
+      //   'href'                => 'key=importTerms^',
       //   'class'               => 'header_edit_all',
       // ),
       // 'export' => array
       // (
       //   'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
-      //   'href'                => 'key=exportGlossar',
+      //   'href'                => 'key=exportTerms^',
       //   'class'               => 'header_edit_all',
       // )
     ),
@@ -117,7 +117,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   'palettes' => array
   (
     '__selector__'                => array('type'),
-    'default'                     => '{title_legend},type,title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,termAsHeadline,jumpTo,teaser,description',
+    'default'                     => '{title_legend},type,title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,strictSearch,termAsHeadline,jumpTo,teaser,description',
     'abbr'                        => '{title_legend},type,title,alias,ignoreInTags,explanation'
   ),
 
@@ -216,6 +216,14 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'noPlural' => array
     (
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['noPlural'],
+      'exclude'                 => true,
+      'inputType'               => 'checkbox',
+      'eval'                    => array('tl_class'=>'w50 clr'),
+      'sql'                     => "char(1) NOT NULL default ''"
+    ),
+    'strictSearch' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['strictSearch'],
       'exclude'                 => true,
       'inputType'               => 'checkbox',
       'eval'                    => array('tl_class'=>'w50 clr'),
