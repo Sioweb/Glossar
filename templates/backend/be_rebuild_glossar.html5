@@ -10,7 +10,7 @@
   <?php endif; ?>
 
   <?php if ($this->isRunning): ?>
-    <div id="tl_rebuild_index">
+    <div id="tl_rebuild_index" class="tl_rebuild_glossar">
       <p id="index_loading"><?php echo $this->loading; ?></p>
       <p id="index_complete" style="display:none"><?php echo $this->complete; ?></p>
       <p style="margin-bottom:0"><?php echo $this->content; ?></p>
@@ -18,26 +18,16 @@
 
     <script>
       window.addEvent('domready', function() {
-        var urls = $$('.page_url'),
+        var urls = $$('.tl_rebuild_glossar span'),
             news_urls = $$('.news_url'),
             last = urls.length-1, url;
         urls.each(function(el, i) {
+          var data = {rebuild_glossar:1,glang: el.getAttribute('data-language')};
+
+          data['rebuild_'+el.getAttribute('data-type')+'_glossar'] = 1;
           el.getAttribute('data-url') && new Request({
             'url': el.getAttribute('data-url'),
-            data: {rebuild_glossar: 1,glang:el.getAttribute('data-language')},
-            onComplete: function() {
-              el.addClass('tl_green');
-              if (i == last) {
-                $('index_loading').setStyle('display', 'none');
-                $('index_complete').setStyle('display', 'block');
-              }
-            }
-          }).get();
-        });
-        news_urls.each(function(el, i) {
-          el.getAttribute('data-url') && new Request({
-            'url': el.getAttribute('data-url'),
-            data: {rebuild_glossar: 1,glossar_news: 1},
+            data: data,
             onComplete: function() {
               el.addClass('tl_green');
               if (i == last) {

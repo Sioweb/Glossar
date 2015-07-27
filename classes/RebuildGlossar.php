@@ -19,6 +19,10 @@ use Contao;
 
 class RebuildGlossar extends \Backend implements \executable {
 
+  public function prepareRebuild($strContent,$strTemplate) {
+    return str_replace(array('<!-- indexer::stop -->','<!-- indexer::continue -->'),array('',''),$strContent);
+  }
+
   public function rebuild($strContent,$arrData,$arrSet) {
     global $objPage;
 
@@ -53,15 +57,18 @@ class RebuildGlossar extends \Backend implements \executable {
     foreach($arrTerms as &$pointer_terms)
       $pointer_terms = array_unique($pointer_terms);
 
-    if(\Input::get('glossar_news') == 1) {
 
-      preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
-      $matches = array_unique($matches[0]);
+    // HOOK: take additional pages
+    if (isset($GLOBALS['TL_HOOKS']['cacheGlossarTerms']) && is_array($GLOBALS['TL_HOOKS']['cacheGlossarTerms'])) {
+      foreach ($GLOBALS['TL_HOOKS']['cacheGlossarTerms'] as $type => $callback) {
+        if(\Input::get('rebuild_'.$type.'_glossar') == '1') {
+          $this->import($callback[0]);
+          $this->$callback[0]->$callback[1](\Input::get('items'),$arrTerms,$strContent,$type);
+        }
+      }
+    }
 
-      $News = \NewsModel::findByAlias(\Input::get('items'));
-      $News->glossar = implode('|',$matches);
-      $News->save();
-    } else {
+    if(\Input::get('rebuild_regular_glossar') == 1) {
       $strFallback = $strGlossar = '';
       if(!empty($arrTerms['glossar'])) {
         $matches = array();
@@ -76,6 +83,7 @@ class RebuildGlossar extends \Backend implements \executable {
         $matches = array_unique(array_map("strtolower",$matches[0]));
         $strFallback = implode('|',$matches);
       }
+
 
       $Page = \PageModel::findByPk($objPage->id);
       $Page->glossar = $strGlossar;
@@ -125,22 +133,27 @@ class RebuildGlossar extends \Backend implements \executable {
         $this->redirect('contao/confirm.php');
       }
 
-      $arrPages = $this->findGlossarPages();
-      $arrNewsPages = $this->findGlossarNewsPages();
+      $arrPages['regular'] = $this->findGlossarPages();
+      $Events = new GlossarEvents();
+
+      // $arrPages['news'] = $this->findGlossarNewsPages();
 
       // HOOK: take additional pages
       if (isset($GLOBALS['TL_HOOKS']['getGlossarPages']) && is_array($GLOBALS['TL_HOOKS']['getGlossarPages'])) {
-        foreach ($GLOBALS['TL_HOOKS']['getGlossarPages'] as $callback) {
+        foreach ($GLOBALS['TL_HOOKS']['getGlossarPages'] as $type => $callback) {
           $this->import($callback[0]);
-          $arrPages = $this->$callback[0]->$callback[1]($arrPages);
+          $cb_return = $this->$callback[0]->$callback[1]($arrPages);
+          if(is_numeric($type))
+            $arrPages[] = $cb_return;
+          else $arrPages[$type] = $cb_return;
         }
       }
 
-      // Return if there are no pages
-      if (empty($arrPages)) {
-        $_SESSION['REBUILD_INDEX_ERROR'] = $GLOBALS['TL_LANG']['tl_maintenance']['noGlossarPages'];
-        $this->redirect($this->getReferer());
-      }
+      // // Return if there are no pages
+      // if (empty($arrPages)) {
+      //   $_SESSION['REBUILD_INDEX_ERROR'] = $GLOBALS['TL_LANG']['tl_maintenance']['noGlossarPages'];
+      //   $this->redirect($this->getReferer());
+      // }
 
       // Truncate the search tables
       $this->import('Automator');
@@ -173,18 +186,27 @@ class RebuildGlossar extends \Backend implements \executable {
       $strBuffer = '';
       $rand = rand();
 
-      // Display the pages
-      foreach($arrPages as $lang => $arrPage)
-        for ($i=0, $c=count($arrPage); $i<$c; $i++) {
-          $strBuffer .= '<span class="page_url" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
-          unset($arrPages[$lang][$i]); // see #5681
+      foreach($arrPages as $type => $pages) {
+        foreach($pages as $lang => $arrPage) {
+          for ($i=0, $c=count($arrPage); $i<$c; $i++) {
+            $strBuffer .= '<span class="get_'.$type.'_url" data-type="'.$type.'" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
+            unset($arrPages[$type][$lang][$i]); // see #5681
+          }
         }
-
-      // Display the pages
-      for ($i=0, $c=count($arrNewsPages); $i<$c; $i++) {
-        $strBuffer .= '<span class="news_url" data-language="de" data-url="' . $arrNewsPages[$i] . '#' . $rand . $i . '">' . \String::substr($arrNewsPages[$i], 100) . '</span><br>';
-        unset($arrNewsPages[$i]); // see #5681
       }
+
+      // // Display the pages
+      // foreach($arrPages as $lang => $arrPage)
+      //   for ($i=0, $c=count($arrPage); $i<$c; $i++) {
+      //     $strBuffer .=   '<span class="page_url" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
+      //     unset($arrPages[$lang][$i]); // see #5681
+      //   }
+
+      // // Display the pages
+      // for ($i=0, $c=count($arrNewsPages); $i<$c; $i++) {
+      //   $strBuffer .=     '<span class="news_url" data-language="'.$lang.'" data-url="' . $arrNewsPages[$i] . '#' . $rand . $i . '">' . \String::substr($arrNewsPages[$i], 100) . '</span><br>';
+      //   unset($arrNewsPages[$i]); // see #5681
+      // }
 
       $objTemplate->content = $strBuffer;
       $objTemplate->note = $GLOBALS['TL_LANG']['tl_maintenance']['glossarNote'];
@@ -237,68 +259,6 @@ class RebuildGlossar extends \Backend implements \executable {
         }
       }
     return $arrPages;
-  }
-
-  protected function findGlossarNewsPages() {
-    $arrNewsPages = array();
-
-    $News = \NewsModel::findAll();
-    if(empty($News))
-      return array();
-
-    $arrNews = array();
-    while($News->next()) {
-      $GlossarNews = new GlossarNews();
-      if(!empty($News))
-        $arrNews[$News->pid][] = $GlossarNews->generateNewsUrl($News);
-    }
-
-    $NewsReader = \ModuleModel::findByType('newsreader');
-    if(empty($NewsReader))
-      return array();
-
-    $arrReader = array();
-    while($NewsReader->next()) $arrReader[$NewsReader->id] = deserialize($NewsReader->news_archives);
-
-    $Content = \ContentModel::findBy(array("module IN ('".implode("','",array_keys($arrReader))."')"),array());
-    if(empty($Content))
-      return array();
-
-    $arrContent = array();
-    while($Content->next()) $arrContent[$Content->module] = $Content->pid;
-
-    $Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$arrContent)."')"),array());
-    if(empty($Article))
-      return array();
-
-
-    $finishedIDs = $arrNewsPages = array();
-    while($Article->next()) {
-
-      // $root = $this->getRootPage($Article->pid);
-
-      $domain = \Environment::get('base');
-      $strLanguage = 'de';
-      $objPages = $Article->getRelated('pid');
-
-      $ReaderId = false;
-      foreach($arrContent as $module => $mid)
-        if($mid == $Article->id)
-          $ReaderId = $module;
-
-      foreach($arrReader[$ReaderId] as $news_id) {
-        if(in_array($news_id,$finishedIDs))
-          continue;
-
-        foreach($arrNews[$news_id] as $news_domain) {
-          $news_domain = str_replace('.html','',$news_domain);
-          $arrNewsPages[] = $domain . static::generateFrontendUrl($objPages->row(), substr($news_domain,strpos($news_domain,'/')), $strLanguage);
-        }
-        $finishedIDs[] = $news_id;
-      }
-    }
-
-    return $arrNewsPages;
   }
 
   private function getRootPage($id) {

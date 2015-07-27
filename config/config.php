@@ -28,10 +28,6 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array(
   )
 ));
 
-$function = 'add';
-
-  $function = 'set';
-
 if(method_exists('Contao\Config','set')) {
   if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
     \Config::set('ignoreInTags','title,a,h1,h2,h3,h4,h5,h6,nav');
@@ -47,12 +43,26 @@ if(method_exists('Contao\Config','set')) {
 }
 
 $GLOBALS['TL_CTE']['texts']['glossar'] = 'ContentGlossar';
-$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('Glossar', 'searchGlossarTerms');
-$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('Glossar','getSearchablePages');
+$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('sioweb\contao\extensions\glossar\Glossar', 'searchGlossarTerms');
+$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('sioweb\contao\extensions\glossar\Glossar','getSearchablePages');
+
+$GLOBALS['TL_HOOKS']['getGlossarPages']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','generateUrl');
+$GLOBALS['TL_HOOKS']['cacheGlossarTerms']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','updateCache');
+$GLOBALS['TL_HOOKS']['glossarContent']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','glossarContent');
+
+$GLOBALS['TL_HOOKS']['getGlossarPages']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','generateUrl');
+$GLOBALS['TL_HOOKS']['cacheGlossarTerms']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','updateCache');
+$GLOBALS['TL_HOOKS']['glossarContent']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','glossarContent');
+
+$GLOBALS['TL_HOOKS']['getGlossarPages']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','generateUrl');
+$GLOBALS['TL_HOOKS']['cacheGlossarTerms']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','updateCache');
+$GLOBALS['TL_HOOKS']['glossarContent']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','glossarContent');
 
 if(\Config::get('enableGlossar') == 1) {
-  if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1)
+  if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1) {
+    $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'prepareRebuild');
     $GLOBALS['TL_HOOKS']['indexPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
+  }
 
   if(TL_MODE == 'FE') {
     $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/Glossar/assets/glossar.js';
@@ -65,7 +75,7 @@ if(\Config::get('enableGlossar') == 1) {
       'maxWidth' => 450,
       'maxHeight' => 300,
     ),
-    'illegal' => '\-_\.',
+    'illegal' => '\-_\.&',
     'templates' => array(
       'ce_glossar',
       'glossar_default',
@@ -75,5 +85,5 @@ if(\Config::get('enableGlossar') == 1) {
   );
 
   if(Input::post('glossar') == 1)
-    $GLOBALS['TL_HOOKS']['initializeSystem'][] = array('Glossar', 'getGlossarTerm');
+    $GLOBALS['TL_HOOKS']['initializeSystem'][] = array('sioweb\contao\extensions\glossar\Glossar', 'getGlossarTerm');
 }

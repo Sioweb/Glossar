@@ -36,9 +36,9 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
   (
     'sorting' => array
     (
-      'mode'                    => 2,
+      'mode'                    => 1,
       'fields'                  => array('title'),
-      'flag'                    => 2,
+      'flag'                    => 1,
       'panelLayout'             => 'sort,search,limit'
     ),
     'label' => array
@@ -82,6 +82,14 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
         'href'                => 'act=edit',
         'icon'                => 'header.gif',
       ),
+      'copy' => array
+      (
+        'label'               => &$GLOBALS['TL_LANG']['tl_glossar']['copy'],
+        'href'                => 'act=copy',
+        'icon'                => 'copy.gif',
+        'attributes'          => 'onclick="Backend.getScrollOffset()"',
+        'button_callback'     => array('tl_glossar', 'copyPage')
+      ),
       'delete' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_glossar']['delete'],
@@ -89,13 +97,13 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
         'icon'                => 'delete.gif',
         'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
       ),
-      'export' => array
-      (
-        'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
-        'href'                => 'key=exportTerms',
-        'icon'                => 'theme_export.gif',
-        'class'               => 'header_edit_all',
-      )
+      // 'export' => array
+      // (
+      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
+      //   'href'                => 'key=exportTerms',
+      //   'icon'                => 'theme_export.gif',
+      //   'class'               => 'header_edit_all',
+      // )
     )
   ),
 
@@ -213,6 +221,56 @@ class tl_glossar extends Backend {
       throw new Exception($GLOBALS['TL_LANG']['ERR']['multipleGlossarFallback']);
 
     return $varValue;
+  }
+
+
+  /**
+   * Return the copy page button
+   *
+   * @param array  $row
+   * @param string $href
+   * @param string $label
+   * @param string $title
+   * @param string $icon
+   * @param string $attributes
+   * @param string $table
+   *
+   * @return string
+   */
+  public function copyPage($row, $href, $label, $title, $icon, $attributes, $table)
+  {
+    if ($GLOBALS['TL_DCA'][$table]['config']['closed'])
+      return '';
+
+    return '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
+  }
+
+
+  /**
+   * Return the copy page with subpages button
+   *
+   * @param array  $row
+   * @param string $href
+   * @param string $label
+   * @param string $title
+   * @param string $icon
+   * @param string $attributes
+   * @param string $table
+   *
+   * @return string
+   */
+  public function copyPageWithSubpages($row, $href, $label, $title, $icon, $attributes, $table)
+  {
+    if ($GLOBALS['TL_DCA'][$table]['config']['closed'])
+    {
+      return '';
+    }
+
+    $objSubpages = $this->Database->prepare("SELECT * FROM tl_page WHERE pid=?")
+                    ->limit(1)
+                    ->execute($row['id']);
+
+    return '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
   }
 
 }

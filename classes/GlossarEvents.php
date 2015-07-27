@@ -8,14 +8,14 @@ namespace sioweb\contao\extensions\glossar;
 use Contao;
 
 /**
- * @file GlossarNews.php
- * @class GlossarNews
+ * @file GlossarEvents.php
+ * @class GlossarEvents
  * @author Sascha Weidner
  * @version 3.0.0
  * @package sioweb.contao.extensions.glossar
  * @copyright Sascha Weidner, Sioweb
  */
-class GlossarNews extends \ModuleNews {
+class GlossarEvents extends \Events {
 
   public function __construct() {
     
@@ -26,38 +26,39 @@ class GlossarNews extends \ModuleNews {
   public function glossarContent($item,$strContent,$template) {
     if(empty($item)) return array();
 
-    $News = \NewsModel::findByAlias(\Input::get('items'));
-    return $News->glossar;
+    $Event = \CalendarEventsModel::findByAlias(\Input::get('items'));
+    return $Event->glossar;
   }
 
   public function updateCache($item,$arrTerms,$strContent) {
     preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
     $matches = array_unique($matches[0]);
 
-    $News = \NewsModel::findByAlias($item);
-    $News->glossar = implode('|',$matches);
-    $News->save();
+    $Event = \CalendarEventsModel::findByAlias($item);
+    $Event->glossar = implode('|',$matches);
+    $Event->save();
   }
 
   public function generateUrl($arrPages) {
     $arrPages = array();
 
-    $News = \NewsModel::findAll();
-    if(empty($News))
+    $Event = \CalendarEventsModel::findAll();
+    if(empty($Event))
       return array();
 
-    $arrNews = array();
-    while($News->next()) {
-      if(!empty($News))
-        $arrNews[$News->pid][] = $this->generateNewsUrl($News);
+    $arrEvent = array();
+    while($Event->next()) {
+      $objCalendar = \CalendarModel::findByPk($Event->pid);
+      if ($objCalendar !== null && $objCalendar->jumpTo && ($objTarget = $objCalendar->getRelated('jumpTo')) !== null)
+        $arrEvent[$Event->pid][] = $this->generateEventUrl($Event,$this->generateFrontendUrl($objTarget->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/events/%s')));
     }
 
-    $NewsReader = \ModuleModel::findByType('newsreader');
-    if(empty($NewsReader))
+    $EventReader = \ModuleModel::findByType('eventreader');
+    if(empty($EventReader))
       return array();
 
     $arrReader = array();
-    while($NewsReader->next()) $arrReader[$NewsReader->id] = deserialize($NewsReader->news_archives);
+    while($EventReader->next()) $arrReader[$EventReader->id] = deserialize($EventReader->cal_calendar);
 
     $Content = \ContentModel::findBy(array("module IN ('".implode("','",array_keys($arrReader))."')"),array());
     if(empty($Content))
@@ -69,7 +70,6 @@ class GlossarNews extends \ModuleNews {
     $Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$arrContent)."')"),array());
     if(empty($Article))
       return array();
-
 
     $finishedIDs = $arrPages = array();
     while($Article->next()) {
@@ -85,17 +85,18 @@ class GlossarNews extends \ModuleNews {
         if($mid == $Article->id)
           $ReaderId = $module;
 
-      foreach($arrReader[$ReaderId] as $news_id) {
-        if(in_array($news_id,$finishedIDs))
+      foreach($arrReader[$ReaderId] as $event_id) {
+        if(in_array($event_id,$finishedIDs))
           continue;
 
-        foreach($arrNews[$news_id] as $news_domain) {
-          $news_domain = str_replace('.html','',$news_domain);
-          $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($news_domain,strpos($news_domain,'/')), $strLanguage);
+        foreach($arrEvent[$event_id] as $event_domain) {
+          $event_domain = str_replace('.html','',$event_domain);
+          $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($event_domain,strpos($event_domain,'/')), $strLanguage);
         }
-        $finishedIDs[] = $news_id;
+        $finishedIDs[] = $event_id;
       }
     }
+
     return $arrPages;
   }
 }

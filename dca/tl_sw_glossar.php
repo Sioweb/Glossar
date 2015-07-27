@@ -38,15 +38,12 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   (
     'sorting' => array
     (
-      'mode'                    => 2,
+      'mode'                    => 4,
       'fields'                  => array('type,title'),
-      'flag'                    => 2,
-      'panelLayout'             => 'sort,search,limit'
-    ),
-    'label' => array
-    (
-      'fields'                  => array('title'),
-      'format'                  => '%s',
+      'headerFields'            => array('type','title','tstamp'),
+      'child_record_callback'   => array('tl_sw_glossar', 'listTerms'),
+      'panelLayout'             => 'filter;sort,search,limit',
+      'child_record_class'      => 'no_padding'
     ),
     'global_operations' => array
     (
@@ -88,13 +85,13 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'copy' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['copy'],
-        'href'                => 'act=paste&mode=copy',
+        'href'                => 'act=copy',
         'icon'                => 'copy.gif'
       ),
       'cut' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['cut'],
-        'href'                => 'act=paste&mode=cut',
+        'href'                => 'act=paste&amp;mode=cut',
         'icon'                => 'cut.gif'
       ),
       'delete' => array
@@ -307,6 +304,10 @@ class tl_sw_glossar extends Backend {
     }
 
     return $varValue;
+  }
+
+  public function listTerms($arrRow) {
+    return '<div class="tl_content_left">' . $arrRow['title'] . '</div>';
   }
 
 }

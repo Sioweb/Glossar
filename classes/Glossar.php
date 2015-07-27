@@ -29,12 +29,21 @@ class Glossar extends \Frontend {
     if($objPage->disableGlossar == 1)
       return $strContent;
 
-    if(\Input::get('items') != '') {
-      $News = \NewsModel::findByAlias(\Input::get('items'));
-      $objPage->glossar = $News->glossar;
+    // HOOK: search for terms in Events, faq and news
+    $arrGlossar = array($objPage->glossar);
+    if (isset($GLOBALS['TL_HOOKS']['glossarContent']) && is_array($GLOBALS['TL_HOOKS']['glossarContent'])) {
+      foreach ($GLOBALS['TL_HOOKS']['glossarContent'] as $type => $callback) {
+        $this->import($callback[0]);
+        if(!empty($cb_output = $this->$callback[0]->$callback[1](\Input::get('items'),$strContent,$template)))
+          $arrGlossar[] = $cb_output;
+      }
     }
 
-    $Glossar = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
+    if(!empty($arrGlossar))
+      $this->glossar = implode('|',$arrGlossar);
+    $this->glossar = str_replace('||','|',$this->glossar);
+
+    $Glossar = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
     $strContent = $this->replace($strContent,$Glossar);
 
     if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1)
@@ -80,12 +89,14 @@ class Glossar extends \Frontend {
         $IllegalPlural = html_entity_decode($IllegalPlural);
 
         $plural = preg_replace('/[.]+(?<!\\.)/is','\\.',$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:''));
-        if($Glossar->title && preg_match_all( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(' . $Glossar->title . (!$Glossar->noPlural?'[^ '.$plural.']*':'') . ($Glossar->strictSearch?'\b':'').')/is', $strContent, $third)) {
-          $strContent = preg_replace_callback( '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(' . $Glossar->title . (!$Glossar->noPlural?'[^ '.$plural.']*':'') . ($Glossar->strictSearch?'\b':'').')/is', array($this,$replaceFunction), $strContent);
+        $preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(' . $Glossar->title . (!$Glossar->noPlural?'[^ '.$plural.']*':'') . ($Glossar->strictSearch?'\b':'').')/is';
+        if($Glossar->title && preg_match_all( $preg_query, $strContent, $third)) {
+          $strContent = preg_replace_callback( $preg_query, array($this,$replaceFunction), $strContent);
         }
       }
-      if($Glossar->type == 'abbr' && $Glossar->title && preg_match_all('/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . ')/is', $strContent, $third)) {
-        $strContent = preg_replace_callback('/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . ')/is', array($this,'replaceAbbr'), $strContent);
+      $preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Glossar->title . ')/is';
+      if($Glossar->type == 'abbr' && $Glossar->title && preg_match_all($preg_query, $strContent, $third)) {
+        $strContent = preg_replace_callback($preg_query, array($this,'replaceAbbr'), $strContent);
       }
     }
     return $strContent;

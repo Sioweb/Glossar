@@ -8,14 +8,14 @@ namespace sioweb\contao\extensions\glossar;
 use Contao;
 
 /**
- * @file GlossarNews.php
- * @class GlossarNews
+ * @file GlossarFAQ.php
+ * @class GlossarFAQ
  * @author Sascha Weidner
  * @version 3.0.0
  * @package sioweb.contao.extensions.glossar
  * @copyright Sascha Weidner, Sioweb
  */
-class GlossarNews extends \ModuleNews {
+class GlossarFAQ extends \ModuleFaqList {
 
   public function __construct() {
     
@@ -26,38 +26,38 @@ class GlossarNews extends \ModuleNews {
   public function glossarContent($item,$strContent,$template) {
     if(empty($item)) return array();
 
-    $News = \NewsModel::findByAlias(\Input::get('items'));
-    return $News->glossar;
+    $Faq = \FaqModel::findByAlias(\Input::get('items'));
+    return $Faq->glossar;
   }
 
   public function updateCache($item,$arrTerms,$strContent) {
     preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
     $matches = array_unique($matches[0]);
 
-    $News = \NewsModel::findByAlias($item);
-    $News->glossar = implode('|',$matches);
-    $News->save();
+    $Faq = \FaqModel::findByAlias($item);
+    $Faq->glossar = implode('|',$matches);
+    $Faq->save();
   }
 
   public function generateUrl($arrPages) {
     $arrPages = array();
 
-    $News = \NewsModel::findAll();
-    if(empty($News))
+    $Faq = \FaqModel::findAll();
+    if(empty($Faq))
       return array();
 
-    $arrNews = array();
-    while($News->next()) {
-      if(!empty($News))
-        $arrNews[$News->pid][] = $this->generateNewsUrl($News);
+    $arrFaq = array();
+    while($Faq->next()) {
+      if(!empty($Faq))
+        $arrFaq[$Faq->pid][] = $this->generateFaqLink($Faq);
     }
 
-    $NewsReader = \ModuleModel::findByType('newsreader');
-    if(empty($NewsReader))
+    $FaqReader = \ModuleModel::findByType('faqreader');
+    if(empty($FaqReader))
       return array();
 
     $arrReader = array();
-    while($NewsReader->next()) $arrReader[$NewsReader->id] = deserialize($NewsReader->news_archives);
+    while($FaqReader->next()) $arrReader[$FaqReader->id] = deserialize($FaqReader->faq_categories);
 
     $Content = \ContentModel::findBy(array("module IN ('".implode("','",array_keys($arrReader))."')"),array());
     if(empty($Content))
@@ -69,7 +69,6 @@ class GlossarNews extends \ModuleNews {
     $Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$arrContent)."')"),array());
     if(empty($Article))
       return array();
-
 
     $finishedIDs = $arrPages = array();
     while($Article->next()) {
@@ -85,17 +84,18 @@ class GlossarNews extends \ModuleNews {
         if($mid == $Article->id)
           $ReaderId = $module;
 
-      foreach($arrReader[$ReaderId] as $news_id) {
-        if(in_array($news_id,$finishedIDs))
+      foreach($arrReader[$ReaderId] as $faq_id) {
+        if(in_array($faq_id,$finishedIDs))
           continue;
 
-        foreach($arrNews[$news_id] as $news_domain) {
-          $news_domain = str_replace('.html','',$news_domain);
-          $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($news_domain,strpos($news_domain,'/')), $strLanguage);
+        foreach($arrFaq[$faq_id] as $faq_domain) {
+          $faq_domain = str_replace('.html','',$faq_domain);
+          $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($faq_domain,strpos($faq_domain,'/')), $strLanguage);
         }
-        $finishedIDs[] = $news_id;
+        $finishedIDs[] = $faq_id;
       }
     }
+
     return $arrPages;
   }
 }
