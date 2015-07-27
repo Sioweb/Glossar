@@ -65,10 +65,12 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['glossar_no_fallback'] = array(
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['strictSearch'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['strictSearch'],
-  'exclude'                 => true,
-  'inputType'               => 'checkbox',
-  'eval'                    => array('tl_class'=>'w50 clr'),
-  'sql'                     => "char(1) NOT NULL default ''"
+  'default'                 => 'alias',
+  'inputType'               => 'select',
+  'options'                 => array_keys($GLOBALS['glossar']['searchTypes']),
+  'reference'               => &$GLOBALS['glossar']['searchTypes'],
+  'eval'                    => array('tl_class'=>'w50 clr','includeBlankOption'=>true),
+  'sql'                     => "varchar(20) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['disableGlossarCache'] = array(

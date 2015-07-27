@@ -221,10 +221,12 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'strictSearch' => array
     (
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['strictSearch'],
-      'exclude'                 => true,
-      'inputType'               => 'checkbox',
-      'eval'                    => array('tl_class'=>'w50 clr'),
-      'sql'                     => "char(1) NOT NULL default ''"
+      'default'                 => 'alias',
+      'inputType'               => 'select',
+      'options'                 => array_keys($GLOBALS['glossar']['searchTypes']),
+      'reference'               => &$GLOBALS['glossar']['searchTypes'],
+      'eval'                    => array('tl_class'=>'w50 clr','includeBlankOption'=>true),
+      'sql'                     => "varchar(20) NOT NULL default ''"
     ),
     'termAsHeadline' => array
     (
