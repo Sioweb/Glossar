@@ -1,6 +1,15 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/core/languages/en/tl_glossar.php" source-language="en">
     <body>
+      <trans-unit id="tl_glossar.tstamp.0">
+        <source>Erstellt am</source>
+        <target>Erstellt am</target>
+      </trans-unit>
+      <trans-unit id="tl_glossar.tstamp.1">
+        <source>Erstellt am</source>
+        <target>Erstellt am</target>
+      </trans-unit>
+
       <trans-unit id="tl_glossar.title.0">
         <source>Glossar-Titel</source>
         <target>Glossar-Titel</target>

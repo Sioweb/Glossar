@@ -18,6 +18,8 @@
  */
 if (Input::get('do') == 'glossar') {
   $GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_sw_glossar';
+
+  $GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('type','title','jumpTo','tstamp');
 }
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['glossar'] = '{type_legend},type,glossar,sortGlossarBy,termAsHeadline;{pagination_legend:hide},addAlphaPagination';

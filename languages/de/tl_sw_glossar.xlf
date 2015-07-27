@@ -1,6 +1,14 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/core/languages/en/tl_sw_glossar.php" source-language="en">
     <body>
+      <trans-unit id="tl_sw_glossar.tstamp.0">
+        <source>Erstellt am</source>
+        <target>Erstellt am</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.tstamp.1">
+        <source>Erstellt am</source>
+        <target>Erstellt am</target>
+      </trans-unit>
       <trans-unit id="tl_sw_glossar.type.0">
         <source>Begriffsart</source>
         <target>Begriffsart</target>
