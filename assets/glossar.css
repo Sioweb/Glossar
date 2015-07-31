@@ -1,3 +1,27 @@
+.tagcloud {
+  width:250px;
+  font-size:12px;
+  padding: 50px 0;
+  text-align:center;
+}
+.tagcloud a {
+  color: #222;
+  text-decoration: none;
+  padding: 0 5px;
+  cursor: pointer;
+  display: inline-block;
+  
+  -webkit-transition: color .25s;
+  -o-transition: color .25s;
+  transition: color .25s;
+}
+.tagcloud a:first-child {
+  display: block;
+}
+.tagcloud a:hover {
+  color: #ccc;
+}
+
 .glossar_layer {
 	top: 0;
 	left: 10%;
