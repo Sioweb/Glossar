@@ -10,6 +10,24 @@
         <target>Der Glossar wird auf allen Seiten aktiviert.</target>
       </trans-unit>
 
+      <trans-unit id="tl_settings.glossarIncludeUnsearchable.0">
+        <source>Von der Suche ausgeschlossene Inhalte einbeziehen</source>
+        <target>Von der Suche ausgeschlossene Inhalte einbeziehen</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.glossarIncludeUnsearchable.1">
+        <source>Inhalte die als nicht suchbar markiert sind, indexer::stop|continue</source>
+        <target>Inhalte die als nicht suchbar markiert sind, indexer::stop|continue</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.activateGlossarTags.0">
+        <source>Glossar Tags aktivieren</source>
+        <target>Glossar Tags aktivieren</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.activateGlossarTags.1">
+        <source>Ähnlich wie nicht durchsuchbare Inhalte gibt es Inhalte die nicht vom Glossar erfasst werden dürfen glossar::stop|continue.</source>
+        <target>Ähnlich wie nicht durchsuchbare Inhalte gibt es Inhalte die nicht vom Glossar erfasst werden dürfen glossar::stop|continue.</target>
+      </trans-unit>
+
       <trans-unit id="tl_settings.disableGlossarCache.0">
         <source>Deactivate Glossar cache</source>
         <target>Cache umgehen</target>

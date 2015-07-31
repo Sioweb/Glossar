@@ -43,6 +43,7 @@ if(method_exists('Contao\Config','set')) {
 }
 
 $GLOBALS['TL_CTE']['texts']['glossar'] = 'ContentGlossar';
+$GLOBALS['TL_CTE']['texts']['glossar_cloud'] = 'ContentGlossarCloud';
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('sioweb\contao\extensions\glossar\Glossar', 'searchGlossarTerms');
 $GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('sioweb\contao\extensions\glossar\Glossar','getSearchablePages');
 
@@ -60,7 +61,8 @@ $GLOBALS['TL_HOOKS']['glossarContent']['events'] = array('sioweb\contao\extensio
 
 if(\Config::get('enableGlossar') == 1) {
   if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1) {
-    $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'prepareRebuild');
+    if(\Config::get('glossarIncludeUnsearchable') == 1)
+      $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'prepareRebuild');
     $GLOBALS['TL_HOOKS']['indexPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
   }
 

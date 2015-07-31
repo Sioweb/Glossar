@@ -1,0 +1,31 @@
+<?php $this->extend('block_unsearchable'); ?>
+<?php $this->block('content'); ?>
+<style>
+  .tagcloud {
+    padding: 50px 0;
+  }
+  .tagcloud a {
+    color: #222;
+    text-decoration: none;
+    padding: 0 5px;
+    cursor: pointer;
+    display: inline-block;
+    
+    -webkit-transition: color .25s;
+    -o-transition: color .25s;
+    transition: color .25s;
+  }
+  .tagcloud a:first-child {
+    display: block;
+  }
+  .tagcloud a:hover {
+    color: #ccc;
+  }
+</style>
+<div class="tagcloud" style="font-size:12px;width:250px; text-align:center;">
+  <?php foreach($this->pages as $page) {?>
+  <a href="<?php echo $page['url'];?>" <?php echo ($page['description']?' title="'.$page['description'].'"':'');?> style="font-size:<?php echo $page['weight'];?>em;<?php echo($page['weight'] > 1.5?'font-weight:bold;':'');?>"><?php echo $page['title'];?></a>
+  <?php }?>
+</div>
+
+<?php $this->endblock(); ?>

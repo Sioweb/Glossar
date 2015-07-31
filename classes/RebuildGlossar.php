@@ -16,7 +16,6 @@ use Contao;
  * @copyright Sascha Weidner, Sioweb
  */
 
-
 class RebuildGlossar extends \Backend implements \executable {
 
   public function prepareRebuild($strContent,$strTemplate) {
@@ -25,6 +24,41 @@ class RebuildGlossar extends \Backend implements \executable {
 
   public function rebuild($strContent,$arrData,$arrSet) {
     global $objPage;
+
+    if(\Config::get('activateGlossarTags') == 1) {
+      if (isset($GLOBALS['TL_HOOKS']['beforeGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['beforeGlossarTags'])) {
+        foreach ($GLOBALS['TL_HOOKS']['beforeGlossarTags'] as $type => $callback) {
+          $this->import($callback[0]);
+          $strContent = $this->$callback[0]->$callback[1]($strContent,$strTemplate);
+        }
+      }
+
+      // Strip non-indexable areas
+      while (($intStart = strpos($strContent, '<!-- glossar::stop -->')) !== false) {
+        if (($intEnd = strpos($strContent, '<!-- glossar::continue -->', $intStart)) !== false) {
+          $intCurrent = $intStart;
+
+          // Handle nested tags
+          while (($intNested = strpos($strContent, '<!-- glossar::stop -->', $intCurrent + 22)) !== false && $intNested < $intEnd) {
+            if (($intNewEnd = strpos($strContent, '<!-- glossar::continue -->', $intEnd + 26)) !== false) {
+              $intEnd = $intNewEnd;
+              $intCurrent = $intNested;
+            }
+            else break;
+          }
+
+          $strContent = substr($strContent, 0, $intStart) . substr($strContent, $intEnd + 26);
+        }
+        else break;
+      }
+
+      if (isset($GLOBALS['TL_HOOKS']['afterGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['afterGlossarTags'])) {
+        foreach ($GLOBALS['TL_HOOKS']['afterGlossarTags'] as $type => $callback) {
+          $this->import($callback[0]);
+          $strContent = $this->$callback[0]->$callback[1]($strContent,$strTemplate);
+        }
+      }
+    }
 
     if (!isset($_GET['items']) && \Config::get('useAutoItem') && isset($_GET['auto_item']))
       \Input::setGet('items', \Input::get('auto_item'));
