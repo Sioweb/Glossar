@@ -25,6 +25,7 @@ class Glossar extends \Frontend {
 
     if (!isset($_GET['items']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item']))
       \Input::setGet('items', \Input::get('auto_item'));
+    $arrGlossar = array($objPage->glossar);
 
     if($objPage->disableGlossar == 1)
       return $strContent;
@@ -34,7 +35,8 @@ class Glossar extends \Frontend {
     if (isset($GLOBALS['TL_HOOKS']['glossarContent']) && is_array($GLOBALS['TL_HOOKS']['glossarContent'])) {
       foreach ($GLOBALS['TL_HOOKS']['glossarContent'] as $type => $callback) {
         $this->import($callback[0]);
-        if(!empty($cb_output = $this->$callback[0]->$callback[1](\Input::get('items'),$strContent,$template)))
+        $cb_output = $this->$callback[0]->$callback[1](\Input::get('items'),$strContent,$template);
+        if(!empty($cb_output))
           $arrGlossar[] = $cb_output;
       }
     }
