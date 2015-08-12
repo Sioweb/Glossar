@@ -42,6 +42,8 @@ class ContentGlossar extends \ContentElement {
   }
   
   public function compile()  {
+    global $objPage;
+
     $this->loadLanguageFile('glossar_errors');
     $glossarErrors = array();
     
@@ -71,6 +73,7 @@ class ContentGlossar extends \ContentElement {
           if(\Input::get('pag') == '' || $initial == \Input::get('pag') ) {
             $newGlossarObj = new \FrontendTemplate('glossar_default');
             $newGlossarObj->setData($Glossar->row());
+
             if(\Input::get('items') != '')
               $newGlossarObj->teaser = null;
 
@@ -112,7 +115,15 @@ class ContentGlossar extends \ContentElement {
       }
     }
     
-    $this->Template->alphaPagination = $letters;
+    $objPagination = new \FrontendTemplate('glossar_pagination');
+    if($objPage) {
+      $objPagination->showAllHref = $this->generateFrontendUrl($objPage->row());
+      $objPagination->showAllLabel = $GLOBALS['TL_LANG']['glossar']['showAllLabel'];
+      $objPagination->alphaPagination = $letters;
+      $strAlphaPagination = $objPagination->parse();
+    }
+
+    $this->Template->alphaPagination = $strAlphaPagination;
     
     if(\Input::get('items') != '' || (!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != ''))
       if(!$arrGlossar && $GLOBALS['glossar']['errors']['no_content'])

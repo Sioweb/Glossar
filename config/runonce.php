@@ -18,16 +18,7 @@ class ROGlossar extends Controller {
       );
       $this->Database->prepare("INSERT INTO tl_glossar %s")->set($arrInsert)->execute();
       $Term = $this->Database->prepare("UPDATE tl_sw_glossar SET pid = 1 WHERE pid = 0 OR pid = NULL")->execute();
-    } else {
-      $Term = $this->Database->prepare("SELECT * FROM tl_sw_glossar WHERE pid = 0 OR pid = NULL or pid = '' ")->execute();
-      if($Term->count() > 0) {
-
-      }
     }
-  }
-
-  private function createContainer() {
-    
   }
 }
 

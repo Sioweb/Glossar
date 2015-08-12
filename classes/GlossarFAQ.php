@@ -17,11 +17,14 @@ use Contao;
  */
 class GlossarFAQ extends \ModuleFaqList {
 
-  public function __construct() {
-    
-  }
+  public function __construct() {}
 
   public function compile() {}
+
+  public function clearGlossar() {
+    $this->import('Database');
+    $this->Database->prepare("UPDATE tl_faq SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+  }
 
   public function glossarContent($item,$strContent,$template) {
     if(empty($item)) return array();
@@ -33,6 +36,9 @@ class GlossarFAQ extends \ModuleFaqList {
   public function updateCache($item,$arrTerms,$strContent) {
     preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
     $matches = array_unique($matches[0]);
+
+    if(empty($matches))
+      return;
 
     $Faq = \FaqModel::findByAlias($item);
     $Faq->glossar = implode('|',$matches);

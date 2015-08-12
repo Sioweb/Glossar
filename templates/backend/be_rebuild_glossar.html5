@@ -22,7 +22,7 @@
             news_urls = $$('.news_url'),
             last = urls.length-1, url;
         urls.each(function(el, i) {
-          var data = {rebuild_glossar:1,glang: el.getAttribute('data-language')};
+          var data = {rebuild_glossar:1,time:el.getAttribute('data-time')};
 
           data['rebuild_'+el.getAttribute('data-type')+'_glossar'] = 1;
           el.getAttribute('data-url') && new Request({

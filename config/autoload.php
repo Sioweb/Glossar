@@ -50,6 +50,7 @@ TemplateLoader::addFiles(array
   'ce_glossar_cloud'    => 'system/modules/Glossar/templates'.$version,
 
   'glossar_default'     => 'system/modules/Glossar/templates',
+  'glossar_pagination'  => 'system/modules/Glossar/templates',
   'glossar_layer'       => 'system/modules/Glossar/templates',
   'glossar_error'       => 'system/modules/Glossar/templates',
   'glossar_description' => 'system/modules/Glossar/templates',

@@ -17,11 +17,14 @@ use Contao;
  */
 class GlossarNews extends \ModuleNews {
 
-  public function __construct() {
-    
-  }
+  public function __construct() {}
 
   public function compile() {}
+
+  public function clearGlossar($time) {
+    $this->import('Database');
+    $this->Database->prepare("UPDATE tl_news SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+  }
 
   public function glossarContent($item,$strContent,$template) {
     if(empty($item)) return array();
@@ -33,6 +36,9 @@ class GlossarNews extends \ModuleNews {
   public function updateCache($item,$arrTerms,$strContent) {
     preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
     $matches = array_unique($matches[0]);
+
+    if(empty($matches))
+      return;
 
     $News = \NewsModel::findByAlias($item);
     $News->glossar = implode('|',$matches);

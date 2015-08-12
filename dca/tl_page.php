@@ -37,3 +37,6 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['glossar'] = array(
 $GLOBALS['TL_DCA']['tl_page']['fields']['fallback_glossar'] = array(
   'sql'                     => "text NULL"
 );
+$GLOBALS['TL_DCA']['tl_page']['fields']['glossar_time'] = array(
+  'sql'                     => "int(10) unsigned NOT NULL default '0'"
+);

@@ -25,6 +25,15 @@ class RebuildGlossar extends \Backend implements \executable {
   public function rebuild($strContent,$arrData,$arrSet) {
     global $objPage;
 
+    $this->import('Database');
+    $this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute(\Input::get('time'),\Input::get('time'));
+    if (isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
+      foreach ($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
+        $this->import($callback[0]);
+        $this->$callback[0]->$callback[1](\Input::get('time'));
+      }
+    }
+
     if(\Config::get('activateGlossarTags') == 1) {
       if (isset($GLOBALS['TL_HOOKS']['beforeGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['beforeGlossarTags'])) {
         foreach ($GLOBALS['TL_HOOKS']['beforeGlossarTags'] as $type => $callback) {
@@ -120,8 +129,10 @@ class RebuildGlossar extends \Backend implements \executable {
 
 
       $Page = \PageModel::findByPk($objPage->id);
-      $Page->glossar = $strGlossar;
-      $Page->fallback_glossar = $strFallback;
+      if($strGlossar)
+        $Page->glossar = $strGlossar;
+      if($strFallback)
+        $Page->fallback_glossar = $strFallback;
       $Page->save();
     }
   }
@@ -219,11 +230,12 @@ class RebuildGlossar extends \Backend implements \executable {
 
       $strBuffer = '';
       $rand = rand();
+      $time = time();
 
       foreach($arrPages as $type => $pages) {
         foreach($pages as $lang => $arrPage) {
           for ($i=0, $c=count($arrPage); $i<$c; $i++) {
-            $strBuffer .= '<span class="get_'.$type.'_url" data-type="'.$type.'" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
+            $strBuffer .= '<span class="get_'.$type.'_url" data-time="'.$time.'" data-type="'.$type.'" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
             unset($arrPages[$type][$lang][$i]); // see #5681
           }
         }

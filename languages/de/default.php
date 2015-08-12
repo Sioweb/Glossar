@@ -15,6 +15,8 @@
 */
 
 $GLOBALS['glossar']['to_article'] = 'Weiterlesen ...';
+$GLOBALS['TL_LANG']['glossar']['showAllLabel'] = 'Alle anzeigen';
+
 $GLOBALS['TL_LANG']['CTE']['glossar'] = array('Glossar','Erzeugt eine Liste mit Glossar-Begriffen.');
 $GLOBALS['TL_LANG']['CTE']['glossar_cloud'] = array('Glossar-Cloud','Erzeugt eine Liste mit Seiten, auf denen gleiche oder verwandte Begriffe stehen.');
 
