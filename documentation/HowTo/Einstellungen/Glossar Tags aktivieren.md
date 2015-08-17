@@ -1,1 +1,0 @@
-Diese Tags definieren dass der Glossar Inhalte ausschließt die mit `<!-- glossar::stop -->` und `<!-- glossar::continue -->` umschlossen wurden.
