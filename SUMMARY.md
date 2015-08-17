@@ -2,4 +2,5 @@
 
 * Vorwort
 * Install
+* Hooks
 
