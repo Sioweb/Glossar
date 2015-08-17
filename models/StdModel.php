@@ -5,8 +5,8 @@
  */
 
 /**
- * @file SWGlossarModel.php
- * @class SWGlossarModel
+ * @file STDModel.php
+ * @class STDModel
  * @author Sascha Weidner
  * @version 3.0.0
  * @package sioweb.contao.extensions.glossar

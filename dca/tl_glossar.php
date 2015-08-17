@@ -55,18 +55,18 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
         'class'               => 'header_edit_all',
         'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
       ),
-      // 'import' => array
-      // (
-      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['import'],
-      //   'href'                => 'key=importGlossar',
-      //   'class'               => 'header_edit_all',
-      // ),
-      // 'export' => array
-      // (
-      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
-      //   'href'                => 'key=exportGlossar',
-      //   'class'               => 'header_edit_all',
-      // )
+      'import' => array
+      (
+        'label'               => &$GLOBALS['TL_LANG']['MSC']['import'],
+        'href'                => 'key=importGlossar',
+        'class'               => 'header_edit_all',
+      ),
+      'export' => array
+      (
+        'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
+        'href'                => 'key=exportGlossar',
+        'class'               => 'header_edit_all',
+      )
     ),
     'operations' => array
     (
@@ -97,13 +97,13 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
         'icon'                => 'delete.gif',
         'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
       ),
-      // 'export' => array
-      // (
-      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
-      //   'href'                => 'key=exportTerms',
-      //   'icon'                => 'theme_export.gif',
-      //   'class'               => 'header_edit_all',
-      // )
+      'export' => array
+      (
+        'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
+        'href'                => 'key=exportTerms',
+        'icon'                => 'theme_export.gif',
+        'class'               => 'header_edit_all',
+      )
     )
   ),
 

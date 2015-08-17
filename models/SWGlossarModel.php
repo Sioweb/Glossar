@@ -28,5 +28,17 @@ class SWGlossarModel extends \Model {
     $arrColumns = array("left($t.alias,1) = ?");
     return static::findBy($arrColumns, $initial, $arrOptions);
   }
+
+  public static function findByPids($pids,$arrOptions = array()) {
+    $t = static::$strTable;
+    $arrColumns = array("pid IN('".implode("','",$pids)."')");
+    return static::findBy($arrColumns, array(), $arrOptions);
+  }
+
+  public static function findAllByAlias($arrAlias,$pid,$arrOptions = array()) {
+    $t = static::$strTable;
+    $arrColumns = array("pid = ? AND alias IN('".implode("','",$arrAlias)."')");
+    return static::findBy($arrColumns, array($pid), $arrOptions);
+  }
   
 }}

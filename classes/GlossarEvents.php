@@ -21,7 +21,7 @@ class GlossarEvents extends \Events {
 
   public function compile() {}
 
-  public function clearGlossar() {
+  public function clearGlossar($time) {
     $this->import('Database');
     $this->Database->prepare("UPDATE tl_calendar_events SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
   }

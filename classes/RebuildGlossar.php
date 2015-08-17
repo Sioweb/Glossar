@@ -231,7 +231,7 @@ class RebuildGlossar extends \Backend implements \executable {
       $strBuffer = '';
       $rand = rand();
       $time = time();
-
+      
       foreach($arrPages as $type => $pages) {
         foreach($pages as $lang => $arrPage) {
           for ($i=0, $c=count($arrPage); $i<$c; $i++) {

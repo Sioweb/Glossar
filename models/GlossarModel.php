@@ -22,5 +22,11 @@ class GlossarModel extends \Model {
    * @var string
    */
   protected static $strTable = 'tl_glossar';
+
+  public static function findAllByAlias($arrAlias,$arrOptions = array()) {
+    $t = static::$strTable;
+    $arrColumns = array("alias IN('".implode("','",$arrAlias)."')");
+    return static::findBy($arrColumns, array(), $arrOptions);
+  }
   
 }}

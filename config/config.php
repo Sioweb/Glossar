@@ -63,6 +63,16 @@ $GLOBALS['TL_HOOKS']['cacheGlossarTerms']['events'] = array('sioweb\contao\exten
 $GLOBALS['TL_HOOKS']['glossarContent']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','glossarContent');
 
 if(\Config::get('enableGlossar') == 1) {
+  $uploadTypes = \Config::get('uploadTypes');
+  if(strpos($uploadTypes,'json') === false) {
+    $uploadTypes .= (strlen($uploadTypes)>0?',':'').'json';
+
+    if(method_exists('Contao\Config','set'))
+      \Config::set('uploadTypes',$uploadTypes);
+    elseif(method_exists('Contao\Config','add'))
+      \Config::add('$GLOBALS[\'TL_CONFIG\'][\'uploadTypes\']',$uploadTypes);
+  }
+
   if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1) {
     $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'prepareRebuild');
     $GLOBALS['TL_HOOKS']['indexPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');

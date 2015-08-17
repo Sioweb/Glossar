@@ -77,15 +77,21 @@ class ContentGlossar extends \ContentElement {
             if(\Input::get('items') != '')
               $newGlossarObj->teaser = null;
 
-            if(!$newGlossarObj->jumpTo)
-              $newGlossarObj->jumpTo = $GLOBALS['TL_CONFIG']['jumpToGlossar'];
+            $link = null;
 
-            if($newGlossarObj->jumpTo)
-              $link = \PageModel::findByPk($newGlossarObj->jumpTo);
+            $Content = \ContentModel::findPublishedByPidAndTable($newGlossarObj->id,'tl_sw_glossar');
+            if(!empty($Content)) {
 
-            if($link)
-              $newGlossarObj->link =  $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$newGlossarObj->alias);
-            
+              if(!$newGlossarObj->jumpTo)
+                $newGlossarObj->jumpTo = $GLOBALS['TL_CONFIG']['jumpToGlossar'];
+
+              if($newGlossarObj->jumpTo)
+                $link = \PageModel::findByPk($newGlossarObj->jumpTo);
+
+              if($link)
+                $newGlossarObj->link =  $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$newGlossarObj->alias);
+            } else $newGlossarObj->link = false;
+
             if(\Input::get('items') == '')
               $arrGlossar[] = $newGlossarObj->parse();
             else {

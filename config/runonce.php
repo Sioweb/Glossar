@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Contao Open Source CMS
+ */
+
+/**
+ * @file runonce.php
+ * @class ROGlossar
+ * @author Sascha Weidner
+ * @version 3.0.0
+ * @package sioweb.contao.extensions.glossar
+ * @copyright Sascha Weidner, Sioweb
+ */
+
 class ROGlossar extends Controller {
   public function __construct() {
     parent::__construct();
