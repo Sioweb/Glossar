@@ -3,4 +3,5 @@
 * Vorwort
 * Install
 * Hooks
+* HowTo
 
