@@ -5,5 +5,5 @@
 * [HowTo](documentation/HowTo/howto.md)
    * [Einstellungen](documentation/HowTo/Einstellungen.md)
    * [Einen neuen Glossar erstellen](documentation/HowTo/einen_neuen_glossar_erstellen.md)
-   * Einen Begriff definieren
+   * [Einen Begriff definieren](documentation/HowTo/einen_begriff_definieren.md)
 
