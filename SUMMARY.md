@@ -2,7 +2,7 @@
 
 * Vorwort
 * Install
-* HowTo
+* [HowTo](howto.md)
 * [Einstellungen](howto/einstellungen.md)
 * Hooks
 
