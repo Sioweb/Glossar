@@ -9,4 +9,5 @@
    * [Seiten konfigurieren](documentation/HowTo/seiten_konfigurieren.md)
    * [Glossar als Liste ausgeben](documentation/HowTo/glossar_als_liste_ausgeben.md)
 * [Features](documentation/features.md)
+* Hooks
 
