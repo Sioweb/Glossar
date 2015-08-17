@@ -291,8 +291,8 @@ class tl_sw_glossar extends Backend {
       $varValue = standardize(String::restoreBasicEntities($dc->activeRecord->title));
     }
 
-    $objAlias = $this->Database->prepare("SELECT id FROM tl_sw_glossar WHERE id=? OR alias=?")
-                   ->execute($dc->id, $varValue);
+    $objAlias = $this->Database->prepare("SELECT id FROM tl_sw_glossar WHERE (id=? OR alias=?) AND pid = ?")
+                   ->execute($dc->id, $varValue,$dc->activeRecord->pid);
 
     // Check whether the page alias exists
     if ($objAlias->numRows > 1)

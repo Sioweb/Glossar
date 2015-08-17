@@ -33,7 +33,7 @@
       </div>
       <?php foreach($this->import['update']['tl_glossar'] as $key => $update) {?>
       <div>
-        <input id="update_glossar_<?php echo $key;?>" type="checkbox" name="update[]" value="<?php echo deserialize($update);?>">
+        <input id="update_glossar_<?php echo $key;?>" type="checkbox" name="update[]" value="<?php echo $update['alias'];?>">
         <label for="update_glossar_<?php echo $key;?>"><?php echo $update['title'];?> (<?php echo $update['alias'];?>)</label>
       </div>
       <?php }?>

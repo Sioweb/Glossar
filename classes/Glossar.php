@@ -224,7 +224,17 @@ class Glossar extends \Frontend {
           $Import = $this->decode_array($Session->get('glossar_import'));
           $f = $FirstID = $Session->get('glossar_first_id');
 
-          // echo '<pre>'.print_r($Import,1).'</pre>';
+          $arrFD = array();
+          foreach($Import['update']['tl_glossar'] as $glossar => $value)
+            if(in_array($glossar,\Input::post('update')))
+              $arrFD[$glossar] = $value;
+
+          $Import['update']['tl_glossar'] = $arrFD;
+          $arrFD = null;
+
+          // echo '<pre>'.print_r($_POST,1).'</pre>';
+          // echo '<pre>'.print_r($FileData,1).'</pre>';
+          // die();
 
           if(!empty($Import['insert']['tl_glossar']))
             foreach($Import['insert']['tl_glossar'] as $alias => &$gdata)
