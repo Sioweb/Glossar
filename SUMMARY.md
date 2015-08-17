@@ -2,4 +2,5 @@
 
 * [Introduction](README.md)
 * [Installation](documentation/installation.md)
+* HowTo
 
