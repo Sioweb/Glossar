@@ -4,5 +4,5 @@
 * Install
 * HowTo
 * Hooks
-* Einstellungen
+* [Einstellungen](howto/einstellungen.md)
 
