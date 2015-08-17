@@ -4,5 +4,4 @@
 * Install
 * HowTo
 * Hooks
-* Einstellungen
 
