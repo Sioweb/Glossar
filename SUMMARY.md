@@ -1,5 +1,5 @@
 # Summary
 
+* [Introduction](README.md)
 * [HowTo](howto.md)
-* [Einstellungen](howto/einstellungen.md)
 
