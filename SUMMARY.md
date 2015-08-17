@@ -2,5 +2,5 @@
 
 * [Introduction](README.md)
 * [Installation](documentation/installation.md)
-* [HowTo](documentation/HowTo/Enstellungen.md)
+* [HowTo](documentation/HowTo/Einstellungen.md)
 
