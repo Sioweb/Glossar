@@ -2,4 +2,5 @@
 
 * [Introduction](README.md)
 * [vorwort](documentation/vorwort.md)
+* installation
 
