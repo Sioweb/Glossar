@@ -2,6 +2,6 @@
 
 * Vorwort
 * Install
-* Hooks
 * HowTo
+* Hooks
 
