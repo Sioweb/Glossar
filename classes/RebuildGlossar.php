@@ -285,7 +285,7 @@ class RebuildGlossar extends \Backend implements \executable {
   protected function findGlossarPages() {
     $time = time();
     $arrPages = array();
-    $objPages = \PageModel::findActiveAndEnabledGlossarPages();
+    $objPages = \GlossarPageModel::findActiveAndEnabledGlossarPages();
     if(!empty($objPages))
       while($objPages->next()) {
 
@@ -307,7 +307,7 @@ class RebuildGlossar extends \Backend implements \executable {
   }
 
   private function getRootPage($id) {
-    $Page = \PageModel::findByPk($id);
+    $Page = \GlossarPageModel::findByPk($id);
     if(empty($Page))
       return;
     if($Page->type == 'root')

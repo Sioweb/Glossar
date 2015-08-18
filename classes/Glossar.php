@@ -77,7 +77,7 @@ class Glossar extends \Frontend {
       if(!$this->term->maxHeight)
         $this->term->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
 
-      $Content = \ContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
+      $Content = \GlossarContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
 
       $replaceFunction = 'replaceTitle2Link';
       if((!$Term->jumpTo && !$GLOBALS['TL_CONFIG']['jumpToGlossar']) || empty($Content))
@@ -129,7 +129,7 @@ class Glossar extends \Frontend {
     //   'action' => 'load',
     // ));
 
-    $Content = \ContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
+    $Content = \GlossarContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
       
     $termObj = new \FrontendTemplate('glossar_layer');
     $termObj->setData($Term->row());
@@ -137,11 +137,11 @@ class Glossar extends \Frontend {
 
     if(!empty($Content)) {
       if($GLOBALS['TL_CONFIG']['jumpToGlossar']) {
-        $link = \PageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
+        $link = \GlossarPageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
         $termObj->link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$termObj->alias);
       }
       if($termObj->jumpTo) {
-        $link = \PageModel::findByPk($termObj->jumpTo);
+        $link = \GlossarPageModel::findByPk($termObj->jumpTo);
         $termObj->link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$termObj->alias);
       }
     }
@@ -160,9 +160,9 @@ class Glossar extends \Frontend {
 
   private function replaceTitle2Link($treffer) {
     if($GLOBALS['TL_CONFIG']['jumpToGlossar'])
-      $link = \PageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
+      $link = \GlossarPageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
     if($this->term->jumpTo)
-      $link = \PageModel::findByPk($this->term->jumpTo);
+      $link = \GlossarPageModel::findByPk($this->term->jumpTo);
     if($link)
       $link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($this->term->alias)));
     return '<a class="glossar" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'" href="'.$link.'">'.$treffer[2].'</a>';
@@ -179,11 +179,11 @@ class Glossar extends \Frontend {
       $url = $GLOBALS['TL_CONFIG']['jumpToGlossar'];
       if($Glossar->jumpTo) $url = $Glossar->jumpTo;
 
-      $objParent = \PageModel::findWithDetails($url);
+      $objParent = \GlossarPageModel::findWithDetails($url);
       $domain = ($objParent->rootUseSSL ? 'https://' : 'http://') . ($objParent->domain ?: \Environment::get('host')) . TL_PATH . '/';
 
       if(!empty($url)) {
-        $link = \PageModel::findByPk($url);
+        $link = \GlossarPageModel::findByPk($url);
         $arrPages[] = $domain.$this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').$Glossar->alias);
       }
     }
@@ -515,7 +515,7 @@ class Glossar extends \Frontend {
                 $JSON[$key]['tl_glossar']['tl_sw_glossar'][] = $Term->row();
           }
 
-          $Content = \ContentModel::findByPidsAndTable($arrTerms,'tl_sw_glossar',\Input::get('glossar_export'));
+          $Content = \GlossarContentModel::findByPidsAndTable($arrTerms,'tl_sw_glossar',\Input::get('glossar_export'));
 
           if(!empty($Content)) {
             while($Content->next()) {

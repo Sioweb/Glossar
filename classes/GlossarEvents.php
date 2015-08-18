@@ -59,6 +59,14 @@ class GlossarEvents extends \Events {
         $arrEvent[$Event->pid][] = $this->generateEventUrl($Event,$this->generateFrontendUrl($objTarget->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/events/%s')));
     }
 
+    $InactiveArchives = \GlossarCalendarModel::findByPidsAndInactiveGlossar(array_keys($arrEvent));
+    if(!empty($InactiveArchives))
+      while($InactiveArchives->next())
+        unset($arrEvent[$InactiveArchives->id]);
+      
+    if(empty($arrEvent))
+      return array();
+
     $EventReader = \ModuleModel::findByType('eventreader');
     if(empty($EventReader))
       return array();
@@ -95,9 +103,11 @@ class GlossarEvents extends \Events {
         if(in_array($event_id,$finishedIDs))
           continue;
 
-        foreach($arrEvent[$event_id] as $event_domain) {
-          $event_domain = str_replace('.html','',$event_domain);
-          $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($event_domain,strpos($event_domain,'/')), $strLanguage);
+        if(!empty($arrEvent[$event_id])) {
+          foreach($arrEvent[$event_id] as $event_domain) {
+            $event_domain = str_replace('.html','',$event_domain);
+            $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($event_domain,strpos($event_domain,'/')), $strLanguage);
+          }
         }
         $finishedIDs[] = $event_id;
       }

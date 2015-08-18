@@ -36,10 +36,14 @@ ClassLoader::addClasses(array
   // Models
   'StdModel'                                          => 'system/modules/Glossar/models/StdModel.php',
   'SWGlossarModel'                                    => 'system/modules/Glossar/models/SWGlossarModel.php',
-  'PageModel'                                         => 'system/modules/Glossar/models/PageModel.php',
-  'ContentModel'                                      => 'system/modules/Glossar/models/ContentModel.php',
+  'GlossarPageModel'                                  => 'system/modules/Glossar/models/GlossarPageModel.php',
+  'GlossarContentModel'                               => 'system/modules/Glossar/models/GlossarContentModel.php',
   'GlossarModel'                                      => 'system/modules/Glossar/models/GlossarModel.php',
   'GlossarLogModel'                                   => 'system/modules/Glossar/models/GlossarLogModel.php',
+
+  'GlossarNewsArchiveModel'                           => 'system/modules/Glossar/models/GlossarNewsArchiveModel.php',
+  'GlossarFaqCategoryModel'                           => 'system/modules/Glossar/models/GlossarFaqCategoryModel.php',
+  'GlossarCalendarModel'                              => 'system/modules/Glossar/models/GlossarCalendarModel.php',
 ));
 
 /* Support for older CTO Versions */

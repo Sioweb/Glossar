@@ -53,10 +53,17 @@ class GlossarNews extends \ModuleNews {
       return array();
 
     $arrNews = array();
-    while($News->next()) {
+    while($News->next())
       if(!empty($News))
         $arrNews[$News->pid][] = $this->generateNewsUrl($News);
-    }
+
+    $InactiveArchives = \GlossarNewsArchiveModel::findByPidsAndInactiveGlossar(array_keys($arrNews));
+    if(!empty($InactiveArchives))
+      while($InactiveArchives->next())
+        unset($arrNews[$InactiveArchives->id]);
+      
+    if(empty($arrNews))
+      return array();
 
     $NewsReader = \ModuleModel::findByType('newsreader');
     if(empty($NewsReader))
@@ -95,9 +102,11 @@ class GlossarNews extends \ModuleNews {
         if(in_array($news_id,$finishedIDs))
           continue;
 
-        foreach($arrNews[$news_id] as $news_domain) {
-          $news_domain = str_replace('.html','',$news_domain);
-          $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($news_domain,strpos($news_domain,'/')), $strLanguage);
+        if(!empty($arrNews[$news_id])) {
+          foreach($arrNews[$news_id] as $news_domain) {
+            $news_domain = str_replace('.html','',$news_domain);
+            $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($news_domain,strpos($news_domain,'/')), $strLanguage);
+          }
         }
         $finishedIDs[] = $news_id;
       }

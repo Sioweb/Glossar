@@ -53,10 +53,17 @@ class GlossarFAQ extends \ModuleFaqList {
       return array();
 
     $arrFaq = array();
-    while($Faq->next()) {
+    while($Faq->next())
       if(!empty($Faq))
         $arrFaq[$Faq->pid][] = $this->generateFaqLink($Faq);
-    }
+
+    $InactiveArchives = \GlossarFaqCategoryModel::findByPidsAndInactiveGlossar(array_keys($arrFaq));
+    if(!empty($InactiveArchives))
+      while($InactiveArchives->next())
+        unset($arrFaq[$InactiveArchives->id]);
+      
+    if(empty($arrFaq))
+      return array();
 
     $FaqReader = \ModuleModel::findByType('faqreader');
     if(empty($FaqReader))
@@ -94,9 +101,11 @@ class GlossarFAQ extends \ModuleFaqList {
         if(in_array($faq_id,$finishedIDs))
           continue;
 
-        foreach($arrFaq[$faq_id] as $faq_domain) {
-          $faq_domain = str_replace('.html','',$faq_domain);
-          $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($faq_domain,strpos($faq_domain,'/')), $strLanguage);
+        if(!empty($arrFaq[$faq_id])) {
+          foreach($arrFaq[$faq_id] as $faq_domain) {
+            $faq_domain = str_replace('.html','',$faq_domain);
+            $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($faq_domain,strpos($faq_domain,'/')), $strLanguage);
+          }
         }
         $finishedIDs[] = $faq_id;
       }

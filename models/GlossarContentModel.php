@@ -5,16 +5,16 @@
  */
 
 /**
- * @file ContentModel.php
- * @class ContentModel
+ * @file GlossarContentModel.php
+ * @class GlossarContentModel
  * @author Sascha Weidner
  * @version 3.0.0
  * @package sioweb.contao.extensions.glossar
  * @copyright Sascha Weidner, Sioweb
  */
 
-if(!class_exists('ContentModel')) {
-class ContentModel extends \Contao\ContentModel {
+if(!class_exists('GlossarContentModel')) {
+class GlossarContentModel extends ContentModel {
 
   public static function findByPidsAndTable($arrPids,$table,$type,$arrOptions = array()) {
     $t = static::$strTable;
