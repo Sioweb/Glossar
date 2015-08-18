@@ -1,6 +1,6 @@
 #Contao Glossar
 
-#Vorwort
+##Vorwort
 
 Der Glossar ist speziell für Contao entwickelt und dient dazu, eine Interne Verlinkung zu erstellen und Besuchern einen Mehrwert der Informationen zu bieten. 
 
