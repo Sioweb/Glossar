@@ -38,13 +38,13 @@ array_insert($GLOBALS['BE_MOD']['system'], 1, array(
 
 if(method_exists('Contao\Config','set')) {
   if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
-    \Config::set('ignoreInTags','title,a,h1,h2,h3,h4,h5,h6,nav');
+    \Config::set('ignoreInTags','title,a,h1,h2,h3,h4,h5,h6,nav,script,style,abbr,input,button,select,option,optgroup,applet,area,map,base,meta,canvas,head,legend,menu,menuitem,noframes,noscript,object,progress,source,time,video,audio,pre,iframe');
 
   if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
     \Config::set('illegalChars','")(=?.,;~:\'\>\<+\/\\<');
 } elseif(method_exists('Contao\Config','add')) {
   if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
-    \Config::add('$GLOBALS[\'TL_CONFIG\'][\'ignoreInTags\']','title,a,h1,h2,h3,h4,h5,h6,nav');
+    \Config::add('$GLOBALS[\'TL_CONFIG\'][\'ignoreInTags\']','title,a,h1,h2,h3,h4,h5,h6,nav,script,style,abbr,input,button,select,option,optgroup,applet,area,map,base,meta,canvas,head,legend,menu,menuitem,noframes,noscript,object,progress,source,time,video,audio,pre,iframe');
 
   if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
     \Config::add('$GLOBALS[\'TL_CONFIG\'][\'illegalChars\']','")(=?.,;~:\'\>+\/!$€`´\'%&');
