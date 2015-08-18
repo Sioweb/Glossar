@@ -1,18 +1,35 @@
 (function($){
-var openLayerTimeout = false,
+var preOpenTimeout= false,
+		openLayerTimeout = false,
 		glossarTimeout = false,
 		LayerAjaxRequest = false,
-		layer = false;
+		layer = false,
+		loaded = false,
+		glossar_id = false;
 
+function followTerm() {
+	var href = this.href,
+			gid = $(this).data('glossar');
+	$.ajax({
+		type: "POST",url:"index.php",
+		data: {isAjaxRequest:1,clicked:1,no_ref:(href === ''?1:0),glossar:1,id:gid,REQUEST_TOKEN:Contao.request_token}
+	});
+}
 $(function(){
 
 	layer = $('body')
 		.append('<div class="glossar_layer">')
 		.find('.glossar_layer');
 
+	// $('abbr.glossar').each(function(key, elem) {
+	// $(elem).mouseover();
+	// });
+
 	$('span.glossar,a.glossar').each(function(key, elem) {
 		$(elem).mouseenter(function() {
 			var glossar = $(this);
+
+			clearTimeout(preOpenTimeout);
 
 			removeLayer();
 			layer.append('<div class="layer_loading"><div class="layer_ring"></div><div class="layer_content"><span></span></div></div>');
@@ -26,11 +43,14 @@ $(function(){
 					'max-height': glossar.data('maxheight')
 				});
 
-			loadLayer(glossar);
+			preOpenTimeout = setTimeout(function(){loadLayer(glossar);},450);
 		}).mouseout(function() {
+			clearTimeout(preOpenTimeout);
 			glossarTimeout = setTimeout(removeLayer,200);
 		});
 	});
+
+	$('a.glossar').click(followTerm);
 });
 
 function loadLayer(glossar) {
@@ -59,11 +79,15 @@ function loadLayer(glossar) {
 		data: { isAjaxRequest: 1, glossar: 1, id: glossar.data('glossar'), REQUEST_TOKEN: Contao.request_token},
 		success: function(result) {
 			openLayerTimeout = setTimeout(function(){
+				glossar_id = glossar.data('glossar');
+				loaded = true;
 				layer.addClass('layer_loaded').append($($.parseJSON(result).content));
 				layer.append('<div class="ce_glossar_close">X</div>').children('.ce_glossar_close')
 					.click(function(){
 						removeLayer();
 					});
+
+				layer.find('.glossar_layer_link').click(followTerm);
 				
 				if(!left)
 					layer.css({left: 'auto','right': 20});
@@ -83,7 +107,14 @@ function loadLayer(glossar) {
 function removeLayer() {
 	clearTimeout(glossarTimeout);
 	clearTimeout(openLayerTimeout);
+	if(loaded) {
+		$.ajax({
+			type: "POST",url:"index.php",
+			data: {isAjaxRequest:1,loaded:1,glossar:1,id:glossar_id,REQUEST_TOKEN:Contao.request_token}
+		});
+	}
 	$('.layer_loading,.ce_glossar_close').remove();
 	layer.css({position: 'absolute'}).removeClass('layer_loaded layer_load').children('.ce_glossar_layer').remove();
+	glossar_id = loaded = false;
 }
 })(jQuery);

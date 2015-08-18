@@ -34,6 +34,11 @@ $GLOBALS['glossar']['sortGlossarBy'] = array(
   'alias_desc' => 'Alphabetisch absteigend',
 );
 
+$GLOBALS['glossar']['sources'] = array(
+  'page' => 'Seite',
+  'external' => 'Externer Link'
+);
+
 $GLOBALS['glossar']['headlineUnit'] = array(
   'h1' => 'H1',
   'h2' => 'H2',

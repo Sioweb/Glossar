@@ -121,6 +121,22 @@
         <source>Die Beschreibung wird als abbr-Tag um die Abkürzung gelegt.</source>
         <target>Die Beschreibung wird als abbr-Tag um die Abkürzung gelegt.</target>
       </trans-unit>
+      <trans-unit id="tl_sw_glossar.source.0">
+        <source>Weiterleitung</source>
+        <target>Weiterleitung</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.source.1">
+        <source>Die Abkürzung kann zu einer detailierteren Beschreibung verlinkt werden.</source>
+        <target>Die Abkürzung kann zu einer detailierteren Beschreibung verlinkt werden.</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.url.0">
+        <source>Externer Link</source>
+        <target>Externer Link</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.url.1">
+        <source>Einen externen Link für mehr informationen angeben.</source>
+        <target>Einen externen Link für mehr informationen angeben.</target>
+      </trans-unit>
 
       <trans-unit id="tl_sw_glossar.title_legend">
         <source>Titel</source>

@@ -50,7 +50,11 @@ class Glossar extends \Frontend {
     if(empty($Glossar))
       $Glossar = \GlossarModel::findByFallback(1);
 
-    $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->term)."') AND pid = ?"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
+    $arrGlossar = array();
+    while($Glossar->next())
+      $arrGlossar[] = $Glossar->id;
+
+    $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->term)."') AND pid IN ('".implode("','",$arrGlossar)."')"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
    
     $strContent = $this->replace($strContent,$Term);
 
@@ -124,10 +128,25 @@ class Glossar extends \Frontend {
     if($Term === null)
       return false;
 
-    // $Log = new \GlossarLogModel();
-    // $Log->setData(array(
-    //   'action' => 'load',
-    // ));
+    if(!$this->checkLizenz()) {
+      $Log = new \GlossarLogModel();
+      $Log->tstamp = time();
+      $Log->user = session_id();
+      $GAction = 'load';
+
+      if(\Input::post('loaded')==1)
+        $GAction = 'close';
+      if(\Input::post('clicked')==1) {
+        $GAction = 'follow';
+        if(\Input::post('no_ref')==1)
+          $GAction = 'span';
+      }
+      $Log->action = $GAction;
+      $Log->term = $Term->id;
+      $Log->page = $_SESSION['FE_DATA']['referer']['current'];
+      $Log->language = $_SESSION['TL_LANGUAGE'];
+      $Log->save();
+    }
 
     $Content = \GlossarContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
       
@@ -151,7 +170,18 @@ class Glossar extends \Frontend {
   }
 
   private function replaceAbbr($treffer) {
-    return '<abbr class="glossar" title="'.$this->term->explanation.'">'.$treffer[2].'</abbr>';
+    $href = $data = '';
+    if($this->term->source == 'page' && $this->term->jumpTo) {
+      $Page = \PageModel::findByPk($this->term->jumpTo);
+      $href = $this->generateFrontendUrl($Page->row());
+    }
+    if($this->term->source == 'external' && $this->term->url)
+      $href = $this->term->url;
+
+    if($href) $data .= '<a class="glossar_abbr" href="'.$href.'"'.($this->term->target?' target="_blank':'').' title="'.$this->term->explanation.'">';
+    $data .= '<abbr class="glossar" title="'.$this->term->explanation.'">'.$treffer[2].'</abbr>';
+    if($href) $data .= '</a>';
+    return $data;
   }
 
   private function replaceTitle2Span($treffer) {
@@ -481,10 +511,9 @@ class Glossar extends \Frontend {
       'action' => ampersand(\Environment::get('request'), true),
     ));
 
-    $db = &$this->Database;
-    $ext = $db->prepare("select * from `tl_repository_installs` where `extension`='SWGlossar'")->execute();
+    $lickey = $this->checkLizenz();
 
-    if($ext->lickey == false || $ext->lickey == 'free2use') {
+    if($lickey) {
       $objGlossar->lickey = false;
       return $objGlossar->parse();
     }
@@ -541,6 +570,12 @@ class Glossar extends \Frontend {
     }
 
     return $objGlossar->parse();
+  }
+
+  private function checkLizenz() {
+    $db = &$this->Database;
+    $ext = $db->prepare("select * from `tl_repository_installs` where `extension`='SWGlossar'")->execute();
+    return ($ext->lickey == '0' || $ext->lickey == 'free2use');
   }
 
   /* Eingabe (Nicer JSON) */

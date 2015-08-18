@@ -40,7 +40,6 @@ ClassLoader::addClasses(array
   'GlossarContentModel'                               => 'system/modules/Glossar/models/GlossarContentModel.php',
   'GlossarModel'                                      => 'system/modules/Glossar/models/GlossarModel.php',
   'GlossarLogModel'                                   => 'system/modules/Glossar/models/GlossarLogModel.php',
-
   'GlossarNewsArchiveModel'                           => 'system/modules/Glossar/models/GlossarNewsArchiveModel.php',
   'GlossarFaqCategoryModel'                           => 'system/modules/Glossar/models/GlossarFaqCategoryModel.php',
   'GlossarCalendarModel'                              => 'system/modules/Glossar/models/GlossarCalendarModel.php',
@@ -48,6 +47,9 @@ ClassLoader::addClasses(array
 
 /* Support for older CTO Versions */
 $version = '';
+// Maybe for older Support
+// if(VERSION <= 2.20)
+//   $version = '/2.20';
 if(VERSION <= 3.2)
   $version = '/3.2';
 

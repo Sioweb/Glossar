@@ -193,12 +193,6 @@ class RebuildGlossar extends \Backend implements \executable {
         }
       }
 
-      // // Return if there are no pages
-      // if (empty($arrPages)) {
-      //   $_SESSION['REBUILD_INDEX_ERROR'] = $GLOBALS['TL_LANG']['tl_maintenance']['noGlossarPages'];
-      //   $this->redirect($this->getReferer());
-      // }
-
       // Truncate the search tables
       $this->import('Automator');
       $this->Automator->purgeSearchTables();
@@ -239,19 +233,6 @@ class RebuildGlossar extends \Backend implements \executable {
           }
         }
       }
-
-      // // Display the pages
-      // foreach($arrPages as $lang => $arrPage)
-      //   for ($i=0, $c=count($arrPage); $i<$c; $i++) {
-      //     $strBuffer .=   '<span class="page_url" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
-      //     unset($arrPages[$lang][$i]); // see #5681
-      //   }
-
-      // // Display the pages
-      // for ($i=0, $c=count($arrNewsPages); $i<$c; $i++) {
-      //   $strBuffer .=     '<span class="news_url" data-language="'.$lang.'" data-url="' . $arrNewsPages[$i] . '#' . $rand . $i . '">' . \String::substr($arrNewsPages[$i], 100) . '</span><br>';
-      //   unset($arrNewsPages[$i]); // see #5681
-      // }
 
       $objTemplate->content = $strBuffer;
       $objTemplate->note = $GLOBALS['TL_LANG']['tl_maintenance']['glossarNote'];

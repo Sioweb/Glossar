@@ -2,7 +2,7 @@
 	<?php if($this->title):?>
 	<h4>
 		<?php if($this->link):?>
-		<a href="<?php echo $this->link;?>" title="<?php echo $this->title;?>">
+		<a class="glossar_layer_link" data-glossar="<?php echo $this->id;?>" href="<?php echo $this->link;?>" title="<?php echo $this->title;?>">
 		<?php endif;?>
 		
 		<?php echo $this->title;?>

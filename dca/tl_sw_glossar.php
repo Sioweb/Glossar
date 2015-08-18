@@ -54,18 +54,6 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
         'class'               => 'header_edit_all',
         'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
       ),
-      // 'import' => array
-      // (
-      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['import'],
-      //   'href'                => 'key=importTerms^',
-      //   'class'               => 'header_edit_all',
-      // ),
-      // 'export' => array
-      // (
-      //   'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
-      //   'href'                => 'key=exportTerms^',
-      //   'class'               => 'header_edit_all',
-      // )
     ),
     'operations' => array
     (
@@ -113,9 +101,15 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   // Palettes
   'palettes' => array
   (
-    '__selector__'                => array('type'),
+    '__selector__'                => array('type','source'),
     'default'                     => '{title_legend},type,title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,strictSearch,termAsHeadline,jumpTo,teaser,description',
-    'abbr'                        => '{title_legend},type,title,alias,ignoreInTags,explanation'
+    'abbr'                        => '{title_legend},type,title,alias,ignoreInTags,explanation,source'
+  ),
+
+  'subpalettes' => array
+  (
+    'source_page' => 'jumpTo',
+    'source_external' => 'url,target'
   ),
 
   // Fields
@@ -262,6 +256,33 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'inputType'               => 'text',
       'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr long'),
       'sql'                     => "varchar(255) NOT NULL default ''"
+    ),
+    'source' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['source'],
+      'default'                 => 'alias',
+      'inputType'               => 'select',
+      'options'                 => array_keys($GLOBALS['glossar']['sources']),
+      'reference'               => &$GLOBALS['glossar']['sources'],
+      'eval'                    => array('tl_class'=>'w50 clr','includeBlankOption'=>true,'submitOnChange'=>true),
+      'sql'                     => "varchar(20) NOT NULL default ''"
+    ),
+    'url' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['url'],
+      'exclude'                 => true,
+      'search'                  => true,
+      'inputType'               => 'text',
+      'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr'),
+      'sql'                     => "varchar(255) NOT NULL default ''"
+    ),
+    'target' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['MSC']['target'],
+      'exclude'                 => true,
+      'inputType'               => 'checkbox',
+      'eval'                    => array('tl_class'=>'w50 m12'),
+      'sql'                     => "char(1) NOT NULL default ''"
     ),
   )
 );
