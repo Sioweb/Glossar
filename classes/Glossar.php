@@ -54,6 +54,9 @@ class Glossar extends \Frontend {
     while($Glossar->next())
       $arrGlossar[] = $Glossar->id;
 
+    if(\Config::get('activateGlossarTags') == 1)
+      $GlossarTags = $this->replaceGlossarTags($strContent);
+
     $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->term)."') AND pid IN ('".implode("','",$arrGlossar)."')"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
    
     $strContent = $this->replace($strContent,$Term);
@@ -64,7 +67,45 @@ class Glossar extends \Frontend {
     /* Replace the fallback languages */
     $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->fallback_glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
     $strContent = $this->replace($strContent,$Term);
+
+    if(\Config::get('activateGlossarTags') == 1)
+      $strContent = $this->insertTagContent($strContent,$GlossarTags);
     
+    return $strContent;
+  }
+
+  private function replaceGlossarTags(&$strContent) {
+
+    // echo strpos('Lorem ipsum amet dolor sit amet','amet');
+    $arrTagContent = array();
+    // Replace non-indexable areas
+    $cIndex = 0;
+    while (($intStart = strpos($strContent, '<!-- glossar::stop -->')) !== false) {
+      if (($intEnd = strpos($strContent, '<!-- glossar::continue -->', $intStart)) !== false) {
+        $intCurrent = $intStart;
+        // Handle nested tags
+        while (($intNested = strpos($strContent, '<!-- glossar::stop -->', $intCurrent + 22)) !== false && $intNested < $intEnd) {
+          if (($intNewEnd = strpos($strContent, '<!-- glossar::continue -->', $intEnd + 26)) !== false) {
+            $intEnd = $intNewEnd;
+            $intCurrent = $intNested;
+          }
+          else break;
+        }
+
+        $arrTagContent[] = substr($strContent,$intStart,$intEnd+26-$intStart);
+        $strContent = substr($strContent, 0, $intStart) .'###GLOSSAR_CONTENT_'.$cIndex.'###'. substr($strContent, $intEnd + 26);
+        $cIndex++;
+      }
+      else break;
+    }
+
+    return $arrTagContent;
+  }
+
+  private function insertTagContent($strContent,$tags = array()) {
+    if(!empty($tags))
+      foreach($tags as $key => $tag)
+        $strContent = str_replace('###GLOSSAR_CONTENT_'.$key.'###',$tag,$strContent);
     return $strContent;
   }
 
