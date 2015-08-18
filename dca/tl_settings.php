@@ -19,7 +19,7 @@ if($semicolon != ';')
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'].$semicolon.'{glossar_legend},enableGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'enableGlossar';
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,strictSearch,ignoreInTags,illegalChars,jumpToGlossar';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,glossar_archive,strictSearch,ignoreInTags,illegalChars,jumpToGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['ignoreInTags'] = array
 (
@@ -92,4 +92,13 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['disableGlossarCache'] = array(
   'inputType'               => 'checkbox',
   'eval'                    => array('submitOnChange'=>true),
   'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['glossar_archive'] = array(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['glossar_archive'],
+  'inputType'               => 'checkboxWizard',
+  'options'                 => array_keys($GLOBALS['TL_HOOKS']['getGlossarPages']),
+  'reference'               => &$GLOBALS['glossar']['glossar_archives'],
+  'eval'                    => array('tl_class'=>'w50 clr','multiple'=>true),
+  'sql'                     => "TEXT NULL"
 );

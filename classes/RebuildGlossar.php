@@ -25,8 +25,10 @@ class RebuildGlossar extends \Backend implements \executable {
   public function rebuild($strContent,$arrData,$arrSet) {
     global $objPage;
 
+    $time = \Input::get('time');
+
     $this->import('Database');
-    $this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute(\Input::get('time'),\Input::get('time'));
+    $this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
     if (isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
       foreach ($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
         $this->import($callback[0]);
@@ -127,13 +129,7 @@ class RebuildGlossar extends \Backend implements \executable {
         $strFallback = implode('|',$matches);
       }
 
-
-      $Page = \PageModel::findByPk($objPage->id);
-      if($strGlossar)
-        $Page->glossar = $strGlossar;
-      if($strFallback)
-        $Page->fallback_glossar = $strFallback;
-      $Page->save();
+      $this->Database->prepare("UPDATE tl_page SET glossar = ?, fallback_glossar = ?,glossar_time = ? WHERE id = ?")->execute($strGlossar,$strFallback,$time,$objPage->id);
     }
   }
 
@@ -184,8 +180,11 @@ class RebuildGlossar extends \Backend implements \executable {
       // $arrPages['news'] = $this->findGlossarNewsPages();
 
       // HOOK: take additional pages
+      $InactiveArchives = (array)deserialize(\Config::get('glossar_archive'));
       if (isset($GLOBALS['TL_HOOKS']['getGlossarPages']) && is_array($GLOBALS['TL_HOOKS']['getGlossarPages'])) {
         foreach ($GLOBALS['TL_HOOKS']['getGlossarPages'] as $type => $callback) {
+          if(in_array($type,$InactiveArchives))
+            continue;
           $this->import($callback[0]);
           $cb_return = $this->$callback[0]->$callback[1]($arrPages);
           if(is_numeric($type))

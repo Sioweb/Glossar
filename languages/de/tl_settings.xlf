@@ -28,6 +28,17 @@
         <target>Ähnlich wie nicht durchsuchbare Inhalte gibt es Inhalte die nicht vom Glossar erfasst werden dürfen glossar::stop|continue.</target>
       </trans-unit>
 
+      <trans-unit id="tl_settings.glossar_archive.0">
+        <source>Archive ausschließen</source>
+        <target>Archive ausschließen</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.glossar_archive.1">
+        <source>Archive die nicht von der Suche berücksichtigt werden sollen ausschließen.</source>
+        <target>Archive die nicht von der Suche berücksichtigt werden sollen ausschließen.</target>
+      </trans-unit>
+
+
+
       <trans-unit id="tl_settings.disableGlossarCache.0">
         <source>Deactivate Glossar cache</source>
         <target>Cache umgehen</target>

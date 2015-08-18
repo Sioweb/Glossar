@@ -59,3 +59,5 @@ $GLOBALS['glossar']['searchTypes'] = array(
   '2' => 'Alles finden (Im Schwimmerbecken, im schwimmer Becken, nicht|schwimmer|becken)',
   '3' => 'Begriff kann das Startwort sein (Im Schwimmer|becken, im schwimmer Becken)',
 );
+
+$GLOBALS['glossar']['glossar_archives'] = array('news'=>'News','faq'=>'FAQ','events'=>'Events',);
