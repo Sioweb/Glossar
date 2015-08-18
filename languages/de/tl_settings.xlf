@@ -38,8 +38,8 @@
       </trans-unit>
 
       <trans-unit id="tl_settings.glossar_no_fallback.0">
-        <source>Keine Fallback-Begriffe</source>
-        <target>Keine Fallback-Begriffe</target>
+        <source>Keine fremdsprachigen Glossare</source>
+        <target>Keine fremdsprachigen Glossare</target>
       </trans-unit>
       <trans-unit id="tl_settings.glossar_no_fallback.1">
         <source>Es werden keine Glossar-Begriffe aus anderen Sprachen ersetzt.</source>

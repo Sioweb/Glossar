@@ -26,7 +26,7 @@ $(function(){
 					'max-height': glossar.data('maxheight')
 				});
 
-			openLayerTimeout = setTimeout(function(){loadLayer(glossar);},1000);
+			loadLayer(glossar);
 		}).mouseout(function() {
 			glossarTimeout = setTimeout(removeLayer,200);
 		});
@@ -58,22 +58,24 @@ function loadLayer(glossar) {
 		url:  "index.php",
 		data: { isAjaxRequest: 1, glossar: 1, id: glossar.data('glossar'), REQUEST_TOKEN: Contao.request_token},
 		success: function(result) {
-			layer.addClass('layer_loaded').append($($.parseJSON(result).content));
-			layer.append('<div class="ce_glossar_close">X</div>').children('.ce_glossar_close')
-				.click(function(){
-					removeLayer();
-				});
-			
-			if(!left)
-				layer.css({left: 'auto','right': 20});
-			if(layer.offset().top + layer.height() > $(window).height() + $(window).scrollTop())
-				layer.css({top: 'auto', bottom: 20, position: 'fixed' });
+			openLayerTimeout = setTimeout(function(){
+				layer.addClass('layer_loaded').append($($.parseJSON(result).content));
+				layer.append('<div class="ce_glossar_close">X</div>').children('.ce_glossar_close')
+					.click(function(){
+						removeLayer();
+					});
+				
+				if(!left)
+					layer.css({left: 'auto','right': 20});
+				if(layer.offset().top + layer.height() > $(window).height() + $(window).scrollTop())
+					layer.css({top: 'auto', bottom: 20, position: 'fixed' });
 
-			$('.ce_glossar_layer').mouseenter(function(){
-				clearTimeout(glossarTimeout);
-			}).mouseleave(function(){
-				glossarTimeout = setTimeout(removeLayer, 750);
-			});
+				$('.ce_glossar_layer').mouseenter(function(){
+					clearTimeout(glossarTimeout);
+				}).mouseleave(function(){
+					glossarTimeout = setTimeout(removeLayer, 750);
+				});
+			},1000);
 		}
 	});
 }

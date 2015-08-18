@@ -13,6 +13,14 @@
         <source>Ersetzt Schlagworte in Haupt- und News-Texten durch Links zu einem Glossar</source>
         <target>Ersetzt Schlagworte in Haupt- und News-Texten durch Links zu einem Glossar</target>
       </trans-unit>
+      <trans-unit id="MOD.glossar_log.0">
+        <source>Glossar Statistiken</source>
+        <target>Glossar Statistiken</target>
+      </trans-unit>
+      <trans-unit id="MOD.glossar_log.1">
+        <source>Zeigt eine Statistik der Besucher-Aktionen.</source>
+        <target>Zeigt eine Statistik der Besucher-Aktionen.</target>
+      </trans-unit>
       <trans-unit id="CTE.glossar.0">
         <source>Glossar</source>
         <target>Glossar</target>

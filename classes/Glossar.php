@@ -46,15 +46,20 @@ class Glossar extends \Frontend {
       $this->glossar = implode('|',$arrGlossar);
     $this->glossar = str_replace('||','|',$this->glossar);
 
-    $Glossar = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
-    $strContent = $this->replace($strContent,$Glossar);
+    $Glossar = \GlossarModel::findByLanguage($objPage->language);
+    if(empty($Glossar))
+      $Glossar = \GlossarModel::findByFallback(1);
+
+    $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->glossar)."') AND pid = ?"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
+   
+    $strContent = $this->replace($strContent,$Term);
 
     if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1)
       return $strContent;
 
     /* Replace the fallback languages */
-    $Glossar = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->fallback_glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
-    $strContent = $this->replace($strContent,$Glossar);
+    $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->fallback_glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
+    $strContent = $this->replace($strContent,$Term);
     
     return $strContent;
   }
@@ -93,8 +98,10 @@ class Glossar extends \Frontend {
           $IllegalPlural = \Config::get('illegalChars');
         $IllegalPlural = html_entity_decode($IllegalPlural);
 
-        $plural = preg_replace('/[.]+(?<!\\.)/is','\\.',$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:''));
+        $plural = preg_replace('/[.]+(?<!\\.)/is','\\.',$IllegalPlural.(!$Glossar->noPlural ? $GLOBALS['glossar']['illegal']:'')).'<';
         $preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))('.($Glossar->strictSearch==1||$Glossar->strictSearch==3?'\b':'') . $Glossar->title . (!$Glossar->noPlural?'[^ '.$plural.']*':'') . ($Glossar->strictSearch==1?'\b':'').')/is';
+        // $preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(?:<(?:a|span|abbr) (?!class="glossar")[^>]*>)?('.($Glossar->strictSearch==1||$Glossar->strictSearch==3?'\b':'') . $Glossar->title . (!$Glossar->noPlural?'[^ '.$plural.']*':'') . ($Glossar->strictSearch==1?'\b':'').')/is';
+        // echo $preg_query.'<br>';
         if($Glossar->title && preg_match_all( $preg_query, $strContent, $third)) {
           $strContent = preg_replace_callback( $preg_query, array($this,$replaceFunction), $strContent);
         }
@@ -115,6 +122,11 @@ class Glossar extends \Frontend {
 
     if($Glossar === null)
       return false;
+
+    // $Log = new \GlossarLogModel();
+    // $Log->setData(array(
+    //   'action' => 'load',
+    // ));
 
     $Content = \ContentModel::findPublishedByPidAndTable($Glossar->id,'tl_sw_glossar');
       

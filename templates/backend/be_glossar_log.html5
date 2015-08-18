@@ -1,0 +1,28 @@
+<div id="tl_buttons">
+  <a href="<?php echo ampersand(str_replace('&key=importGlossar', '', \Environment::get('request')));?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);?>" accesskey="b"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT'];?></a>
+</div>
+<?php if($this->lickey == false) {?>
+<h2 class="sub_headline_index">Purchase-Version (Statistiken)</h2>
+<form action="<?php echo $this->action;?>" class="tl_form" method="get">
+  <div class="tl_formbody_edit">
+    <p>Die Statistiken sind nur in der Purchase-Version möglich. Die Purchase-Version kann <a href="http://glossar.sioweb.de"><strong>hier erworben werden</strong></a>.</p>
+  </div>
+</form>
+<br><br>
+<?php } else {?>
+<h2 class="sub_headline">Statistik</h2>
+<?php echo $this->messages;?>
+<form action="<?php echo $this->action;?>" id="tl_csv_import" class="tl_form" method="post" enctype="multipart/form-data">
+  <div class="tl_formbody_edit">
+    <input type="hidden" name="FORM_SUBMIT" value="tl_csv_import">
+    <input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN;?>">
+    
+
+    <ul>
+      <li>User</li>
+      <li>Label</li>
+      <li>Details</li>
+    </ul>
+  </div>
+</form>
+<?php }?>

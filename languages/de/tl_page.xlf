@@ -10,8 +10,8 @@
         <target>Der Glossar wird auf dieser Seite deaktiviert.</target>
       </trans-unit>
       <trans-unit id="tl_page.glossar_no_fallback.0">
-        <source>Keine Fallback-Begriffe</source>
-        <target>Keine Fallback-Begriffe</target>
+        <source>Keine fremdsprachigen Glossare</source>
+        <target>Keine fremdsprachigen Glossare</target>
       </trans-unit>
       <trans-unit id="tl_page.glossar_no_fallback.1">
         <source>Auf dieser Seite werden keine Glossar-Begriffe aus anderen Sprachen ersetzt.</source>
