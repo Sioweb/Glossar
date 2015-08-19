@@ -21,6 +21,19 @@ class Glossar extends \Frontend {
 
   private $term = array();
 
+  /* Delete all cached glossary data*/
+  public function purgeGlossar() {
+    $this->import('Database');
+    $time = time();
+    $this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+    if (isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
+      foreach ($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
+        $this->import($callback[0]);
+        $this->$callback[0]->$callback[1]($time);
+      }
+    }
+  }
+
   public function searchGlossarTerms($strContent, $strTemplate) {
     global $objPage;
 
@@ -54,6 +67,7 @@ class Glossar extends \Frontend {
     while($Glossar->next())
       $arrGlossar[] = $Glossar->id;
 
+    /* replace content with tags to stop glossary replacement */
     if(\Config::get('activateGlossarTags') == 1)
       $GlossarTags = $this->replaceGlossarTags($strContent);
 
@@ -61,24 +75,27 @@ class Glossar extends \Frontend {
    
     $strContent = $this->replace($strContent,$Term);
 
-    if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1)
+    if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1) {
+      /* reinsert glossar hidden content */
+      if(\Config::get('activateGlossarTags') == 1)
+        $strContent = $this->insertTagContent($strContent,$GlossarTags);
       return $strContent;
+    }
 
     /* Replace the fallback languages */
     $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->fallback_glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
     $strContent = $this->replace($strContent,$Term);
 
+    /* reinsert glossar hidden content */
     if(\Config::get('activateGlossarTags') == 1)
       $strContent = $this->insertTagContent($strContent,$GlossarTags);
     
     return $strContent;
   }
 
+  /* Replace content between the tags with placeholder */
   private function replaceGlossarTags(&$strContent) {
-
-    // echo strpos('Lorem ipsum amet dolor sit amet','amet');
     $arrTagContent = array();
-    // Replace non-indexable areas
     $cIndex = 0;
     while (($intStart = strpos($strContent, '<!-- glossar::stop -->')) !== false) {
       if (($intEnd = strpos($strContent, '<!-- glossar::continue -->', $intStart)) !== false) {
@@ -92,6 +109,10 @@ class Glossar extends \Frontend {
           else break;
         }
 
+        /* 
+         * Save all cut content to reinsert it in insertTagContent 
+         * to hide content from Glossar.
+         */
         $arrTagContent[] = substr($strContent,$intStart,$intEnd+26-$intStart);
         $strContent = substr($strContent, 0, $intStart) .'###GLOSSAR_CONTENT_'.$cIndex.'###'. substr($strContent, $intEnd + 26);
         $cIndex++;
@@ -102,6 +123,7 @@ class Glossar extends \Frontend {
     return $arrTagContent;
   }
 
+  /* replace placeholder with glossar-tag content */
   private function insertTagContent($strContent,$tags = array()) {
     if(!empty($tags))
       foreach($tags as $key => $tag)
@@ -109,6 +131,7 @@ class Glossar extends \Frontend {
     return $strContent;
   }
 
+  /* replace found tags with links and abbr */
   private function replace($strContent,$Term) {
 
     if(!$strContent || !$Term)
@@ -116,6 +139,11 @@ class Glossar extends \Frontend {
 
     while($Term->next()) {
       $this->term = $Term;
+
+      if(($maxWidth = \Config::get('glossarMaxWidth')))
+        $this->term->maxWidth = $maxWidth;
+      if(($maxHeigth = \Config::get('glossarMaxHeight')))
+        $this->term->maxWidth = $maxHeight;
 
       if(!$this->term->maxWidth)
         $this->term->maxWidth = $GLOBALS['glossar']['css']['maxWidth'];

@@ -25,6 +25,8 @@ $GLOBALS['TL_LANG']['ERR']['multipleGlossarFallback'] = 'Sie können nur einen G
 $GLOBALS['TL_LANG']['MSC']['import'] = 'Importieren';
 $GLOBALS['TL_LANG']['MSC']['export'] = 'Exportieren';
 
+$GLOBALS['TL_LANG']['tl_maintenance_jobs']['glossar'] = array('Glossar zurücksetzen','Setzt den kompletten Glossar (Seiteninhalte, News, Events, FAQ, ...) zurück. Alle Daten müssen danach neu generiert werden.');
+
 $GLOBALS['glossar']['sortGlossarBy'] = array(
   'id' => 'ID aufsteigend',
   'id_desc' => 'ID absteigend',

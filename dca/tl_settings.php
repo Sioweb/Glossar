@@ -19,7 +19,7 @@ if($semicolon != ';')
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'].$semicolon.'{glossar_legend},enableGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'enableGlossar';
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,glossar_archive,strictSearch,ignoreInTags,illegalChars,jumpToGlossar';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,glossar_archive,strictSearch,glossarMaxWidth,glossarMaxHeight,ignoreInTags,illegalChars,jumpToGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['ignoreInTags'] = array
 (
@@ -82,7 +82,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['strictSearch'] = array(
   'inputType'               => 'select',
   'options'                 => array_keys($GLOBALS['glossar']['searchTypes']),
   'reference'               => &$GLOBALS['glossar']['searchTypes'],
-  'eval'                    => array('tl_class'=>'w50 clr','includeBlankOption'=>true),
+  'eval'                    => array('tl_class'=>'w50 clr long','includeBlankOption'=>true),
   'sql'                     => "varchar(20) NOT NULL default ''"
 );
 
@@ -99,6 +99,25 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['glossar_archive'] = array(
   'inputType'               => 'checkboxWizard',
   'options'                 => array_keys($GLOBALS['TL_HOOKS']['getGlossarPages']),
   'reference'               => &$GLOBALS['glossar']['glossar_archives'],
-  'eval'                    => array('tl_class'=>'w50 clr','multiple'=>true),
+  'eval'                    => array('tl_class'=>'w50 clr long','multiple'=>true),
   'sql'                     => "TEXT NULL"
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['glossarMaxWidth'] = array
+(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['glossarMaxWidth'],
+  'exclude'                 => true,
+  'inputType'               => 'text',/*inputUnit*/
+  'options'                 => array('px','em','%','rem'),
+  'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+  'sql'                     => "varchar(255) NOT NULL default ''",
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['glossarMaxHeight'] = array
+(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['glossarMaxHeight'],
+  'exclude'                 => true,
+  'inputType'               => 'text',/*inputUnit*/
+  'options'                 => array('px','em','%','rem'),
+  'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+  'sql'                     => "varchar(255) NOT NULL default ''",
 );

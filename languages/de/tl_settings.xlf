@@ -84,6 +84,23 @@
         <target>Diese Zeichen werden bei der Pluralsuche ignoriert. Als Beispiel: Bei Contao(CMS) wird nur Contao ersetzt, wenn die offene Klammer ( hier definiert wird.</target>
       </trans-unit>
 
+      <trans-unit id="tl_settings.glossarMaxWidth.0">
+        <source>Maximale Vorschaubreite</source>
+        <target>Maximale Vorschaubreite</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.glossarMaxWidth.1">
+        <source>Definiert die Breite des Vorschaufenster, wenn ein Besucher mit der Maus über den Begriff fahren.</source>
+        <target>Definiert die Breite des Vorschaufenster, wenn ein Besucher mit der Maus über den Begriff fahren.</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.glossarMaxHeight.0">
+        <source>Maximale Vorschauhöhe</source>
+        <target>Maximale Vorschauhöhe</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.glossarMaxHeight.1">
+        <source>Definiert die Höhe des Vorschaufenster, wenn ein Besucher mit der Maus über den Begriff fahren.</source>
+        <target>Definiert die Höhe des Vorschaufenster, wenn ein Besucher mit der Maus über den Begriff fahren.</target>
+      </trans-unit>
+
       <trans-unit id="tl_settings.jumpToGlossar.0">
         <source>Glossar page</source>
         <target>Glossar-Seite</target>

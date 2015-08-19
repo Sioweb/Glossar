@@ -28,6 +28,11 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array(
   )
 ));
 
+$GLOBALS['TL_PURGE']['custom']['glossar'] = array(
+  'callback' => array('Glossar', 'purgeGlossar'),
+  // 'affected' => array('tl_search', 'tl_search_index')
+);
+
 /** /
 array_insert($GLOBALS['BE_MOD']['system'], 1, array(
   'glossar_log' => array(
