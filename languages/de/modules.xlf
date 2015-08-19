@@ -21,6 +21,14 @@
         <source>Zeigt eine Statistik der Besucher-Aktionen.</source>
         <target>Zeigt eine Statistik der Besucher-Aktionen.</target>
       </trans-unit>
+      <trans-unit id="MOD.glossar_status.0">
+        <source>Glossar Status</source>
+        <target>Glossar Status</target>
+      </trans-unit>
+      <trans-unit id="MOD.glossar_status.1">
+        <source>Erstellt eine Übersicht der Glossar-Einstellungen für besseren Support.</source>
+        <target>Erstellt eine Übersicht der Glossar-Einstellungen für besseren Support.</target>
+      </trans-unit>
       <trans-unit id="CTE.glossar.0">
         <source>Glossar</source>
         <target>Glossar</target>

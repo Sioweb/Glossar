@@ -19,7 +19,7 @@ if($semicolon != ';')
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'].$semicolon.'{glossar_legend},enableGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'enableGlossar';
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,glossar_archive,strictSearch,glossarMaxWidth,glossarMaxHeight,ignoreInTags,illegalChars,jumpToGlossar';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarPurgable,termAsHeadline,noPlural,glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,glossar_archive,strictSearch,glossarMaxWidth,glossarMaxHeight,ignoreInTags,illegalChars,jumpToGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['ignoreInTags'] = array
 (
@@ -48,6 +48,29 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['jumpToGlossar'] = array
   'relation'                => array('type'=>'belongsTo', 'load'=>'lazy')
 );
 
+$GLOBALS['TL_DCA']['tl_settings']['fields']['glossarPurgable'] = array(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['glossarPurgable'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
+  'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['noPlural'] = array
+(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['noPlural'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
+  'eval'                    => array('tl_class'=>'w50 clr'),
+  'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['termAsHeadline'] = array
+(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['termAsHeadline'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
+  'sql'                     => "char(1) NOT NULL default ''"
+);
 $GLOBALS['TL_DCA']['tl_settings']['fields']['enableGlossar'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['enableGlossar'],
   'exclude'                 => true,
@@ -80,8 +103,8 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['strictSearch'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['strictSearch'],
   'default'                 => 'alias',
   'inputType'               => 'select',
-  'options'                 => array_keys($GLOBALS['glossar']['searchTypes']),
-  'reference'               => &$GLOBALS['glossar']['searchTypes'],
+  'options'                 => array_keys($GLOBALS['glossar']['strictSearch']),
+  'reference'               => &$GLOBALS['glossar']['strictSearch'],
   'eval'                    => array('tl_class'=>'w50 clr long','includeBlankOption'=>true),
   'sql'                     => "varchar(20) NOT NULL default ''"
 );

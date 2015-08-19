@@ -61,7 +61,7 @@ $GLOBALS['glossar']['paginationPositions'] = array(
   'after' => 'Nur unter den Begriffen',
 );
 
-$GLOBALS['glossar']['searchTypes'] = array(
+$GLOBALS['glossar']['strictSearch'] = array(
   '1' => 'Nur alleinstehende Wörter finden (Im schwimmer Becken)',
   '2' => 'Alles finden (Im Schwimmerbecken, im schwimmer Becken, nicht|schwimmer|becken)',
   '3' => 'Begriff kann das Startwort sein (Im Schwimmer|becken, im schwimmer Becken)',

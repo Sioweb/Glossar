@@ -22,6 +22,7 @@ ClassLoader::addClasses(array
 (
   // classes
   'sioweb\contao\extensions\glossar\RebuildGlossar'   => 'system/modules/Glossar/classes/RebuildGlossar.php',
+  'sioweb\contao\extensions\glossar\GlossarStatus'    => 'system/modules/Glossar/classes/GlossarStatus.php',
   'sioweb\contao\extensions\glossar\GlossarLog'       => 'system/modules/Glossar/classes/GlossarLog.php',
   'sioweb\contao\extensions\glossar\Glossar'          => 'system/modules/Glossar/classes/Glossar.php',
 
@@ -68,4 +69,10 @@ TemplateLoader::addFiles(array
   'be_glossar_import'   => 'system/modules/Glossar/templates/backend',
   'be_glossar_export'   => 'system/modules/Glossar/templates/backend',
   'be_glossar_log'      => 'system/modules/Glossar/templates/backend',
+  'be_glossar_status'   => 'system/modules/Glossar/templates/backend',
+
+  'be_glossar_type_valid'   => 'system/modules/Glossar/templates/backend/inputType',
+  'be_glossar_type_page'    => 'system/modules/Glossar/templates/backend/inputType',
+  'be_glossar_type_select'  => 'system/modules/Glossar/templates/backend/inputType',
+  'be_glossar_type_content' => 'system/modules/Glossar/templates/backend/inputType',
 ));

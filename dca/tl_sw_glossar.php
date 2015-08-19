@@ -134,7 +134,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'inputType'               => 'select',
       'options'                 => array_keys($GLOBALS['glossar']['types']),
       'reference'               => &$GLOBALS['glossar']['types'],
-      'eval'                    => array('tl_class'=>'w50 clr long','submitOnChange'=>true),
+      'eval'                    => array('tl_class'=>'w50 clr long','submitOnChange'=>true,'gsIgnore'=>true),
       'sql'                     => "varchar(20) NOT NULL default ''"
     ),
     'title' => array
@@ -142,7 +142,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['title'],
       'exclude'                 => true,
       'inputType'               => 'text',
-      'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
+      'eval'                    => array('mandatory'=>true,'maxlength'=>255,'tl_class'=>'w50','gsIgnore'=>true),
       'sql'                     => "varchar(255) NOT NULL default ''"
     ),
     'alias' => array
@@ -151,7 +151,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'exclude'                 => true,
       'inputType'               => 'text',
       'search'                  => true,
-      'eval'                    => array('rgxp'=>'alias', 'doNotCopy'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+      'eval'                    => array('rgxp'=>'alias','doNotCopy'=>true,'maxlength'=>128,'tl_class'=>'w50','gsIgnore'=>true),
       'sql'                     => "varchar(255) NOT NULL default ''",
       'save_callback' => array
       (
@@ -164,16 +164,16 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'exclude'                 => true,
       'inputType'               => 'pageTree',
       'foreignKey'              => 'tl_page.title',
-      'eval'                    => array('fieldType'=>'radio', 'tl_class'=>'w50 clr'),
+      'eval'                    => array('fieldType'=>'radio','tl_class'=>'w50 clr','gsLabel'=>'jumpToGlossar'),
       'sql'                     => "int(10) unsigned NOT NULL default '0'",
-      'relation'                => array('type'=>'belongsTo', 'load'=>'lazy')
+      'relation'                => array('type'=>'belongsTo','load'=>'lazy')
     ),
     'maxWidth' => array
     (
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['maxWidth'],
       'exclude'                 => true,
       'inputType'               => 'text',
-      'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
+      'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50','gsLabel'=>'glossarMaxWidth'),
       'sql'                     => "varchar(255) NOT NULL default ''"
     ),
     'maxHeight' => array
@@ -181,7 +181,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['maxHeight'],
       'exclude'                 => true,
       'inputType'               => 'text',
-      'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
+      'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50','gsLabel'=>'glossarMaxHeight'),
       'sql'                     => "varchar(255) NOT NULL default ''"
     ),
     'ignoreInTags' => array
@@ -189,7 +189,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['ignoreInTags'],
       'exclude'                 => true,
       'inputType'               => 'text',
-      'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr long'),
+      'eval'                    => array('maxlength'=>255,'tl_class'=>'clr long'),
       'sql'                     => "text NULL"
     ),
     'date' => array
@@ -201,7 +201,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'sorting'                 => true,
       'flag'                    => 8,
       'inputType'               => 'text',
-      'eval'                    => array('rgxp'=>'date', 'doNotCopy'=>true, 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+      'eval'                    => array('rgxp'=>'date', 'doNotCopy'=>true,'datepicker'=>true,'tl_class'=>'w50 wizard','gsIgnore'=>true),
       'sql'                     => "int(10) unsigned NOT NULL default '0'"
     ),
     'noPlural' => array
@@ -217,8 +217,8 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['strictSearch'],
       'default'                 => 'alias',
       'inputType'               => 'select',
-      'options'                 => array_keys($GLOBALS['glossar']['searchTypes']),
-      'reference'               => &$GLOBALS['glossar']['searchTypes'],
+      'options'                 => array_keys($GLOBALS['glossar']['strictSearch']),
+      'reference'               => &$GLOBALS['glossar']['strictSearch'],
       'eval'                    => array('tl_class'=>'w50 clr','includeBlankOption'=>true),
       'sql'                     => "varchar(20) NOT NULL default ''"
     ),
@@ -236,7 +236,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'exclude'                 => true,
       'search'                  => true,
       'inputType'               => 'textarea',
-      'eval'                    => array('rte'=>'tinyMCE', 'tl_class'=>'clr long'),
+      'eval'                    => array('rte'=>'tinyMCE','tl_class'=>'clr long','gsIgnore'=>true),
       'sql'                     => "text NULL"
     ),
     'description' => array
@@ -245,7 +245,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'exclude'                 => true,
       'search'                  => true,
       'inputType'               => 'textarea',
-      'eval'                    => array('rte'=>'tinyMCE', 'style'=>'height: 50px;', 'tl_class'=>'clr long'),
+      'eval'                    => array('rte'=>'tinyMCE','style'=>'height: 50px;','tl_class'=>'clr long','gsIgnore'=>true),
       'sql'                     => "text NULL"
     ),
     'explanation' => array
@@ -254,7 +254,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'exclude'                 => true,
       'search'                  => true,
       'inputType'               => 'text',
-      'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr long'),
+      'eval'                    => array('maxlength'=>255,'tl_class'=>'clr long','gsIgnore'=>true),
       'sql'                     => "varchar(255) NOT NULL default ''"
     ),
     'source' => array
@@ -264,7 +264,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'inputType'               => 'select',
       'options'                 => array_keys($GLOBALS['glossar']['sources']),
       'reference'               => &$GLOBALS['glossar']['sources'],
-      'eval'                    => array('tl_class'=>'w50 clr','includeBlankOption'=>true,'submitOnChange'=>true),
+      'eval'                    => array('tl_class'=>'w50 clr','includeBlankOption'=>true,'submitOnChange'=>true,'gsIgnore'=>true),
       'sql'                     => "varchar(20) NOT NULL default ''"
     ),
     'url' => array
@@ -273,7 +273,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'exclude'                 => true,
       'search'                  => true,
       'inputType'               => 'text',
-      'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr'),
+      'eval'                    => array('maxlength'=>255, 'tl_class'=>'clr','gsIgnore'=>true),
       'sql'                     => "varchar(255) NOT NULL default ''"
     ),
     'target' => array
@@ -281,7 +281,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'label'                   => &$GLOBALS['TL_LANG']['MSC']['target'],
       'exclude'                 => true,
       'inputType'               => 'checkbox',
-      'eval'                    => array('tl_class'=>'w50 m12'),
+      'eval'                    => array('tl_class'=>'w50 m12','gsIgnore'=>true),
       'sql'                     => "char(1) NOT NULL default ''"
     ),
   )

@@ -137,7 +137,7 @@ class ContentGlossar extends \ContentElement {
 
     $termAsHeadline = false;
     if(\Input::get('items') != '') {
-      if($this->termAsHeadline && !$Glossar->termAsHeadline) {
+      if(($this->termAsHeadline || \Config::get('termAsHeadline')) && !$Glossar->termAsHeadline) {
         $Headline = new \StdModel();
         $Headline->headline = serialize(array('value'=>$Glossar->title,'unit'=>$this->headlineUnit));
         // $Headline->cssID = serialize(array('','glossar_headline'));

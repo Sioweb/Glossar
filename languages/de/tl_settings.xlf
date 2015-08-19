@@ -10,6 +10,33 @@
         <target>Der Glossar wird auf allen Seiten aktiviert.</target>
       </trans-unit>
 
+      <trans-unit id="tl_settings.glossarPurgable.0">
+        <source>Glossar in der Systemwartung/Daten bereinigen anzeigen</source>
+        <target>Glossar in der Systemwartung/Daten bereinigen anzeigen</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.glossarPurgable.1">
+        <source>Der Glossar kann im Bereich "Daten bereinigen" ausgegeben werden. Diese Option verhindert dass der Glossar versehentlich geleert wird.</source>
+        <target>Der Glossar kann im Bereich "Daten bereinigen" ausgegeben werden. Diese Option verhindert dass der Glossar versehentlich geleert wird.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.termAsHeadline.0">
+        <source>Begriffe als Headline aktivieren</source>
+        <target>Begriffe als Headline aktivieren</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.termAsHeadline.1">
+        <source>Begriffe werden als überschrift verwendet, wenn kein Überschrift-Element eingebunden wird.</source>
+        <target>Begriffe werden als überschrift verwendet, wenn kein Überschrift-Element eingebunden wird.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.noPlural.0">
+        <source>Pluralsuche deaktivieren</source>
+        <target>Pluralsuche deaktivieren</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.noPlural.1">
+        <source>Pluralsuche bedeutet, dass der Begriff am Wortbeginn bis Wortende gefunden wird. Als Beispiel: Bad-emeister.</source>
+        <target>Pluralsuche bedeutet, dass der Begriff am Wortbeginn bis Wortende gefunden wird. Als Beispiel: Bad-emeister.</target>
+      </trans-unit>
+
       <trans-unit id="tl_settings.glossarIncludeUnsearchable.0">
         <source>Von der Suche ausgeschlossene Inhalte einbeziehen</source>
         <target>Von der Suche ausgeschlossene Inhalte einbeziehen</target>

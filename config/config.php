@@ -28,18 +28,26 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array(
   )
 ));
 
-$GLOBALS['TL_PURGE']['custom']['glossar'] = array(
-  'callback' => array('Glossar', 'purgeGlossar'),
-  // 'affected' => array('tl_search', 'tl_search_index')
-);
+if(TL_MODE == 'BE')
+  $GLOBALS['TL_CSS'][] = 'system/modules/Glossar/assets/be_main.css';
 
-/** /
+if(\Config::get('glossarPurgable') == 1) {
+  $GLOBALS['TL_PURGE']['custom']['glossar'] = array(
+    'callback' => array('Glossar', 'purgeGlossar')
+  );
+}
+
+
 array_insert($GLOBALS['BE_MOD']['system'], 1, array(
-  'glossar_log' => array(
+  /** /'glossar_log' => array(
     'callback'   => 'sioweb\contao\extensions\glossar\GlossarLog',
     'icon'   => 'system/modules/Glossar/assets/sioweb16x16.png',
-  ),
-));/**/
+  ),/**/
+  'glossar_status' => array(
+    'callback'   => 'sioweb\contao\extensions\glossar\GlossarStatus',
+    'icon'   => 'system/modules/Glossar/assets/sioweb16x16.png',
+  ),/**/
+));
 
 if(method_exists('Contao\Config','set')) {
   if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
@@ -109,7 +117,8 @@ if(\Config::get('enableGlossar') == 1) {
       'glossar_default',
       'glossar_error',
       'glossar_layer'
-    )
+    ),
+    'tables' => array('tl_settings','tl_sw_glossar','tl_content','tl_page','tl_glossar','tl_news_archive','tl_faq_category','tl_calendar'),
   );
 
   if(Input::post('glossar') == 1)
