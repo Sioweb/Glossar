@@ -85,7 +85,7 @@ class RebuildGlossar extends \Backend implements \executable {
       $arrGlossar[$Glossar->id] = $Glossar->language;
     }
 
-    $Term = \SWGlossarModel::findAll(array('order'=>' CHAR_LENGTH(title) DESC'));
+    $Term = \SwGlossarModel::findAll(array('order'=>' CHAR_LENGTH(title) DESC'));
     if(empty($Term)) {
       $this->clearGlossar();
       return;

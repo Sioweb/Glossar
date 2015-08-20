@@ -39,7 +39,7 @@ if(\Config::get('glossarPurgable') == 1) {
 
 
 array_insert($GLOBALS['BE_MOD']['system'], 1, array(
-  /** /'glossar_log' => array(
+  /**/'glossar_log' => array(
     'callback'   => 'sioweb\contao\extensions\glossar\GlossarLog',
     'icon'   => 'system/modules/Glossar/assets/sioweb16x16.png',
   ),/**/

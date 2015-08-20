@@ -5,8 +5,8 @@
  */
 
 /**
- * @file SWGlossarModel.php
- * @class SWGlossarModel
+ * @file SwGlossarModel.php
+ * @class SwGlossarModel
  * @author Sascha Weidner
  * @version 3.0.0
  * @package sioweb.contao.extensions.glossar
@@ -14,8 +14,8 @@
  */
 
 
-if(!class_exists('SWGlossarModel')) {
-class SWGlossarModel extends \Model {
+if(!class_exists('SwGlossarModel')) {
+class SwGlossarModel extends \Model {
   
   /**
    * Table name

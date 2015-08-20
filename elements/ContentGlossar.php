@@ -54,10 +54,10 @@ class ContentGlossar extends \ContentElement {
 
     if(\Input::get('items') == '')
       if(empty($this->glossar))
-        $Glossar = \SWGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
-      else $Glossar = \SWGlossarModel::findByPid($this->glossar,array('order'=>$this->sortGlossarBy));
+        $Glossar = \SwGlossarModel::findAll(array('order'=>$this->sortGlossarBy));
+      else $Glossar = \SwGlossarModel::findByPid($this->glossar,array('order'=>$this->sortGlossarBy));
     else
-      $Glossar = \SWGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
+      $Glossar = \SwGlossarModel::findByAlias(\Input::get('items'),array(),array('order'=>$this->sortGlossarBy));
     
     
 

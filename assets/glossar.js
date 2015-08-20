@@ -25,6 +25,13 @@ $(function(){
 	// $(elem).mouseover();
 	// });
 
+	$('.tagcloud a').click(function(e){
+		$.ajax({
+			type: "POST",url:"index.php",
+			data: {isAjaxRequest:1,cloud:$(this).data('page'),glossar:1,REQUEST_TOKEN:Contao.request_token}
+		});
+	});
+
 	$('span.glossar,a.glossar').each(function(key, elem) {
 		$(elem).mouseenter(function() {
 			var glossar = $(this);

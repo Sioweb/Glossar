@@ -71,7 +71,7 @@ class Glossar extends \Frontend {
     if(\Config::get('activateGlossarTags') == 1)
       $GlossarTags = $this->replaceGlossarTags($strContent);
 
-    $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->term)."') AND pid IN ('".implode("','",$arrGlossar)."')"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
+    $Term = \SwGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->term)."') AND pid IN ('".implode("','",$arrGlossar)."')"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
    
     $strContent = $this->replace($strContent,$Term);
 
@@ -83,7 +83,7 @@ class Glossar extends \Frontend {
     }
 
     /* Replace the fallback languages */
-    $Term = \SWGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->fallback_glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
+    $Term = \SwGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$objPage->fallback_glossar)."')"),array(),array('order'=>' CHAR_LENGTH(title) DESC'));
     $strContent = $this->replace($strContent,$Term);
 
     /* reinsert glossar hidden content */
@@ -192,9 +192,9 @@ class Glossar extends \Frontend {
   public function getGlossarTerm() {
 
     if(\Input::post('id'))
-      $Term = \SWGlossarModel::findByPk(\Input::post('id'));
+      $Term = \SwGlossarModel::findByPk(\Input::post('id'));
 
-    if($Term === null)
+    if($Term === null && \Input::post('cloud') == '')
       return false;
 
     if(!$this->checkLizenz()) {
@@ -210,12 +210,20 @@ class Glossar extends \Frontend {
         if(\Input::post('no_ref')==1)
           $GAction = 'span';
       }
+      if(($id = \Input::post('cloud'))) {
+        $GAction = 'cloud';
+        $Term = new \stdClass();
+        $Term->id = $id;
+      }
       $Log->action = $GAction;
       $Log->term = $Term->id;
       $Log->page = $_SESSION['FE_DATA']['referer']['current'];
       $Log->language = $_SESSION['TL_LANGUAGE'];
       $Log->save();
     }
+
+    if(\Input::post('cloud') != '')
+      return false;
 
     $Content = \GlossarContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
       
@@ -269,7 +277,7 @@ class Glossar extends \Frontend {
   
   public function getSearchablePages($arrPages, $intRoot=0, $blnIsSitemap=false) {
     
-    $Glossar = \SWGlossarModel::findAll();
+    $Glossar = \SwGlossarModel::findAll();
 
     if($Glossar === null)
       return false;
@@ -478,7 +486,7 @@ class Glossar extends \Frontend {
         foreach($data[$glossar]['tl_glossar']['tl_sw_glossar'] as $key => $term)
           $arrTerms[$term['alias']] = $term['alias'];
 
-        $allTerms = \SWGlossarModel::findAllByAlias($arrTerms,$gdata['id']);
+        $allTerms = \SwGlossarModel::findAllByAlias($arrTerms,$gdata['id']);
         if(!empty($allTerms)) {
           $dbTerms = $allTerms->fetchAll();
 
@@ -602,7 +610,7 @@ class Glossar extends \Frontend {
             $JSON[$Glossar->alias] = array('tl_glossar'=>$Glossar->row());
           }
         }
-        $Term = \SWGlossarModel::findByPids($arrGlossar);
+        $Term = \SwGlossarModel::findByPids($arrGlossar);
         if(!empty($Term)) {
           $arrTerms = array();
           $term = null;

@@ -36,7 +36,7 @@ ClassLoader::addClasses(array
 
   // Models
   'StdModel'                                          => 'system/modules/Glossar/models/StdModel.php',
-  'SWGlossarModel'                                    => 'system/modules/Glossar/models/SWGlossarModel.php',
+  'SwGlossarModel'                                    => 'system/modules/Glossar/models/SwGlossarModel.php',
   'GlossarPageModel'                                  => 'system/modules/Glossar/models/GlossarPageModel.php',
   'GlossarContentModel'                               => 'system/modules/Glossar/models/GlossarContentModel.php',
   'GlossarModel'                                      => 'system/modules/Glossar/models/GlossarModel.php',

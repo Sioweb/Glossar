@@ -106,8 +106,10 @@ $GLOBALS['TL_DCA']['tl_glossar_log'] = array(
       'label'                   => &$GLOBALS['TL_LANG']['tl_glossar_log']['term'],
       'exclude'                 => true,
       'inputType'               => 'text',
+      'foreignKey'              => 'tl_sw_glossar.title',
       'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
-      'sql'                     => "varchar(255) NOT NULL default ''"
+      'sql'                     => "varchar(255) NOT NULL default ''",
+      'relation'                => array('type'=>'belongsTo', 'load'=>'eager')
     ),
     'page' => array
     (
