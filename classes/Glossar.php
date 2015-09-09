@@ -75,7 +75,7 @@ class Glossar extends \Frontend {
 
     $Term = \SwGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->term)."') AND pid IN ('".implode("','",$arrGlossar)."')"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
    
-    $strContent = $this->replace($strContent,$Term);
+    $strContent = $this->replace($strContent,$Term,$Glossar);
 
     if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1) {
       /* reinsert glossar hidden content */
@@ -134,8 +134,8 @@ class Glossar extends \Frontend {
   }
 
   /* replace found tags with links and abbr */
-  private function replace($strContent,$Term) {
-
+  private function replace($strContent,$Term,$Glossar = null) {
+    $this->term_glossar = $Glossar;
     if(!$strContent || !$Term)
       return $strContent;
 
@@ -257,14 +257,23 @@ class Glossar extends \Frontend {
     if($this->term->source == 'external' && $this->term->url)
       $href = $this->term->url;
 
+    $lang = '';
+    if(!empty($this->term_glossar->language))
+      $lang = ' lang="'.$this->term_glossar->language.'"';
+
     if($href) $data .= '<a class="glossar_abbr" href="'.$href.'"'.($this->term->target?' target="_blank':'').' title="'.$this->term->explanation.'">';
-    $data .= '<abbr class="glossar" title="'.$this->term->explanation.'">'.$treffer[2].'</abbr>';
+    $data .= '<abbr'.$lang.' class="glossar" title="'.$this->term->explanation.'">'.$treffer[2].'</abbr>';
     if($href) $data .= '</a>';
     return $data;
   }
 
   private function replaceTitle2Span($treffer) {
-    return '<a class="glossar glossar_no_content" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'">'.$treffer[2].'</a>';
+
+    $lang = '';
+    if(!empty($this->term_glossar->language))
+      $lang = ' lang="'.$this->term_glossar->language.'"';
+
+    return '<a'.$lang.' class="glossar glossar_no_content" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'">'.$treffer[2].'</a>';
   }
 
   private function replaceTitle2Link($treffer) {
@@ -274,7 +283,12 @@ class Glossar extends \Frontend {
       $link = \GlossarPageModel::findByPk($this->term->jumpTo);
     if($link)
       $link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($this->term->alias)));
-    return '<a class="glossar" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'" href="'.$link.'">'.$treffer[2].'</a>';
+    
+    $lang = '';
+    if(!empty($this->term_glossar->language))
+      $lang = ' lang="'.$this->term_glossar->language.'"';
+    
+    return '<a'.$lang.' class="glossar" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'" href="'.$link.'">'.$treffer[2].'</a>';
   }
   
   public function getSearchablePages($arrPages, $intRoot=0, $blnIsSitemap=false) {
