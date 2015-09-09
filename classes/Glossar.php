@@ -64,6 +64,8 @@ class Glossar extends \Frontend {
       $Glossar = \GlossarModel::findByFallback(1);
 
     $arrGlossar = array();
+    if(empty($Glossar))
+      return $strContent;
     while($Glossar->next())
       $arrGlossar[] = $Glossar->id;
 

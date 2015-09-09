@@ -114,17 +114,22 @@ class RebuildGlossar extends \Backend implements \executable {
     }
 
     if(\Input::get('rebuild_regular_glossar') == 1) {
+
       $strFallback = $strGlossar = '';
       if(!empty($arrTerms['glossar'])) {
         $matches = array();
-        preg_match_all('#'.implode('|',$arrTerms['glossar']).'#is', $strContent, $matches);
+        foreach($arrTerms['glossar'] as $key => $term)
+          if(preg_match('#'.$term.'#is',$strContent))
+            $matches[] = $term;
         $matches = array_unique(array_map("strtolower",$matches[0]));
         $strGlossar = implode('|',$matches);
       }
+
       if(!empty($arrTerms['fallback'])) {
         $matches = array();
-        preg_match_all('#'.implode('|',$arrTerms['fallback']).'#is', $strContent, $matches);
-        // $matches = array_unique($matches[0]);
+        foreach($arrTerms['fallback'] as $key => $term)
+          if(preg_match('#'.$term.'#is',$strContent))
+            $matches[] = $term;
         $matches = array_unique(array_map("strtolower",$matches[0]));
         $strFallback = implode('|',$matches);
       }

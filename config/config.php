@@ -83,6 +83,22 @@ $GLOBALS['TL_HOOKS']['getGlossarPages']['events'] = array('sioweb\contao\extensi
 $GLOBALS['TL_HOOKS']['cacheGlossarTerms']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','updateCache');
 $GLOBALS['TL_HOOKS']['glossarContent']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','glossarContent');
 
+
+$GLOBALS['glossar'] = array(
+  'css' => array(
+    'maxWidth' => 450,
+    'maxHeight' => 300,
+  ),
+  'illegal' => '\-_\.&><;',
+  'templates' => array(
+    'ce_glossar',
+    'glossar_default',
+    'glossar_error',
+    'glossar_layer'
+  ),
+  'tables' => array('tl_settings','tl_sw_glossar','tl_content','tl_page','tl_glossar','tl_news_archive','tl_faq_category','tl_calendar'),
+);
+
 if(\Config::get('enableGlossar') == 1) {
   $uploadTypes = \Config::get('uploadTypes');
   if(strpos($uploadTypes,'json') === false) {
@@ -105,21 +121,6 @@ if(\Config::get('enableGlossar') == 1) {
     $GLOBALS['TL_CSS'][] = 'system/modules/Glossar/assets/glossar.css';
     $GLOBALS['TL_JQUERY'][] = '<script>var Contao = {request_token: "'.$_SESSION['REQUEST_TOKEN'].'"};</script>';
   }
-
-  $GLOBALS['glossar'] = array(
-    'css' => array(
-      'maxWidth' => 450,
-      'maxHeight' => 300,
-    ),
-    'illegal' => '\-_\.&><;',
-    'templates' => array(
-      'ce_glossar',
-      'glossar_default',
-      'glossar_error',
-      'glossar_layer'
-    ),
-    'tables' => array('tl_settings','tl_sw_glossar','tl_content','tl_page','tl_glossar','tl_news_archive','tl_faq_category','tl_calendar'),
-  );
 
   if(Input::post('glossar') == 1)
     $GLOBALS['TL_HOOKS']['initializeSystem'][] = array('sioweb\contao\extensions\glossar\Glossar', 'getGlossarTerm');

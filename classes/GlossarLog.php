@@ -32,9 +32,7 @@ class GlossarLog extends \BackendModule {
 
     if($ext->lickey == false || $ext->lickey == 'free2use') {
       $this->Template->lickey = false;
-    } else $this->Template->lickey = true;
-
-    $Log = \GlossarLogModel::findBy(array("tl_glossar_log.tstamp >= ?"),array(time()-(86400*7*31)),array('order'=>'tstamp DESC','limit'=>500));
+    } else $this->Template->lickey = true;    $Log = \GlossarLogModel::findBy(array("tl_glossar_log.tstamp >= ?"),array(time()-(86400*7*31)),array('order'=>'tstamp DESC','limit'=>500));
     $arrTerms = $arrLog = array();
     if(!empty($Log)) {
       while($Log->next()) {

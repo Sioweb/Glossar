@@ -1,12 +1,6 @@
-<div class="<?php echo $this->class; ?> block"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+<div class="<?php echo $this->class; ?> block" <?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
 
-<?php if($this->alphaPagination && !$this->content && ($this->ppos == 'before' || $this->ppos == 'both')) {?>
-<div class="glossar_alpha_pagination">
-<?php foreach($this->alphaPagination as $pKey => $pagination) {?>
-<a class="alpha_pagination<?php echo ($pagination['active']?' active':'');?><?php echo ($pagination['trueLink']?' trueLink':'');?>" href="<?php echo $pagination['href'];?>" title=""><?php echo $pagination['initial'];?><?php if($pagination['trueLink']) {?><span>*</span><?php }?></a>
-<?php }?>
-</div>
-<?php }?>
+<?php if($this->alphaPagination && !$this->content && ($this->ppos == 'before' || $this->ppos == 'both')) echo $this->alphaPagination;?>
 
 <?php if($this->glossar && !$this->content) {?>
 <ul class="glossar_items">
@@ -20,13 +14,7 @@
 if($this->errors)
   echo $this->errors;
 
-if($this->alphaPagination && !$this->content && (empty($this->ppos) || $this->ppos == 'after' || $this->ppos == 'both')) {?>
-<div class="glossar_alpha_pagination">
-<?php foreach($this->alphaPagination as $pKey => $pagination) {?>
-<a class="alpha_pagination<?php echo ($pagination['active']?' active':'');?><?php echo ($pagination['trueLink']?' trueLink':'');?>" href="<?php echo $pagination['href'];?>" title=""><?php echo $pagination['initial'];?><?php if($pagination['trueLink']) {?><span>*</span><?php }?></a>
-<?php }?>
-</div>
-<?php }?>
+if($this->alphaPagination && !$this->content && (empty($this->ppos) || $this->ppos == 'after' || $this->ppos == 'both')) echo $this->alphaPagination;?>
 <?php if($this->content) {?><a href="javascript:history.back();">Zurück</a><?php }?>
-  
+
 </div>
