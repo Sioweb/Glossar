@@ -13,6 +13,10 @@
  */
 
 
+/* Contao 3.2 support */
+if(empty($GLOBALS['glossar']['headlineUnit']))
+  $this->loadLanguageFile('default');
+
 /**
  * Dynamically add the permission check and parent table
  */

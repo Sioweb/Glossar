@@ -12,6 +12,9 @@
  * @copyright Sascha Weidner, Sioweb
  */
 
+/* Contao 3.2 support */
+if(empty($GLOBALS['glossar']['types']))
+  $this->loadLanguageFile('default');
 
 $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
 
