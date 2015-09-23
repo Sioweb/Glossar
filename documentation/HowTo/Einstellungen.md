@@ -24,7 +24,7 @@ Pluralsuche bedeutet, dass der Begriff am Wortbeginn bis das Wortende gefunden w
 Inhalte die von der Suche ausgeschlossen sind, werden standardmäßig nicht durchsucht. Diese Einstellung kann dies Ändern. Diese Option schließt zum Beispiel auch Module ein.
 
 ##2.1.6 Glossar Tags aktivieren
-Diese Tags definieren dass der Glossar Inhalte ausschließt die mit `<!-- glossar::stop -->` und `<!-- glossar::continue -->` umschlossen wurden.
+Diese Tags definieren, dass das Glossar Inhalte ausschließt, die mit `<!-- glossar::stop -->` und `<!-- glossar::continue -->` umschlossen wurden.
 
 ##2.1.7 Cache umgehen
 Falls es weniger als zehn Begriffe auf einer Seite gibt, kann der Cache auch umgangen werden. Diese Option macht die Seite langsamer und sollte nur auf schnellen Servern verwendet werden. Allerdings muss der Cache mit dieser Version nicht nach jeder Inhaltsaktualisierung erneuert werden.
