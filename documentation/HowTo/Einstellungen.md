@@ -1,5 +1,7 @@
 #2.1 Einstellungen
 
+Da einige Einstellungen für alle Begriffe übergreifend funktionieren müssen, finden Sie in den Contao-Einstellungen ganz unten Einstellungsmöglichkeiten. Derzeit lassen sich zu ignorierende HTML-Tags und die Weiterleitungsseite definieren, die dann Standardmäßig für alle Begriffe gelten. Diese Einstellungen können aber in den Begriffseinstellungen selber überschrieben werden.
+
 ##2.1.1 Von der Suche ausgeschlossene Inhalte einbeziehen
 
 Inhalte die von der Suche ausgeschlossen sind, werden standardmäßig nicht durchsucht. Diese Einstellung kann dies Ändern. Diese Option schließt zum Beispiel auch Module ein.
