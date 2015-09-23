@@ -8,6 +8,9 @@ Da einige Einstellungen für alle Begriffe übergreifend funktionieren müssen, 
 Wird generell der Glossar deaktiviert, dann ist die Funktionalität des Mouse-Over deaktiviert. 
 In der Systemwartung ist der Glossar Index Aufbau nicht mehr vorhanden.
 
+Wurde bereits ein Glossar aufgebaut, bleiben die Links erhalten. Erst nachdem in der Systemwartung „Glossar zurücksetzen“ durchgeführt wurde, sind die Glossareinträge weg.
+ACHTUNG: Das Glossar muss danach wieder neu aufgebaut werden.
+
 ##2.1.2 Glossar in der Systemwartung/Daten bereinigen anzeigen
 Der Glossar kann im Bereich "Daten bereinigen" ausgegeben werden. Diese Option verhindert dass der Glossar versehentlich geleert wird.
 
