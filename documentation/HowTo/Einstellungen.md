@@ -15,14 +15,10 @@ ACHTUNG: Das Glossar muss danach wieder neu aufgebaut werden.
 Der Glossar kann im Bereich "Daten bereinigen" ausgegeben werden. Diese Option verhindert dass der Glossar versehentlich geleert wird.
 
 ##2.1.3 Begriffe als Headline aktivieren
-Begriffe werden als überschrift verwendet, wenn kein Überschrift-Element eingebunden wird.
-
-Wurde bereits ein Glossar aufgebaut, bleiben die Links erhalten. Erst nachdem in der Systemwartung „Glossar zurücksetzen“ durchgeführt wurde, sind die Glossareinträge weg.
-ACHTUNG: Das Glossar muss danach wieder neu aufgebaut werden.
+Im Glossar definierte Begriffe werden in der Auflistung als Überschrift verwendet, wenn kein Überschrift-Element eingebunden wird.
 
 ##2.1.4 Pluralsuche deaktivieren
-Pluralsuche bedeutet, dass der Begriff am Wortbeginn bis das Wortende gefunden wird. Als Beispiel Bad-emeister
-
+Pluralsuche bedeutet, dass der Begriff am Wortbeginn bis das Wortende gefunden wird. Als Beispiel **Bad**emeister 
 
 ##2.1.5 Von der Suche ausgeschlossene Inhalte einbeziehen
 Inhalte die von der Suche ausgeschlossen sind, werden standardmäßig nicht durchsucht. Diese Einstellung kann dies Ändern. Diese Option schließt zum Beispiel auch Module ein.
