@@ -121,7 +121,7 @@ class RebuildGlossar extends \Backend implements \executable {
         foreach($arrTerms['glossar'] as $key => $term)
           if(preg_match('#'.$term.'#is',$strContent))
             $matches[] = $term;
-        $matches = array_unique(array_map("strtolower",$matches[0]));
+        $matches = array_unique(array_map("strtolower",$matches));
         $strGlossar = implode('|',$matches);
       }
 
@@ -130,7 +130,7 @@ class RebuildGlossar extends \Backend implements \executable {
         foreach($arrTerms['fallback'] as $key => $term)
           if(preg_match('#'.$term.'#is',$strContent))
             $matches[] = $term;
-        $matches = array_unique(array_map("strtolower",$matches[0]));
+        $matches = array_unique(array_map("strtolower",$matches));
         $strFallback = implode('|',$matches);
       }
 
