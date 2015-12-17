@@ -148,10 +148,21 @@ class ContentGlossar extends \ContentElement {
       $this->Template->termAsHeadline = $termAsHeadline;
       $this->Template->content = 1;
       $arrGlossar = array_shift($arrGlossar);
+
+      if($Glossar->seo) {
+        if($Glossar->term_in_title_tag) {
+          $objPage->pageTitle = strip_tags(strip_insert_tags($Glossar->title));
+        }
+
+        if($Glossar->term_description_tag) {
+          $objPage->description = $this->prepareMetaDescription($Glossar->term_description_tag);
+        }
+      }
     }
 
     $this->Template->ppos = $this->paginationPosition;
     $this->Template->glossar = $arrGlossar;
+
     if($glossarErrors) {
       $errorObj = new \FrontendTemplate('glossar_error');
       $errorObj->msg = $glossarErrors;

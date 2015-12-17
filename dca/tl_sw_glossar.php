@@ -104,13 +104,14 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
   // Palettes
   'palettes' => array
   (
-    '__selector__'                => array('type','source'),
-    'default'                     => '{title_legend},type,title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,strictSearch,termAsHeadline,jumpTo,teaser,description',
+    '__selector__'                => array('type','source','seo'),
+    'default'                     => '{title_legend},type,title,alias,maxWidth,maxHeight,ignoreInTags,date,noPlural,strictSearch,termAsHeadline,jumpTo,teaser,description;{seo_legend},seo',
     'abbr'                        => '{title_legend},type,title,alias,ignoreInTags,explanation,source'
   ),
 
   'subpalettes' => array
   (
+    'seo' => 'term_in_title_tag,term_description_tag',
     'source_page' => 'jumpTo',
     'source_external' => 'url,target'
   ),
@@ -286,6 +287,30 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'inputType'               => 'checkbox',
       'eval'                    => array('tl_class'=>'w50 m12','gsIgnore'=>true),
       'sql'                     => "char(1) NOT NULL default ''"
+    ),
+    'seo' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['seo'],
+      'exclude'                 => true,
+      'inputType'               => 'checkbox',
+      'eval'                    => array('submitOnChange'=>true),
+      'sql'                     => "char(1) NOT NULL default ''"
+    ),
+    'term_in_title_tag' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['term_in_title_tag'],
+      'exclude'                 => true,
+      'inputType'               => 'checkbox',
+      'eval'                    => array('tl_class'=>'w50 clr'),
+      'sql'                     => "char(1) NOT NULL default ''"
+    ),
+    'term_description_tag' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['term_description_tag'],
+      'exclude'                 => true,
+      'inputType'               => 'text',
+      'eval'                    => array('maxlength'=>255,'tl_class'=>'w50','gsIgnore'=>true),
+      'sql'                     => "varchar(255) NOT NULL default ''"
     ),
   )
 );
