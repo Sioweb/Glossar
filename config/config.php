@@ -125,3 +125,5 @@ if(\Config::get('enableGlossar') == 1) {
   if(Input::post('glossar') == 1)
     $GLOBALS['TL_HOOKS']['initializeSystem'][] = array('sioweb\contao\extensions\glossar\Glossar', 'getGlossarTerm');
 }
+
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('sioweb\contao\extensions\glossar\Glossar', 'replaceInsertTags');

@@ -34,6 +34,23 @@ class Glossar extends \Frontend {
     }
   }
 
+  public static function replaceInsertTags($Tag) {
+    $Tag = explode('::',$Tag);
+    if($Tag[0] !== 'glossar')
+      return false;
+
+    switch($Tag[1]) {
+      case 'term':
+        if(($Item = \Input::get('items')) != '') {
+          $Glossar = \SwGlossarModel::findByAlias($Item,array());
+          if(!empty($Glossar))
+            return $Glossar->title;
+        }
+      break;
+    }
+    return false;
+  }
+
   public function searchGlossarTerms($strContent, $strTemplate) {
     global $objPage;
 

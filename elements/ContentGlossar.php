@@ -151,7 +151,11 @@ class ContentGlossar extends \ContentElement {
 
       if($Glossar->seo) {
         if($Glossar->term_in_title_tag) {
-          $objPage->pageTitle = strip_tags(strip_insert_tags($Glossar->title));
+          $Title = $objPage->pageTitle;
+          if(empty($Glossar->term_in_title_str_tag))
+            $pageTitle = strip_tags(strip_insert_tags($Glossar->title));
+          else $pageTitle = strip_tags($this->replaceInsertTags($Glossar->term_in_title_str_tag));
+          $objPage->pageTitle = $pageTitle;
         }
 
         if($Glossar->term_description_tag) {

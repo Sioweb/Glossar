@@ -154,6 +154,14 @@
         <source>Fügt den Begriff in der Deteilansicht in den Titel ein.</source>
         <target>Fügt den Begriff in der Deteilansicht in den Titel ein.</target>
       </trans-unit>
+      <trans-unit id="tl_sw_glossar.term_in_title_str_tag.0">
+        <source>Titel manuel definieren</source>
+        <target>Titel manuel definieren</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.term_in_title_str_tag.1">
+        <source>Glossar-Term einfügen mit {{glossar::term}}. Dieses Feld überschreibt den Titel komplett!</source>
+        <target>Glossar-Term einfügen mit {{glossar::term}}. Dieses Feld überschreibt den Titel komplett!</target>
+      </trans-unit>
       <trans-unit id="tl_sw_glossar.term_description_tag.0">
         <source>Meta-Description</source>
         <target>Meta-Description</target>
@@ -161,6 +169,14 @@
       <trans-unit id="tl_sw_glossar.term_description_tag.1">
         <source>Diese Beschreibung wird als Seitenbeschreibung verwendet in der Detailansicht.</source>
         <target>Diese Beschreibung wird als Seitenbeschreibung verwendet in der Detailansicht.</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.replace_pageTitle.0">
+        <source>Page-Title überschreiben?</source>
+        <target>Page-Title überschreiben?</target>
+      </trans-unit>
+      <trans-unit id="tl_sw_glossar.replace_pageTitle.1">
+        <source>Überschreibt den Wert {{page::pageTitle}} durch den manuellen Titel.</source>
+        <target>Überschreibt den Wert {{page::pageTitle}} durch den manuellen Titel.</target>
       </trans-unit>
 
 

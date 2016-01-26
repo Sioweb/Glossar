@@ -111,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
 
   'subpalettes' => array
   (
-    'seo' => 'term_in_title_tag,term_description_tag',
+    'seo' => 'term_in_title_tag,term_description_tag,term_in_title_str_tag',
     'source_page' => 'jumpTo',
     'source_external' => 'url,target'
   ),
@@ -299,6 +299,22 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'term_in_title_tag' => array
     (
       'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['term_in_title_tag'],
+      'exclude'                 => true,
+      'inputType'               => 'checkbox',
+      'eval'                    => array('tl_class'=>'w50 clr'),
+      'sql'                     => "char(1) NOT NULL default ''"
+    ),
+    'term_in_title_str_tag' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['term_in_title_str_tag'],
+      'exclude'                 => true,
+      'inputType'               => 'text',
+      'eval'                    => array('maxlength'=>255,'tl_class'=>'w50','gsIgnore'=>true),
+      'sql'                     => "varchar(255) NOT NULL default ''"
+    ),
+    'replace_pageTitle' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['replace_pageTitle'],
       'exclude'                 => true,
       'inputType'               => 'checkbox',
       'eval'                    => array('tl_class'=>'w50 clr'),
