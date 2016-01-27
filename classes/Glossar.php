@@ -261,7 +261,7 @@ class Glossar extends \Frontend {
       }
     }
     
-    echo json_encode(array('content'=>$this->replaceInsertTags($termObj->parse(),false)));
+    echo json_encode(array('content'=>parent::replaceInsertTags($termObj->parse(),false)));
     die();
   }
 
