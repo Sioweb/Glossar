@@ -1,0 +1,22 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/news/languages/en/tl_module.php" source-language="en" target-language="de">
+    <body>
+      <trans-unit id="tl_module.glossar.0">
+        <source>Choose glossary</source>
+        <target>Glossar wählen</target>
+      </trans-unit>
+      <trans-unit id="tl_module.glossar.1">
+        <source>The pagination only uses the choosen glossary</source>
+        <target>Die Pagination berücksichtigt nur das hier gewählte Glossar. Es werden alle Glossare verwendet, wenn nichts ausgwählt wird.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.addOnlyTrueLinks.0">
+        <source>No empty characters</source>
+        <target>Keine leeren Ziffern</target>
+      </trans-unit>
+      <trans-unit id="tl_module.addOnlyTrueLinks.1">
+        <source>Do not link empty characters.</source>
+        <target>Zeigt nur Buchstaben an, die einem Begriff zugeordner werden können.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

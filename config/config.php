@@ -37,6 +37,15 @@ if(\Config::get('glossarPurgable') == 1) {
   );
 }
 
+/**
+ * Front end modules
+ */
+array_insert($GLOBALS['FE_MOD'], 2, array(
+    'glossar' => array
+    (
+        'glossar_pagination'    => 'ModuleGlossarPagination',
+    )
+));
 
 array_insert($GLOBALS['BE_MOD']['system'], 1, array(
   /**/'glossar_log' => array(

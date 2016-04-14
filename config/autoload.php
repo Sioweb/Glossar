@@ -34,6 +34,9 @@ ClassLoader::addClasses(array
   'sioweb\contao\extensions\glossar\ContentGlossar'         => 'system/modules/Glossar/elements/ContentGlossar.php',
   'sioweb\contao\extensions\glossar\ContentGlossarCloud'    => 'system/modules/Glossar/elements/ContentGlossarCloud.php',
 
+  // Modules
+  'sioweb\contao\extensions\glossar\ModuleGlossarPagination'    => 'system/modules/Glossar/modules/ModuleGlossarPagination.php',
+
   // Models
   'StdModel'                                          => 'system/modules/Glossar/models/StdModel.php',
   'SwGlossarModel'                                    => 'system/modules/Glossar/models/SwGlossarModel.php',
