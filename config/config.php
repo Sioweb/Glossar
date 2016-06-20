@@ -12,6 +12,10 @@
  * @copyright Sascha Weidner, Sioweb
  */
 
+if(empty($GLOBALS['tags_extension']))
+  $GLOBALS['tags_extension'] = array('sourcetable'=>array());
+$GLOBALS['tags_extension']['sourcetable'][] = 'tl_sw_glossar';
+$GLOBALS['TL_HOOKS']['tagSourceTable'][] = array('sioweb\contao\extensions\glossar\Glossar', 'addSourceTable');
 
 array_insert($GLOBALS['TL_MAINTENANCE'],1,array(
   'sioweb\contao\extensions\glossar\RebuildGlossar'
@@ -121,7 +125,8 @@ if(\Config::get('enableGlossar') == 1) {
 
   if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1) {
     $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'prepareRebuild');
-    $GLOBALS['TL_HOOKS']['indexPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
+    $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
+    // $GLOBALS['TL_HOOKS']['indexPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
     $GLOBALS['TL_HOOKS']['clearGlossar'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'clearGlossar');
   }
 

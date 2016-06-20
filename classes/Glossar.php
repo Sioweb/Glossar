@@ -34,6 +34,25 @@ class Glossar extends \Frontend {
     }
   }
 
+  public function addSourceTable($sourceTable,$tags) {
+    $Term = \SwGlossarModel::findBy(array("id IN ('".implode("','",$tags)."')"),array());
+    if(!empty($Term)) {
+      $arrLinks = array();
+      while($Term->next()) {
+        if($GLOBALS['TL_CONFIG']['jumpToGlossar'])
+          $link = \GlossarPageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
+        if($this->term->jumpTo)
+          $link = \GlossarPageModel::findByPk($Term->jumpTo);
+        if($link)
+          $link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($Term->alias)));
+        
+        $arrLinks[] = '<a href="'.$link.'" title="'.$Term->title.'">'.$Term->title.'</a>';
+      }
+    }
+
+    return $arrLinks;
+  }
+
   public function replaceGlossarInsertTags($Tag) {
     $Tag = explode('::',$Tag);
     if($Tag[0] !== 'glossar')
@@ -87,6 +106,7 @@ class Glossar extends \Frontend {
       $arrGlossar[] = $Glossar->id;
 
     /* replace content with tags to stop glossary replacement */
+    $GlossarIgnoreTags = $this->replaceGlossarIgnoreTags($strContent);
     if(\Config::get('activateGlossarTags') == 1)
       $GlossarTags = $this->replaceGlossarTags($strContent);
 
@@ -96,8 +116,10 @@ class Glossar extends \Frontend {
 
     if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1) {
       /* reinsert glossar hidden content */
+      $strContent = $this->insertTagIgnoreContent($strContent,$GlossarIgnoreTags);
       if(\Config::get('activateGlossarTags') == 1)
         $strContent = $this->insertTagContent($strContent,$GlossarTags);
+
       return $strContent;
     }
 
@@ -106,6 +128,7 @@ class Glossar extends \Frontend {
     $strContent = $this->replace($strContent,$Term);
 
     /* reinsert glossar hidden content */
+    $strContent = $this->insertTagIgnoreContent($strContent,$GlossarIgnoreTags);
     if(\Config::get('activateGlossarTags') == 1)
       $strContent = $this->insertTagContent($strContent,$GlossarTags);
     
@@ -142,6 +165,36 @@ class Glossar extends \Frontend {
     return $arrTagContent;
   }
 
+  /* Replace content between the tags with placeholder */
+  private function replaceGlossarIgnoreTags(&$strContent) {
+    $arrTagContent = array();
+    $cIndex = 0;
+    while (($intStart = strpos($strContent, '<!-- glossar::ignore -->')) !== false) {
+      if (($intEnd = strpos($strContent, '<!-- glossar::unignore -->', $intStart)) !== false) {
+        $intCurrent = $intStart;
+        // Handle nested tags
+        while (($intNested = strpos($strContent, '<!-- glossar::ignore -->', $intCurrent + 22)) !== false && $intNested < $intEnd) {
+          if (($intNewEnd = strpos($strContent, '<!-- glossar::unignore -->', $intEnd + 26)) !== false) {
+            $intEnd = $intNewEnd;
+            $intCurrent = $intNested;
+          }
+          else break;
+        }
+
+        /* 
+         * Save all cut content to reinsert it in insertTagContent 
+         * to hide content from Glossar.
+         */
+        $arrTagContent[] = substr($strContent,$intStart,$intEnd+26-$intStart);
+        $strContent = substr($strContent, 0, $intStart) .'###GLOSSAR_IGNORE_CONTENT_'.$cIndex.'###'. substr($strContent, $intEnd + 26);
+        $cIndex++;
+      }
+      else break;
+    }
+
+    return $arrTagContent;
+  }
+
   /* replace placeholder with glossar-tag content */
   private function insertTagContent($strContent,$tags = array()) {
     if(!empty($tags))
@@ -150,11 +203,21 @@ class Glossar extends \Frontend {
     return $strContent;
   }
 
+  /* replace placeholder with glossar-tag content */
+  private function insertTagIgnoreContent($strContent,$tags = array()) {
+    if(!empty($tags))
+      foreach($tags as $key => $tag)
+        $strContent = str_replace('###GLOSSAR_IGNORE_CONTENT_'.$key.'###',$tag,$strContent);
+    return $strContent;
+  }
+
   /* replace found tags with links and abbr */
   private function replace($strContent,$Term,$Glossar = null) {
     $this->term_glossar = $Glossar;
     if(!$strContent || !$Term)
       return $strContent;
+
+    $IgnoreTags = $this->replaceGlossarIgnoreTags($strContent);
 
     while($Term->next()) {
       $this->term = $Term;
@@ -193,8 +256,8 @@ class Glossar extends \Frontend {
         $plural = preg_replace('/[.]+(?<!\\.)/is','\\.',$IllegalPlural.(!$Term->noPlural ? $GLOBALS['glossar']['illegal']:'')).'<';
         $preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))('.($Term->strictSearch==1||$Term->strictSearch==3?'\b':'') . $Term->title . (!$Term->noPlural?'[^ '.$plural.']*':'') . ($Term->strictSearch==1?'\b':'').')/is';
         $no_preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(?:<(?:a|span|abbr) (?!class="glossar")[^>]*>)('.($Term->strictSearch==1||$Term->strictSearch==3?'\b':'') . $Term->title . (!$Term->noPlural?'[^ '.$plural.']*':'') . ($Term->strictSearch==1?'\b':'').')/is';
-        // echo $no_preg_query.'<br>';
-        // echo preg_match_all($no_preg_query,$strContent,$third2);
+        
+
         if($Term->title && preg_match_all( $preg_query, $strContent, $third)) {
           $strContent = preg_replace_callback( $preg_query, array($this,$replaceFunction), $strContent);
         }
@@ -204,6 +267,8 @@ class Glossar extends \Frontend {
         $strContent = preg_replace_callback($preg_query, array($this,'replaceAbbr'), $strContent);
       }
     }
+
+    $strContent = $this->insertTagIgnoreContent($strContent,$IgnoreTags);
     return $strContent;
   }
   

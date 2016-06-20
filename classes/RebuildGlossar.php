@@ -136,6 +136,8 @@ class RebuildGlossar extends \Backend implements \executable {
 
       $this->Database->prepare("UPDATE tl_page SET glossar = ?, fallback_glossar = ?,glossar_time = ? WHERE id = ?")->execute($strGlossar,$strFallback,$time,$objPage->id);
     }
+
+    return $strContent;
   }
 
   private function clearGlossar() {
