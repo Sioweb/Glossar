@@ -110,14 +110,7 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
   // Palettes
   'palettes' => array
   (
-    '__selector__'                => array('allowComments'),
-    'default'                     => '{title_legend},title,alias,language,fallback,allowComments',
-  ),
-
-  // Subpalettes
-  'subpalettes' => array
-  (
-    'allowComments'               => 'notify,sortOrder,perPage,moderate,bbcode,requireLogin,disableCaptcha'
+    'default'                     => '{title_legend},title,alias,language,fallback',
   ),
 
   // Fields
@@ -169,76 +162,6 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
       'save_callback' => array(
         array('tl_glossar', 'checkFallback')
       ),
-      'sql'                     => "char(1) NOT NULL default ''"
-    ),
-    'allowComments' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['allowComments'],
-      'exclude'                 => true,
-      'filter'                  => true,
-      'inputType'               => 'checkbox',
-      'eval'                    => array('submitOnChange'=>true,'tl_class'=>'w50'),
-      'sql'                     => "char(1) NOT NULL default ''"
-    ),
-    'notify' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['notify'],
-      'default'                 => 'notify_admin',
-      'exclude'                 => true,
-      'inputType'               => 'select',
-      'options'                 => array('notify_admin', 'notify_author', 'notify_both'),
-      'reference'               => &$GLOBALS['TL_LANG']['tl_glossar'],
-      'sql'                     => "varchar(16) NOT NULL default ''"
-    ),
-    'sortOrder' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['sortOrder'],
-      'default'                 => 'ascending',
-      'exclude'                 => true,
-      'inputType'               => 'select',
-      'options'                 => array('ascending', 'descending'),
-      'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-      'eval'                    => array('tl_class'=>'w50'),
-      'sql'                     => "varchar(32) NOT NULL default ''"
-    ),
-    'perPage' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['perPage'],
-      'exclude'                 => true,
-      'inputType'               => 'text',
-      'eval'                    => array('rgxp'=>'natural', 'tl_class'=>'w50'),
-      'sql'                     => "smallint(5) unsigned NOT NULL default '0'"
-    ),
-    'moderate' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['moderate'],
-      'exclude'                 => true,
-      'inputType'               => 'checkbox',
-      'eval'                    => array('tl_class'=>'w50'),
-      'sql'                     => "char(1) NOT NULL default ''"
-    ),
-    'bbcode' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['bbcode'],
-      'exclude'                 => true,
-      'inputType'               => 'checkbox',
-      'eval'                    => array('tl_class'=>'w50'),
-      'sql'                     => "char(1) NOT NULL default ''"
-    ),
-    'requireLogin' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['requireLogin'],
-      'exclude'                 => true,
-      'inputType'               => 'checkbox',
-      'eval'                    => array('tl_class'=>'w50'),
-      'sql'                     => "char(1) NOT NULL default ''"
-    ),
-    'disableCaptcha' => array
-    (
-      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar']['disableCaptcha'],
-      'exclude'                 => true,
-      'inputType'               => 'checkbox',
-      'eval'                    => array('tl_class'=>'w50'),
       'sql'                     => "char(1) NOT NULL default ''"
     ),
   )

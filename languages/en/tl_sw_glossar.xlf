@@ -138,15 +138,6 @@
         <target>This is an externam link to other pages.</target>
       </trans-unit>
 
-      <trans-unit id="tl_sw_glossar.tags.0">
-        <source>Tags</source>
-        <target>Tags</target>
-      </trans-unit>
-      <trans-unit id="tl_sw_glossar.tags.1">
-        <source>Please enter one or more comma separated tags for categorization</source>
-        <target>Please enter one or more comma separated tags for categorization</target>
-      </trans-unit>
-
       <trans-unit id="tl_sw_glossar.title_legend">
         <source>Title</source>
         <target>Title</target>

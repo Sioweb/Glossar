@@ -19,11 +19,4 @@
 		</a>
 	</p>
 	<?php }}?>
-	<?php if($this->showTags && $this->tags) {?>
-	<ul class="glossar-tags tag-chain">
-		<?php foreach($this->tags as $key => $tag) {?>
-		<li class="tag-chain-item<?php echo ($key==0?' first':'');?><?php echo ($tag === end($this->tags)?' last':'');?>"><?php echo $tag['tag'];?></li>
-		<?php }?>
-	</ul>
-	<?php }?>
 </li>

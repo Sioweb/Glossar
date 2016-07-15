@@ -26,7 +26,7 @@ if (Input::get('do') == 'glossar') {
   $GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('type','title','jumpTo','tstamp');
 }
 
-$GLOBALS['TL_DCA']['tl_content']['palettes']['glossar'] = '{type_legend},type,glossar,sortGlossarBy,termAsHeadline,glossarShowTags,glossarShowTagsDetails;{pagination_legend:hide},addAlphaPagination';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['glossar'] = '{type_legend},type,glossar,sortGlossarBy,termAsHeadline;{pagination_legend:hide},addAlphaPagination';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['glossar_cloud'] = '{type_legend},type,glossar';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addAlphaPagination';
@@ -104,23 +104,5 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['termAsHeadline'] = array
   'exclude'                 => true,
   'inputType'               => 'checkbox',
   'eval'                    => array('tl_class'=>'w50 clr','submitOnChange'=>true),
-  'sql'                     => "char(1) NOT NULL default ''"
-);
-
-$GLOBALS['TL_DCA']['tl_content']['fields']['glossarShowTags'] = array
-(
-  'label'                   => &$GLOBALS['TL_LANG']['tl_content']['glossarShowTags'],
-  'exclude'                 => true,
-  'inputType'               => 'checkbox',
-  'eval'                    => array('tl_class'=>'w50 clr','submitOnChange'=>true),
-  'sql'                     => "char(1) NOT NULL default ''"
-);
-
-$GLOBALS['TL_DCA']['tl_content']['fields']['glossarShowTagsDetails'] = array
-(
-  'label'                   => &$GLOBALS['TL_LANG']['tl_content']['glossarShowTagsDetails'],
-  'exclude'                 => true,
-  'inputType'               => 'checkbox',
-  'eval'                    => array('tl_class'=>'w50','submitOnChange'=>true),
   'sql'                     => "char(1) NOT NULL default ''"
 );

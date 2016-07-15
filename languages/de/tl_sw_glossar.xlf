@@ -179,14 +179,6 @@
         <target>Überschreibt den Wert {{page::pageTitle}} durch den manuellen Titel.</target>
       </trans-unit>
 
-      <trans-unit id="tl_sw_glossar.tags.0">
-        <source>Auszeichnungen</source>
-        <target>Auszeichnungen</target>
-      </trans-unit>
-      <trans-unit id="tl_sw_glossar.tags.1">
-        <source>Bitte geben Sie eine oder mehrere Auszeichnungen durch Komma getrennt an, um eine Kategorisierung vorzunehmen.</source>
-        <target>Bitte geben Sie eine oder mehrere Auszeichnungen durch Komma getrennt an, um eine Kategorisierung vorzunehmen.</target>
-      </trans-unit>
 
       <trans-unit id="tl_sw_glossar.title_legend">
         <source>Titel</source>

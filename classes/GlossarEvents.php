@@ -105,8 +105,8 @@ class GlossarEvents extends \Events {
 
         if(!empty($arrEvent[$event_id])) {
           foreach($arrEvent[$event_id] as $event_domain) {
-            $event_domain = end((explode('/',str_replace('.html','',$event_domain))));
-            $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), '/'.$event_domain, $strLanguage);
+            $event_domain = str_replace('.html','',$event_domain);
+            $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($event_domain,strpos($event_domain,'/')), $strLanguage);
           }
         }
         $finishedIDs[] = $event_id;

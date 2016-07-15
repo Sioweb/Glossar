@@ -104,8 +104,8 @@ class GlossarNews extends \ModuleNews {
 
         if(!empty($arrNews[$news_id])) {
           foreach($arrNews[$news_id] as $news_domain) {
-            $news_domain = end((explode('/',str_replace('.html','',$news_domain))));
-            $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), '/'.$news_domain, $strLanguage);
+            $news_domain = str_replace('.html','',$news_domain);
+            $arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($news_domain,strpos($news_domain,'/')), $strLanguage);
           }
         }
         $finishedIDs[] = $news_id;
