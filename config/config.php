@@ -12,6 +12,10 @@
  * @copyright Sascha Weidner, Sioweb
  */
 
+if(empty($GLOBALS['tags_extension']))
+  $GLOBALS['tags_extension'] = array('sourcetable'=>array());
+$GLOBALS['tags_extension']['sourcetable'][] = 'tl_sw_glossar';
+$GLOBALS['TL_HOOKS']['tagSourceTable'][] = array('sioweb\contao\extensions\glossar\Glossar', 'addSourceTable');
 
 array_insert($GLOBALS['TL_MAINTENANCE'],1,array(
   'sioweb\contao\extensions\glossar\RebuildGlossar'
@@ -72,26 +76,35 @@ if(method_exists('Contao\Config','set')) {
     \Config::add('$GLOBALS[\'TL_CONFIG\'][\'illegalChars\']','")(=?.,;~:\'\>+\/!$€`´\'%&');
 }
 
+$GLOBALS['TL_HOOKS']['getGlossarPages'] = array();
 $GLOBALS['TL_CTE']['texts']['glossar'] = 'ContentGlossar';
 $GLOBALS['TL_CTE']['texts']['glossar_cloud'] = 'ContentGlossarCloud';
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('sioweb\contao\extensions\glossar\Glossar', 'searchGlossarTerms');
 $GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('sioweb\contao\extensions\glossar\Glossar','getSearchablePages');
 
-$GLOBALS['TL_HOOKS']['clearGlossar']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','clearGlossar');
-$GLOBALS['TL_HOOKS']['getGlossarPages']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','generateUrl');
-$GLOBALS['TL_HOOKS']['cacheGlossarTerms']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','updateCache');
-$GLOBALS['TL_HOOKS']['glossarContent']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','glossarContent');
+if (in_array('news', \Config::getInstance()->getActiveModules())) {
+  ClassLoader::addClasses(array('sioweb\contao\extensions\glossar\GlossarNews' => 'system/modules/Glossar/classes/GlossarNews.php'));
+  $GLOBALS['TL_HOOKS']['clearGlossar']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','clearGlossar');
+  $GLOBALS['TL_HOOKS']['getGlossarPages']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','generateUrl');
+  $GLOBALS['TL_HOOKS']['cacheGlossarTerms']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','updateCache');
+  $GLOBALS['TL_HOOKS']['glossarContent']['news'] = array('sioweb\contao\extensions\glossar\GlossarNews','glossarContent');
+}
 
-$GLOBALS['TL_HOOKS']['clearGlossar']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','clearGlossar');
-$GLOBALS['TL_HOOKS']['getGlossarPages']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','generateUrl');
-$GLOBALS['TL_HOOKS']['cacheGlossarTerms']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','updateCache');
-$GLOBALS['TL_HOOKS']['glossarContent']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','glossarContent');
+if (in_array('faq', \Config::getInstance()->getActiveModules())) {
+  ClassLoader::addClasses(array('sioweb\contao\extensions\glossar\GlossarFAQ' => 'system/modules/Glossar/classes/GlossarFAQ.php'));
+  $GLOBALS['TL_HOOKS']['clearGlossar']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','clearGlossar');
+  $GLOBALS['TL_HOOKS']['getGlossarPages']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','generateUrl');
+  $GLOBALS['TL_HOOKS']['cacheGlossarTerms']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','updateCache');
+  $GLOBALS['TL_HOOKS']['glossarContent']['faq'] = array('sioweb\contao\extensions\glossar\GlossarFAQ','glossarContent');
+}
 
-$GLOBALS['TL_HOOKS']['clearGlossar']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','clearGlossar');
-$GLOBALS['TL_HOOKS']['getGlossarPages']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','generateUrl');
-$GLOBALS['TL_HOOKS']['cacheGlossarTerms']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','updateCache');
-$GLOBALS['TL_HOOKS']['glossarContent']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','glossarContent');
-
+if (in_array('events', \Config::getInstance()->getActiveModules())) {
+  ClassLoader::addClasses(array('sioweb\contao\extensions\glossar\GlossarEvents' => 'system/modules/Glossar/classes/GlossarEvents.php'));
+  $GLOBALS['TL_HOOKS']['clearGlossar']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','clearGlossar');
+  $GLOBALS['TL_HOOKS']['getGlossarPages']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','generateUrl');
+  $GLOBALS['TL_HOOKS']['cacheGlossarTerms']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','updateCache');
+  $GLOBALS['TL_HOOKS']['glossarContent']['events'] = array('sioweb\contao\extensions\glossar\GlossarEvents','glossarContent');
+}
 
 $GLOBALS['glossar'] = array(
   'css' => array(
@@ -121,7 +134,8 @@ if(\Config::get('enableGlossar') == 1) {
 
   if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1) {
     $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'prepareRebuild');
-    $GLOBALS['TL_HOOKS']['indexPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
+    $GLOBALS['TL_HOOKS']['modifyFrontendPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
+    // $GLOBALS['TL_HOOKS']['indexPage'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'rebuild');
     $GLOBALS['TL_HOOKS']['clearGlossar'][] = array('sioweb\contao\extensions\glossar\RebuildGlossar', 'clearGlossar');
   }
 

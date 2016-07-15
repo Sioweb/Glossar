@@ -136,9 +136,11 @@ class RebuildGlossar extends \Backend implements \executable {
 
       $this->Database->prepare("UPDATE tl_page SET glossar = ?, fallback_glossar = ?,glossar_time = ? WHERE id = ?")->execute($strGlossar,$strFallback,$time,$objPage->id);
     }
+
+    return $strContent;
   }
 
-  private function clearGlossar() {
+  public function clearGlossar() {
     /** @todo Clear all Glossar caches */
   }
 
@@ -180,8 +182,6 @@ class RebuildGlossar extends \Backend implements \executable {
       }
 
       $arrPages['regular'] = $this->findGlossarPages();
-      $Events = new GlossarEvents();
-
       // $arrPages['news'] = $this->findGlossarNewsPages();
 
       // HOOK: take additional pages

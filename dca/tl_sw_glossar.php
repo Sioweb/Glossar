@@ -125,7 +125,9 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     ),
     'pid' => array
     (
-      'sql'                     => "int(10) unsigned NOT NULL default '1'"
+      'sql'                     => "int(10) unsigned NOT NULL default '1'",
+      'foreignKey'              => 'tl_glossar.id',
+      'relation'                => array('type'=>'hasOne','load'=>'lazy')
     ),
     'tstamp' => array
     (
@@ -328,8 +330,23 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       'eval'                    => array('maxlength'=>255,'tl_class'=>'w50','gsIgnore'=>true),
       'sql'                     => "varchar(255) NOT NULL default ''"
     ),
+    'tags' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_sw_glossar']['tags'],
+      'inputType'               => 'tag',
+      'eval'                    => array('tl_class'=>'clr long'),
+      'sql'                     => "char(1) NOT NULL default ''",
+    ),
   )
 );
+
+if (in_array('tags', $this->Config->getActiveModules())) {
+  foreach($GLOBALS['TL_DCA']['tl_sw_glossar']['palettes'] as $palette => &$fields) {
+    if(is_array($fields)) continue;
+      $fields = str_replace('alias','alias,tags',$fields);
+  }
+  unset($fields);
+}
 
 class tl_sw_glossar extends Backend {
 

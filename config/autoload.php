@@ -26,10 +26,6 @@ ClassLoader::addClasses(array
   'sioweb\contao\extensions\glossar\GlossarLog'       => 'system/modules/Glossar/classes/GlossarLog.php',
   'sioweb\contao\extensions\glossar\Glossar'          => 'system/modules/Glossar/classes/Glossar.php',
 
-  'sioweb\contao\extensions\glossar\GlossarNews'      => 'system/modules/Glossar/classes/GlossarNews.php',
-  'sioweb\contao\extensions\glossar\GlossarFAQ'       => 'system/modules/Glossar/classes/GlossarFAQ.php',
-  'sioweb\contao\extensions\glossar\GlossarEvents'    => 'system/modules/Glossar/classes/GlossarEvents.php',
-
   // Elements
   'sioweb\contao\extensions\glossar\ContentGlossar'         => 'system/modules/Glossar/elements/ContentGlossar.php',
   'sioweb\contao\extensions\glossar\ContentGlossarCloud'    => 'system/modules/Glossar/elements/ContentGlossarCloud.php',
