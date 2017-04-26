@@ -229,7 +229,7 @@ class RebuildGlossar extends \Backend implements \executable {
       $strBuffer = '';
       $rand = rand();
       $time = time();
-      
+
       foreach($arrPages as $type => $pages) {
         foreach($pages as $lang => $arrPage) {
           for ($i=0, $c=count($arrPage); $i<$c; $i++) {
@@ -272,12 +272,15 @@ class RebuildGlossar extends \Backend implements \executable {
     $time = time();
     $arrPages = array();
     $objPages = \GlossarPageModel::findActiveAndEnabledGlossarPages();
+    $domain = rtrim(\Environment::get('base'),'/').'/';
     if(!empty($objPages))
       while($objPages->next()) {
 
-        if ($objPages->type == 'root')
+        if($objPages->type == 'root') {
+          if(!empty($objPages->dns))
+            $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$objPages->dns),'/').'/';
           $strLanguage = $objPages->language;
-        $domain = \Environment::get('base');
+        }
 
         if ((!$objPages->start || $objPages->start < $time) && (!$objPages->stop || $objPages->stop > $time)) {
           $arrPages[$strLanguage][] = $domain . static::generateFrontendUrl($objPages->row(), null, $strLanguage);
