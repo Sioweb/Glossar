@@ -22,7 +22,7 @@ class RebuildGlossar extends \Backend implements \executable {
     return str_replace(array('<!-- indexer::stop -->','<!-- indexer::continue -->'),array('',''),$strContent);
   }
 
-  public function rebuild($strContent,$arrData,$arrSet) {
+  public function rebuild($strContent,$arrData) {
     global $objPage;
 
     $time = \Input::get('time');
@@ -285,7 +285,10 @@ class RebuildGlossar extends \Backend implements \executable {
         if($objPages->pid)
           $RootPage = $this->getRootPage($objPages->pid);
 
-        $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
+        if($RootPage->dns)
+          $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
+        else $domain = rtrim(\Environment::get('base'),'/').'/';
+        
         $strLanguage = $RootPage->language;
 
         if ((!$objPages->start || $objPages->start < $time) && (!$objPages->stop || $objPages->stop > $time)) {
