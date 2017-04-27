@@ -91,9 +91,11 @@ class Glossar extends \Frontend {
       }
     }
 
+
     if(!empty($arrGlossar))
       $this->term = implode('|',$arrGlossar);
     $this->term = addslashes(str_replace('||','|',$this->term));
+
 
     $Glossar = \GlossarModel::findByLanguage($objPage->language);
     if(empty($Glossar))
@@ -265,6 +267,7 @@ class Glossar extends \Frontend {
         $preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))('.($Term->strictSearch==1||$Term->strictSearch==3?'\b':'') . $Term->title . (!$Term->noPlural?'[^ '.$plural.']*':'') . ($Term->strictSearch==1?'\b':'').')/is';
         $no_preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))(?:<(?:a|span|abbr) (?!class="glossar")[^>]*>)('.($Term->strictSearch==1||$Term->strictSearch==3?'\b':'') . $Term->title . (!$Term->noPlural?'[^ '.$plural.']*':'') . ($Term->strictSearch==1?'\b':'').')/is';
         // echo preg_match_all($no_preg_query,$strContent,$third2);
+        
         if($Term->title && preg_match_all( $preg_query, $strContent, $third)) {
           $strContent = preg_replace_callback( $preg_query, array($this,$replaceFunction), $strContent);
           if($lastIstDot)
@@ -280,6 +283,7 @@ class Glossar extends \Frontend {
         }
         $preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/',$ignoredTags).'>)))\b(' . $Term->title . ')\b/is';
         // echo $preg_query.'<br><br>';
+        // echo $preg_query."\n";
         if($Term->title && preg_match_all($preg_query, $strContent, $third)) {
           $strContent = preg_replace_callback($preg_query, array($this,'replaceAbbr'), $strContent);
           if($lastIstDot)
