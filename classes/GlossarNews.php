@@ -29,18 +29,23 @@ class GlossarNews extends \ModuleNews {
   public function glossarContent($item,$strContent,$template) {
     if(empty($item)) return array();
 
-    $News = \NewsModel::findByAlias(\Input::get('items'));
+    $News = \NewsModel::findByIdOrAlias(\Input::get('items'));
     return $News->glossar;
   }
 
   public function updateCache($item,$arrTerms,$strContent) {
-    preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
-    $matches = array_unique($matches[0]);
+    $matches = array();
+    foreach($arrTerms['both'] as $term) {
+      if(preg_match('#('.$term.')#is',$strContent,$match))
+        $matches[] = $match[1];
+    }
+    // preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
+    $matches = array_unique($matches);
 
     if(empty($matches))
       return;
 
-    $News = \NewsModel::findByAlias($item);
+    $News = \NewsModel::findByIdOrAlias($item);
     $News->glossar = implode('|',$matches);
     $News->save();
   }
@@ -76,18 +81,27 @@ class GlossarNews extends \ModuleNews {
     if(empty($Content))
       return array();
 
-    $arrContent = array();
-    while($Content->next()) $arrContent[$Content->module] = $Content->pid;
+    $_content = $arrContent = array();
+    while($Content->next()) $_content[] = $arrContent[$Content->module][] = $Content->pid;
 
-    $Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$arrContent)."')"),array());
+    // print_r($arrContent);
+    // print_r($arrReader);
+    // die();
+
+    $Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$_content)."')"),array());
     if(empty($Article))
       return array();
 
 
     $finishedIDs = $arrPages = array();
+    
     while($Article->next()) {
 
-      // $root = $this->getRootPage($Article->pid);
+      $RootPage = $this->getRootPage($Article->pid);
+
+      if($RootPage->dns)
+        $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
+      else $domain = rtrim(\Environment::get('base'),'/').'/';
 
       $domain = \Environment::get('base');
       $strLanguage = 'de';
@@ -95,12 +109,12 @@ class GlossarNews extends \ModuleNews {
 
       $ReaderId = false;
       foreach($arrContent as $module => $mid)
-        if($mid == $Article->id)
+        if(in_array($Article->id,$mid))
           $ReaderId = $module;
 
       foreach($arrReader[$ReaderId] as $news_id) {
-        if(in_array($news_id,$finishedIDs))
-          continue;
+        // if(in_array($news_id,$finishedIDs))
+        //   continue;
 
         if(!empty($arrNews[$news_id])) {
           foreach($arrNews[$news_id] as $news_domain) {
@@ -111,6 +125,14 @@ class GlossarNews extends \ModuleNews {
         $finishedIDs[] = $news_id;
       }
     }
+
     return $arrPages;
+  }
+
+  private function getRootPage($id) {
+    $Page = \PageModel::findByPk($id);
+    if($Page->type !== 'root')
+      $Page = $this->getRootPage($Page->pid);
+    return $Page;
   }
 }
