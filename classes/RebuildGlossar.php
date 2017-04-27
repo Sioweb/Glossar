@@ -268,6 +268,13 @@ class RebuildGlossar extends \Backend implements \executable {
     return $objTemplate->parse();
   }
 
+  private function getRootPage($id) {
+    $Page = \PageModel::findByPk($id);
+    if($Page->type !== 'root')
+      $Page = $this->getRootPage($Page->pid);
+    return $Page;
+  }
+
   protected function findGlossarPages() {
     $time = time();
     $arrPages = array();
@@ -275,12 +282,11 @@ class RebuildGlossar extends \Backend implements \executable {
     $domain = rtrim(\Environment::get('base'),'/').'/';
     if(!empty($objPages))
       while($objPages->next()) {
+        if($objPages->pid)
+          $RootPage = $this->getRootPage($objPages->pid);
 
-        if($objPages->type == 'root') {
-          if(!empty($objPages->dns))
-            $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$objPages->dns),'/').'/';
-          $strLanguage = $objPages->language;
-        }
+        $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
+        $strLanguage = $RootPage->language;
 
         if ((!$objPages->start || $objPages->start < $time) && (!$objPages->stop || $objPages->stop > $time)) {
           $arrPages[$strLanguage][] = $domain . static::generateFrontendUrl($objPages->row(), null, $strLanguage);
@@ -295,12 +301,12 @@ class RebuildGlossar extends \Backend implements \executable {
     return $arrPages;
   }
 
-  private function getRootPage($id) {
-    $Page = \GlossarPageModel::findByPk($id);
-    if(empty($Page))
-      return;
-    if($Page->type == 'root')
-      return $Page;
-    else return $this->getRootPage($Page->pid);
-  }
+  // private function getRootPage($id) {
+  //   $Page = \GlossarPageModel::findByPk($id);
+  //   if(empty($Page))
+  //     return;
+  //   if($Page->type == 'root')
+  //     return $Page;
+  //   else return $this->getRootPage($Page->pid);
+  // }
 }
