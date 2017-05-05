@@ -367,8 +367,8 @@ class Glossar extends \Frontend {
     if(!empty($this->term_glossar->language))
       $lang = ' lang="'.$this->term_glossar->language.'"';
 
-    if($href) $data .= '<a class="glossar_abbr" href="'.$href.'"'.($this->term->target?' target="_blank':'').' title="'.$this->term->explanation.'">';
-    $data .= '<abbr'.$lang.' class="glossar" title="'.$this->term->explanation.'">'.$treffer[2].'</abbr>';
+    if($href) $data .= '<a class="glossar_abbr glossar_'.$this->term->pid.'" href="'.$href.'"'.($this->term->target?' target="_blank':'').' title="'.$this->term->explanation.'">';
+    $data .= '<abbr'.$lang.' class="glossar glossar_'.$this->term->pid.'" title="'.$this->term->explanation.'">'.$treffer[2].'</abbr>';
     if($href) $data .= '</a>';
     return $data;
   }
@@ -379,7 +379,7 @@ class Glossar extends \Frontend {
     if(!empty($this->term_glossar->language))
       $lang = ' lang="'.$this->term_glossar->language.'"';
 
-    return '<a'.$lang.' class="glossar glossar_no_content" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'">'.$treffer[2].'</a>';
+    return '<a'.$lang.' class="glossar glossar_'.$this->term->pid.' glossar_no_content" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'">'.$treffer[2].'</a>';
   }
 
   private function replaceTitle2Link($treffer) {
@@ -394,7 +394,7 @@ class Glossar extends \Frontend {
     if(!empty($this->term_glossar->language))
       $lang = ' lang="'.$this->term_glossar->language.'"';
     
-    return '<a'.$lang.' class="glossar" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'" href="'.$link.'">'.$treffer[2].'</a>';
+    return '<a'.$lang.' class="glossar glossar_'.$this->term->pid.'" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'" href="'.$link.'">'.$treffer[2].'</a>';
   }
   
   public function getSearchablePages($arrPages, $intRoot=0, $blnIsSitemap=false) {
