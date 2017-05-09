@@ -119,6 +119,14 @@ $GLOBALS['TL_DCA']['tl_glossar_log'] = array(
       'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
       'sql'                     => "varchar(255) NOT NULL default ''"
     ),
+    'host' => array
+    (
+      'label'                   => &$GLOBALS['TL_LANG']['tl_glossar_log']['host'],
+      'exclude'                 => true,
+      'inputType'               => 'text',
+      'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
+      'sql'                     => "varchar(255) NOT NULL default ''"
+    ),
     'language' => array
     (
       'label'                   => &$GLOBALS['TL_LANG']['tl_glossar_log']['language'],

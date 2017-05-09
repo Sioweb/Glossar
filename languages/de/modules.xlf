@@ -5,6 +5,10 @@
         <source>Sioweb</source>
         <target>Sioweb</target>
       </trans-unit>
+      <trans-unit id="FMD.glossar">
+        <source>Glossar</source>
+        <target>Glossar</target>
+      </trans-unit>
       <trans-unit id="MOD.glossar.0">
         <source>Glossar</source>
         <target>Glossar</target>
@@ -45,6 +49,15 @@
       <trans-unit id="FMD.glossar_pagination.1">
         <source>Generates the Pagination for the selected glossar.</source>
         <target>Erzeugt die Glossar-Pagination für das ausgewählte Glossar.</target>
+      </trans-unit>
+
+      <trans-unit id="FMD.glossar_cloud.0">
+        <source>Glossary cloud</source>
+        <target>Glossar Tag-Cloud</target>
+      </trans-unit>
+      <trans-unit id="FMD.glossar_cloud.1">
+        <source>Generates a tag-cloud for related glossar terms.</source>
+        <target>Erzeugt eine Tag-Cloud mit relevanten Glossar-Begriffen.</target>
       </trans-unit>
     </body>
   </file>

@@ -14,15 +14,15 @@
 
 
 /* Contao 3.2 support */
-if(empty($GLOBALS['glossar']['headlineUnit']))
+if(empty($GLOBALS['glossar']['headlineUnit'])) {
   $this->loadLanguageFile('default');
+}
 
 /**
  * Dynamically add the permission check and parent table
  */
 if (Input::get('do') == 'glossar') {
   $GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_sw_glossar';
-
   $GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('type','title','jumpTo','tstamp');
 }
 

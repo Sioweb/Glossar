@@ -1,3 +1,6 @@
+span.glossar {
+  border-bottom: 1px dotted #000;
+}
 .glossar_status,
 .glossar_status * {
   -webkit-box-sizing: border-box;

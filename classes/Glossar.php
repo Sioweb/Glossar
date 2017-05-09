@@ -26,8 +26,8 @@ class Glossar extends \Frontend {
     $this->import('Database');
     $time = time();
     $this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
-    if (isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
-      foreach ($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
+    if(isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
+      foreach($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
         $this->import($callback[0]);
         $this->$callback[0]->$callback[1]($time);
       }
@@ -39,12 +39,15 @@ class Glossar extends \Frontend {
     if(!empty($Term)) {
       $arrLinks = array();
       while($Term->next()) {
-        if($GLOBALS['TL_CONFIG']['jumpToGlossar'])
+        if($GLOBALS['TL_CONFIG']['jumpToGlossar']) {
           $link = \GlossarPageModel::findByPk($GLOBALS['TL_CONFIG']['jumpToGlossar']);
-        if($this->term->jumpTo)
+        }
+        if($this->term->jumpTo) {
           $link = \GlossarPageModel::findByPk($Term->jumpTo);
-        if($link)
+        }
+        if($link) {
           $link = $this->generateFrontendUrl($link->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/' : '/items/').standardize(\String::restoreBasicEntities($Term->alias)));
+        }
         
         $arrLinks[] = '<a href="'.$link.'" title="'.$Term->title.'">'.$Term->title.'</a>';
       }
@@ -55,8 +58,9 @@ class Glossar extends \Frontend {
 
   public function replaceGlossarInsertTags($Tag) {
     $Tag = explode('::',$Tag);
-    if($Tag[0] !== 'glossar')
+    if($Tag[0] !== 'glossar') {
       return false;
+    }
 
     switch($Tag[1]) {
       case 'term':
@@ -73,12 +77,15 @@ class Glossar extends \Frontend {
   public function searchGlossarTerms($strContent, $strTemplate) {
     global $objPage;
 
-    if (!isset($_GET['items']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item']))
+    if(!isset($_GET['items']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item'])) {
       \Input::setGet('items', \Input::get('auto_item'));
+    }
+
     $arrGlossar = array($objPage->glossar);
 
-    if($objPage->disableGlossar == 1)
+    if($objPage->disableGlossar == 1) {
       return $strContent;
+    }
 
     // HOOK: search for terms in Events, faq and news
     $arrGlossar = array($objPage->glossar);
@@ -86,31 +93,38 @@ class Glossar extends \Frontend {
       foreach ($GLOBALS['TL_HOOKS']['glossarContent'] as $type => $callback) {
         $this->import($callback[0]);
         $cb_output = $this->$callback[0]->$callback[1](\Input::get('items'),$strContent,$template,$objPage->language);
-        if(!empty($cb_output))
+        if(!empty($cb_output)) {
           $arrGlossar[] = $cb_output;
+        }
       }
     }
 
 
-    if(!empty($arrGlossar))
+    if(!empty($arrGlossar)) {
       $this->term = implode('|',$arrGlossar);
+    }
+
     $this->term = addslashes(str_replace('||','|',$this->term));
 
-
     $Glossar = \GlossarModel::findByLanguage($objPage->language);
-    if(empty($Glossar))
+    if(empty($Glossar)) {
       $Glossar = \GlossarModel::findByFallback(1);
+    }
 
     $arrGlossar = array();
-    if(empty($Glossar))
+    if(empty($Glossar)) {
       return $strContent;
-    while($Glossar->next())
+    }
+
+    while($Glossar->next()) {
       $arrGlossar[] = $Glossar->id;
+    }
 
     /* replace content with tags to stop glossary replacement */
     $GlossarIgnoreTags = $this->replaceGlossarIgnoreTags($strContent);
-    if(\Config::get('activateGlossarTags') == 1)
+    if(\Config::get('activateGlossarTags') == 1) {
       $GlossarTags = $this->replaceGlossarTags($strContent);
+    }
 
     $Term = \SwGlossarModel::findBy(array("title IN ('".str_replace('|',"','",$this->term)."') AND pid IN ('".implode("','",$arrGlossar)."')"),array($Glossar->id),array('order'=>' CHAR_LENGTH(title) DESC'));
    
@@ -119,8 +133,9 @@ class Glossar extends \Frontend {
     if(\Config::get('glossar_no_fallback') == 1 || $objPage->glossar_no_fallback == 1) {
       /* reinsert glossar hidden content */
       $strContent = $this->insertTagIgnoreContent($strContent,$GlossarIgnoreTags);
-      if(\Config::get('activateGlossarTags') == 1)
+      if(\Config::get('activateGlossarTags') == 1) {
         $strContent = $this->insertTagContent($strContent,$GlossarTags);
+      }
 
       return $strContent;
     }
@@ -131,8 +146,9 @@ class Glossar extends \Frontend {
 
     /* reinsert glossar hidden content */
     $strContent = $this->insertTagIgnoreContent($strContent,$GlossarIgnoreTags);
-    if(\Config::get('activateGlossarTags') == 1)
+    if(\Config::get('activateGlossarTags') == 1) {
       $strContent = $this->insertTagContent($strContent,$GlossarTags);
+    }
     
     return $strContent;
   }
@@ -150,7 +166,9 @@ class Glossar extends \Frontend {
             $intEnd = $intNewEnd;
             $intCurrent = $intNested;
           }
-          else break;
+          else {
+            break;
+          }
         }
 
         /* 
@@ -161,7 +179,9 @@ class Glossar extends \Frontend {
         $strContent = substr($strContent, 0, $intStart) .'###GLOSSAR_CONTENT_'.$cIndex.'###'. substr($strContent, $intEnd + 26);
         $cIndex++;
       }
-      else break;
+      else {
+        break;
+      }
     }
 
     return $arrTagContent;
@@ -171,6 +191,7 @@ class Glossar extends \Frontend {
   private function replaceGlossarIgnoreTags(&$strContent) {
     $arrTagContent = array();
     $cIndex = 0;
+
     while (($intStart = strpos($strContent, '<!-- glossar::ignore -->')) !== false) {
       if (($intEnd = strpos($strContent, '<!-- glossar::unignore -->', $intStart)) !== false) {
         $intCurrent = $intStart;
@@ -199,55 +220,69 @@ class Glossar extends \Frontend {
 
   /* replace placeholder with glossar-tag content */
   private function insertTagContent($strContent,$tags = array()) {
-    if(!empty($tags))
-      foreach($tags as $key => $tag)
+    if(!empty($tags)) {
+      foreach($tags as $key => $tag) {
         $strContent = str_replace('###GLOSSAR_CONTENT_'.$key.'###',$tag,$strContent);
+      }
+    }
     return $strContent;
   }
 
   /* replace placeholder with glossar-tag content */
   private function insertTagIgnoreContent($strContent,$tags = array()) {
-    if(!empty($tags))
-      foreach($tags as $key => $tag)
+    if(!empty($tags)) {
+      foreach($tags as $key => $tag) {
         $strContent = str_replace('###GLOSSAR_IGNORE_CONTENT_'.$key.'###',$tag,$strContent);
+      }
+    }
     return $strContent;
   }
 
   /* replace found tags with links and abbr */
   private function replace($strContent,$Term,$Glossar = null) {
     $this->term_glossar = $Glossar;
-    if(!$strContent || !$Term)
+    if(!$strContent || !$Term) {
       return $strContent;
+    }
 
     $IgnoreTags = $this->replaceGlossarIgnoreTags($strContent);
 
     while($Term->next()) {
       $this->term = $Term;
 
-      if(($maxWidth = \Config::get('glossarMaxWidth')))
+      if(($maxWidth = \Config::get('glossarMaxWidth'))) {
         $this->term->maxWidth = $maxWidth;
-      if(($maxHeigth = \Config::get('glossarMaxHeight')))
+      }
+      if(($maxHeigth = \Config::get('glossarMaxHeight'))) {
         $this->term->maxWidth = $maxHeight;
+      }
 
-      if(!$this->term->maxWidth)
+      if(!$this->term->maxWidth) {
         $this->term->maxWidth = $GLOBALS['glossar']['css']['maxWidth'];
-      if(!$this->term->maxHeight)
+      }
+      if(!$this->term->maxHeight) {
         $this->term->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
+      }
 
       $Content = \GlossarContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
 
       $replaceFunction = 'replaceTitle2Link';
-      if((!$Term->jumpTo && !$GLOBALS['TL_CONFIG']['jumpToGlossar']) || empty($Content))
+      if((!$Term->jumpTo && !$GLOBALS['TL_CONFIG']['jumpToGlossar']) || empty($Content)) {
         $replaceFunction = 'replaceTitle2Span';
+      }
 
       $ignoredTags = array('a');
-      if($GLOBALS['TL_CONFIG']['ignoreInTags'])
+      if($GLOBALS['TL_CONFIG']['ignoreInTags']) {
         $ignoredTags = explode(',',$GLOBALS['TL_CONFIG']['ignoreInTags']);
-      if($this->term->ignoreInTags)
-        $ignoredTags = explode(',',$this->term->ignoreInTags);
+      }
 
-      if(\Config::get('strictSearch') !== null && $Term->strictSearch === null)
+      if($this->term->ignoreInTags) {
+        $ignoredTags = explode(',',$this->term->ignoreInTags);
+      }
+
+      if(\Config::get('strictSearch') !== null && $Term->strictSearch === null) {
         $Term->strictSearch = \Config::get('strictSearch');
+      }
 
       if(empty($Term->type) || $Term->type == 'default' || $Term->type == 'glossar') {
         $IllegalPlural = '';
@@ -259,8 +294,10 @@ class Glossar extends \Frontend {
           $lastIstDot = true;
         }
 
-        if(\Config::get('illegalChars'))
+        if(\Config::get('illegalChars')) {
           $IllegalPlural = \Config::get('illegalChars');
+        }
+
         $IllegalPlural = html_entity_decode($IllegalPlural);
 
         $plural = preg_replace('/[.]+(?<!\\.)/is','\\.',$IllegalPlural.(!$Term->noPlural ? $GLOBALS['glossar']['illegal']:'')).'<';
@@ -274,6 +311,7 @@ class Glossar extends \Frontend {
             $strContent = str_replace($Term->title,substr($Term->title,0,-1),$strContent);
         }
       }
+
       if($Term->type == 'abbr') {
         $lastIstDot = false;
         if(substr($Term->title,-1) === '.') {
@@ -299,11 +337,13 @@ class Glossar extends \Frontend {
   /* InitializeSystem */
   public function getGlossarTerm() {
 
-    if(\Input::post('id'))
+    if(\Input::post('id')) {
       $Term = \SwGlossarModel::findByPk(\Input::post('id'));
+    }
 
-    if($Term === null && \Input::post('cloud') == '')
+    if($Term === null && \Input::post('cloud') == '') {
       return false;
+    }
 
     if(!$this->checkLizenz()) {
       $Log = new \GlossarLogModel();
@@ -311,27 +351,33 @@ class Glossar extends \Frontend {
       $Log->user = session_id();
       $GAction = 'load';
 
-      if(\Input::post('loaded')==1)
+      if(\Input::post('loaded')==1) {
         $GAction = 'close';
+      }
+
       if(\Input::post('clicked')==1) {
         $GAction = 'follow';
         if(\Input::post('no_ref')==1)
           $GAction = 'span';
       }
+
       if(($id = \Input::post('cloud'))) {
         $GAction = 'cloud';
         $Term = new \stdClass();
         $Term->id = $id;
       }
+
       $Log->action = $GAction;
       $Log->term = $Term->id;
-      $Log->page = $_SESSION['FE_DATA']['referer']['current'];
+      $Log->page = \Input::post('objPageUrl');
+      $Log->host = $_SERVER['SERVER_NAME'];
       $Log->language = $_SESSION['TL_LANGUAGE'];
       $Log->save();
     }
 
-    if(\Input::post('cloud') != '')
+    if(\Input::post('cloud') != '') {
       return false;
+    }
 
     $Content = \GlossarContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
       
@@ -367,10 +413,29 @@ class Glossar extends \Frontend {
     if(!empty($this->term_glossar->language))
       $lang = ' lang="'.$this->term_glossar->language.'"';
 
-    if($href) $data .= '<a class="glossar_abbr" href="'.$href.'"'.($this->term->target?' target="_blank':'').' title="'.$this->term->explanation.'">';
-    $data .= '<abbr'.$lang.' class="glossar" title="'.$this->term->explanation.'">'.$treffer[2].'</abbr>';
-    if($href) $data .= '</a>';
-    return $data;
+
+    $abbrObj = new \FrontendTemplate('term_abbr');
+    $abbrObj->setData(array(
+        'lang' => $lang,
+        'class' => 'glossar glossar_'.$this->term->pid,
+        'label' => $treffer[2],
+        'title' => $this->term->explanation
+    ));
+
+    if($href) {
+      $linkObj = new \FrontendTemplate('term_link');
+      $linkObj->setData(array(
+          'lang' => $lang,
+          'class' => 'glossar_abbr glossar_'.$this->term->pid,
+          'id' => $this->term->id,
+          'label' => $abbrObj->parse(),
+          'maxWidth' => $this->term->maxWidth,
+          'maxHeight' => $this->term->maxHeight,
+      ));
+      return $linkObj->parse();
+    }
+
+    return $abbrObj->parse();
   }
 
   private function replaceTitle2Span($treffer) {
@@ -379,7 +444,17 @@ class Glossar extends \Frontend {
     if(!empty($this->term_glossar->language))
       $lang = ' lang="'.$this->term_glossar->language.'"';
 
-    return '<a'.$lang.' class="glossar glossar_no_content" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'">'.$treffer[2].'</a>';
+    $spanObj = new \FrontendTemplate('term_span');
+    $spanObj->setData(array(
+        'lang' => $lang,
+        'class' => 'glossar glossar_no_content glossar_'.$this->term->pid,
+        'id' => $this->term->id,
+        'label' => $treffer[2],
+        'maxWidth' => $this->term->maxWidth,
+        'maxHeight' => $this->term->maxHeight,
+    ));
+    
+    return $spanObj->parse();
   }
 
   private function replaceTitle2Link($treffer) {
@@ -394,7 +469,17 @@ class Glossar extends \Frontend {
     if(!empty($this->term_glossar->language))
       $lang = ' lang="'.$this->term_glossar->language.'"';
     
-    return '<a'.$lang.' class="glossar" data-maxwidth="'.($this->term->maxWidth ? $this->term->maxWidth : 0).'" data-maxheight="'.($this->term->maxHeight ? $this->term->maxHeight : 0).'" data-glossar="'.$this->term->id.'" href="'.$link.'">'.$treffer[2].'</a>';
+    $linkObj = new \FrontendTemplate('term_link');
+    $linkObj->setData(array(
+        'lang' => $lang,
+        'class' => 'glossar glossar_'.$this->term->pid,
+        'id' => $this->term->id,
+        'label' => $treffer[2],
+        'maxWidth' => $this->term->maxWidth,
+        'maxHeight' => $this->term->maxHeight,
+    ));
+
+    return $linkObj->parse();
   }
   
   public function getSearchablePages($arrPages, $intRoot=0, $blnIsSitemap=false) {

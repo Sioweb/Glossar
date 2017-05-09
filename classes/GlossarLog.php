@@ -32,17 +32,24 @@ class GlossarLog extends \BackendModule {
 
     if($ext->lickey == false || $ext->lickey == 'free2use') {
       $this->Template->lickey = false;
-    } else $this->Template->lickey = true;    $Log = \GlossarLogModel::findBy(array("tl_glossar_log.tstamp >= ?"),array(time()-(86400*7*31)),array('order'=>'tstamp DESC','limit'=>500));
+    } else {
+      $this->Template->lickey = true;
+    }
+
+    $Log = \GlossarLogModel::findBy(array("tl_glossar_log.tstamp >= ?"),array(time()-(86400*7*31)),array('order'=>'tstamp DESC','limit'=>500));
     $arrTerms = $arrLog = array();
+
     if(!empty($Log)) {
       while($Log->next()) {
         $_term = $Log->getRelated('term');
+        if(empty($_term)) continue;
         $arrLog[$Log->action][$Log->term][] = $Log->user;
         $_log = $Log->row();
         $_log['term'] = $_term->row();
         $arrTerms[$_term->id][] = $_log;
       }
     }
+    
     $this->Template->terms = $arrTerms;
     $arrTerms = null;
 
@@ -55,6 +62,7 @@ class GlossarLog extends \BackendModule {
         'user_percent' => array(),
       )
     );
+
     $arrStats = array(
       'load' => $stdArray,
       'follow' => $stdArray,
@@ -62,7 +70,9 @@ class GlossarLog extends \BackendModule {
       'cloud' => $stdArray,
       'span' => $stdArray,
     );
+
     $stdArray = null;
+
     foreach($arrLog as $type => $terms) {
       foreach($terms as $id => $users) {
         $arrStats[$type][$id]['unique'] = count(array_unique($users));
@@ -79,14 +89,17 @@ class GlossarLog extends \BackendModule {
         $arrStats[$type][$id]['sum'] = array_sum($arrStats[$type][$id]['user']);
         $arrStats[$type][0]['sum'] += $arrStats[$type][$id]['sum'];
 
-        foreach($arrStats[$type][$id]['user'] as $sid => $count)
+        foreach($arrStats[$type][$id]['user'] as $sid => $count) {
           $arrStats[$type][$id]['user_percent'][$sid] = number_format($count * 100 / $arrStats[$type][$id]['sum'],2);
-        $arrStats[$type][$id]['avg'] = $arrStats[$type][$id]['sum'] / count($arrStats[$type][$id]['user']);
+        }
+        $arrStats[$type][$id]['avg'] = number_format($arrStats[$type][$id]['sum'] / count($arrStats[$type][$id]['user']),2);
         ksort($arrStats[$type][$id]);
       }
-      $arrStats[$type][0]['avg'] = $arrStats[$type][0]['sum'] / count($arrStats[$type][0]['user']);
-      foreach($arrStats[$type][0]['user'] as $sid => $count)
+
+      $arrStats[$type][0]['avg'] = number_format($arrStats[$type][0]['sum'] / count($arrStats[$type][0]['user']),2);
+      foreach($arrStats[$type][0]['user'] as $sid => $count) {
         $arrStats[$type][0]['user_percent'][$sid] = number_format($count * 100 / $arrStats[$type][0]['sum'],2);
+      }
       $arrStats[$type][0]['unique'] = count($arrStats[$type][0]['user']);
       ksort($arrStats[$type][0]);
       ksort($arrStats[$type]);
@@ -95,5 +108,4 @@ class GlossarLog extends \BackendModule {
     $this->Template->stats = $arrStats;
     $this->Template->log = $arrLog;
   }
-
 }

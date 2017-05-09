@@ -1,6 +1,10 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/news/languages/en/tl_module.php" source-language="en" target-language="de">
     <body>
+      <trans-unit id="tl_module.glossar_legend">
+        <source>Glossary settings</source>
+        <target>Glossar Einstellungen</target>
+      </trans-unit>
       <trans-unit id="tl_module.glossar.0">
         <source>Choose glossary</source>
         <target>Glossar wählen</target>

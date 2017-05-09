@@ -14,6 +14,7 @@
 
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['glossar_pagination']    = '{title_legend},name,headline,type;{glossar_legend},glossar,addOnlyTrueLinks;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['glossar_cloud']         = '{title_legend},name,headline,type;{glossar_legend},glossar;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['glossar'] = array

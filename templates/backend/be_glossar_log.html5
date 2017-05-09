@@ -48,9 +48,18 @@
       </tr>
       <?php }?>
       <tr class="<?php echo ($key%2==0)?'odd':'even';?>" onmouseover="Theme.hoverRow(this,1)" onmouseout="Theme.hoverRow(this,0)">
-        <td class="tl_file_list"><div class="ellipsis"><?php echo ($key<9?'0':'').($key+1);?>.)<span style="color:#b3b3b3;padding-right:3px"> [<?php echo date('m.d.Y - H:i',$term['tstamp']);?>]</span> <span<?php echo $term['action']=='close'?' class="tl_green"':''?> style="display: inline-block;width: 100px;">Aktion: <?php echo $term['action'];?></span> Seite: <?php echo $term['page'];?></div></td>
-        <td class="tl_file_list tl_right_nowrap"></td>
-      </tr>
+        <td class="tl_file_list">
+          <div class="ellipsis">
+              <?php echo ($key<9?'0':'').($key+1);?>.)
+              <span style="color:#b3b3b3;padding-right:3px">[<?php echo date('m.d.Y - H:i',$term['tstamp']);?>]</span>
+              <span<?php echo $term['action']=='close'?' class="tl_green"':''?> style="display: inline-block;width: 100px;">
+                Aktion: <?php echo $term['action'];?>
+              </span>
+              Seite: <?php echo $term['page'];?>
+            </div>
+          </td>
+          <td class="tl_file_list tl_right_nowrap"></td>
+        </tr>
       <?php }}?>
     </tbody>
   </table>

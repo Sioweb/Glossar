@@ -32,6 +32,7 @@ ClassLoader::addClasses(array
 
   // Modules
   'sioweb\contao\extensions\glossar\ModuleGlossarPagination'    => 'system/modules/Glossar/modules/ModuleGlossarPagination.php',
+  'sioweb\contao\extensions\glossar\ModuleGlossarCloud'         => 'system/modules/Glossar/modules/ModuleGlossarCloud.php',
 
   // Models
   'StdModel'                                          => 'system/modules/Glossar/models/StdModel.php',
@@ -74,4 +75,9 @@ TemplateLoader::addFiles(array
   'be_glossar_type_page'    => 'system/modules/Glossar/templates/backend/inputType',
   'be_glossar_type_select'  => 'system/modules/Glossar/templates/backend/inputType',
   'be_glossar_type_content' => 'system/modules/Glossar/templates/backend/inputType',
+
+  'term_link'           => 'system/modules/Glossar/templates/replacement',
+  'term_span'           => 'system/modules/Glossar/templates/replacement',
+  'term_abbr'           => 'system/modules/Glossar/templates/replacement',
+
 ));

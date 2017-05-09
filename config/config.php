@@ -12,8 +12,10 @@
  * @copyright Sascha Weidner, Sioweb
  */
 
-if(empty($GLOBALS['tags_extension']))
+if(empty($GLOBALS['tags_extension'])) {
   $GLOBALS['tags_extension'] = array('sourcetable'=>array());
+}
+
 $GLOBALS['tags_extension']['sourcetable'][] = 'tl_sw_glossar';
 $GLOBALS['TL_HOOKS']['tagSourceTable'][] = array('sioweb\contao\extensions\glossar\Glossar', 'addSourceTable');
 
@@ -32,8 +34,9 @@ array_insert($GLOBALS['BE_MOD']['content'], 1, array(
   )
 ));
 
-if(TL_MODE == 'BE')
+if(TL_MODE == 'BE') {
   $GLOBALS['TL_CSS'][] = 'system/modules/Glossar/assets/be_main.css';
+}
 
 if(\Config::get('glossarPurgable') == 1) {
   $GLOBALS['TL_PURGE']['custom']['glossar'] = array(
@@ -48,6 +51,7 @@ array_insert($GLOBALS['FE_MOD'], 2, array(
     'glossar' => array
     (
         'glossar_pagination'    => 'ModuleGlossarPagination',
+        'glossar_cloud'         => 'ModuleGlossarCloud',
     )
 ));
 
@@ -63,17 +67,21 @@ array_insert($GLOBALS['BE_MOD']['system'], 1, array(
 ));
 
 if(method_exists('Contao\Config','set')) {
-  if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
+  if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags'])) {
     \Config::set('ignoreInTags','title,a,h1,h2,h3,h4,h5,h6,nav,script,style,abbr,input,button,select,option,optgroup,applet,area,map,base,meta,canvas,head,legend,menu,menuitem,noframes,noscript,object,progress,source,time,video,audio,pre,iframe');
+  }
 
-  if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
+  if(!isset($GLOBALS['TL_CONFIG']['illegalChars'])) {
     \Config::set('illegalChars','")(=?.,;~:\'\>\<+\/\\<');
+  }
 } elseif(method_exists('Contao\Config','add')) {
-  if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags']))
+  if(!isset($GLOBALS['TL_CONFIG']['ignoreInTags'])) {
     \Config::add('$GLOBALS[\'TL_CONFIG\'][\'ignoreInTags\']','title,a,h1,h2,h3,h4,h5,h6,nav,script,style,abbr,input,button,select,option,optgroup,applet,area,map,base,meta,canvas,head,legend,menu,menuitem,noframes,noscript,object,progress,source,time,video,audio,pre,iframe');
+  }
 
-  if(!isset($GLOBALS['TL_CONFIG']['illegalChars']))
+  if(!isset($GLOBALS['TL_CONFIG']['illegalChars'])) {
     \Config::add('$GLOBALS[\'TL_CONFIG\'][\'illegalChars\']','")(=?.,;~:\'\>+\/!$€`´\'%&');
+  }
 }
 
 $GLOBALS['TL_HOOKS']['getGlossarPages'] = array();
@@ -126,10 +134,11 @@ if(\Config::get('enableGlossar') == 1) {
   if(strpos($uploadTypes,'json') === false) {
     $uploadTypes .= (strlen($uploadTypes)>0?',':'').'json';
 
-    if(method_exists('Contao\Config','set'))
+    if(method_exists('Contao\Config','set')) {
       \Config::set('uploadTypes',$uploadTypes);
-    elseif(method_exists('Contao\Config','add'))
+    } elseif(method_exists('Contao\Config','add')) {
       \Config::add('$GLOBALS[\'TL_CONFIG\'][\'uploadTypes\']',$uploadTypes);
+    }
   }
 
   if(Input::get('rebuild_glossar') == 1 || \Config::get('disableGlossarCache') == 1) {
@@ -142,11 +151,12 @@ if(\Config::get('enableGlossar') == 1) {
   if(TL_MODE == 'FE') {
     $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/Glossar/assets/glossar.js';
     $GLOBALS['TL_CSS'][] = 'system/modules/Glossar/assets/glossar.css';
-    $GLOBALS['TL_JQUERY'][] = '<script>var Contao = {request_token: "'.$_SESSION['REQUEST_TOKEN'].'"};</script>';
+    $GLOBALS['TL_JQUERY'][] = '<script>var Contao = {request_token: "'.$_SESSION['REQUEST_TOKEN'].'",objPageUrl:"'.$_SERVER['REDIRECT_URL'].'"};</script>';
   }
 
-  if(Input::post('glossar') == 1)
+  if(Input::post('glossar') == 1) {
     $GLOBALS['TL_HOOKS']['initializeSystem'][] = array('sioweb\contao\extensions\glossar\Glossar', 'getGlossarTerm');
+  }
 }
 
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('sioweb\contao\extensions\glossar\Glossar', 'replaceGlossarInsertTags');
