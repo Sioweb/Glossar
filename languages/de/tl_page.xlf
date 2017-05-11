@@ -1,8 +1,16 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/core/languages/en/tl_page.php" source-language="en">
     <body>
+      <trans-unit id="tl_page.disableGlossarCloud.0">
+        <source>Deactivate cloud</source>
+        <target>Von der Cloud ausschließen</target>
+      </trans-unit>
+      <trans-unit id="tl_page.disableGlossarCloud.1">
+        <source>This site will not be shown in the cloud</source>
+        <target>Diese Seite wird nicht in der Cloud ausgegeben.</target>
+      </trans-unit>
       <trans-unit id="tl_page.disableGlossar.0">
-        <source>Deactivate Glossar</source>
+        <source>Deactivate glossary</source>
         <target>Glossar deaktivieren</target>
       </trans-unit>
       <trans-unit id="tl_page.disableGlossar.1">

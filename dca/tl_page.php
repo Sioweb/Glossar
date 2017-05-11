@@ -17,10 +17,17 @@ $semicolon = substr($GLOBALS['TL_DCA']['tl_page']['palettes']['regular'], -1, 1)
 if($semicolon != ';')
   $semicolon = ';';
 
-$GLOBALS['TL_DCA']['tl_page']['palettes']['regular'] = $GLOBALS['TL_DCA']['tl_page']['palettes']['regular'].$semicolon.'{glossar_legend},disableGlossar,glossar_no_fallback';
+$GLOBALS['TL_DCA']['tl_page']['palettes']['regular'] = $GLOBALS['TL_DCA']['tl_page']['palettes']['regular'].$semicolon.'{glossar_legend},disableGlossar,disableGlossarCloud,glossar_no_fallback';
+// $GLOBALS['TL_DCA']['tl_page']['palettes']['root'] = $GLOBALS['TL_DCA']['tl_page']['palettes']['root'].$semicolon.'{glossar_legend},disableGlossarCloud';
 
 $GLOBALS['TL_DCA']['tl_page']['fields']['disableGlossar'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_page']['disableGlossar'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
+  'sql'                     => "char(1) NOT NULL default ''"
+);
+$GLOBALS['TL_DCA']['tl_page']['fields']['disableGlossarCloud'] = array(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_page']['disableGlossarCloud'],
   'exclude'                 => true,
   'inputType'               => 'checkbox',
   'sql'                     => "char(1) NOT NULL default ''"

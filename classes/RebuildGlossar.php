@@ -18,40 +18,15 @@ use Contao;
 
 class RebuildGlossar extends \Backend implements \executable {
 
-  public function prepareRebuild($strContent,$strTemplate) {
-    return str_replace(array('<!-- indexer::stop -->','<!-- indexer::continue -->'),array('',''),$strContent);
-  }
-
-  public function rebuild($strContent,$arrData) {
-    global $objPage;
-
-    $time = \Input::get('time');
-
-    $this->import('Database');
-    $this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
-    if (isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
-      foreach ($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
-        $this->import($callback[0]);
-        $this->$callback[0]->$callback[1](\Input::get('time'));
-      }
-    }
-
-    if(\Config::get('activateGlossarTags') == 1) {
-      if (isset($GLOBALS['TL_HOOKS']['beforeGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['beforeGlossarTags'])) {
-        foreach ($GLOBALS['TL_HOOKS']['beforeGlossarTags'] as $type => $callback) {
-          $this->import($callback[0]);
-          $strContent = $this->$callback[0]->$callback[1]($strContent,$strTemplate);
-        }
-      }
-
+  private function replaceGlossarTags($strContent,$tags = array()) {
       // Strip non-indexable areas
-      while (($intStart = strpos($strContent, '<!-- glossar::stop -->')) !== false) {
-        if (($intEnd = strpos($strContent, '<!-- glossar::continue -->', $intStart)) !== false) {
+      while (($intStart = strpos($strContent, $tags[1])) !== false) {
+        if(($intEnd = strpos($strContent, $tags[0], $intStart)) !== false) {
           $intCurrent = $intStart;
 
           // Handle nested tags
-          while (($intNested = strpos($strContent, '<!-- glossar::stop -->', $intCurrent + 22)) !== false && $intNested < $intEnd) {
-            if (($intNewEnd = strpos($strContent, '<!-- glossar::continue -->', $intEnd + 26)) !== false) {
+          while (($intNested = strpos($strContent, $tags[1], $intCurrent + 22)) !== false && $intNested < $intEnd) {
+            if(($intNewEnd = strpos($strContent, $tags[0], $intEnd + 26)) !== false) {
               $intEnd = $intNewEnd;
               $intCurrent = $intNested;
             }
@@ -63,7 +38,41 @@ class RebuildGlossar extends \Backend implements \executable {
         else break;
       }
 
-      if (isset($GLOBALS['TL_HOOKS']['afterGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['afterGlossarTags'])) {
+      return $strContent;
+  }
+
+  public function prepareRebuild($strContent,$strTemplate) {
+    return str_replace(array('<!-- indexer::stop -->','<!-- indexer::continue -->'),array('',''),$strContent);
+  }
+
+  public function rebuild($strContent,$arrData) {
+    global $objPage;
+
+    $time = \Input::get('time');
+
+    $strContent = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $strContent);
+    $strContent = preg_replace('#<style(.*?)>(.*?)</style>#is', '', $strContent);
+
+    $this->import('Database');
+    $this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+    if(isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
+      foreach ($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
+        $this->import($callback[0]);
+        $this->$callback[0]->$callback[1](\Input::get('time'));
+      }
+    }
+
+    if(\Config::get('activateGlossarTags') == 1) {
+      if(isset($GLOBALS['TL_HOOKS']['beforeGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['beforeGlossarTags'])) {
+        foreach ($GLOBALS['TL_HOOKS']['beforeGlossarTags'] as $type => $callback) {
+          $this->import($callback[0]);
+          $strContent = $this->$callback[0]->$callback[1]($strContent,$strTemplate);
+        }
+      }
+
+      $strContent = $this->replaceGlossarTags($strContent,['<!-- glossar::continue -->','<!-- glossar::stop -->']);
+
+      if(isset($GLOBALS['TL_HOOKS']['afterGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['afterGlossarTags'])) {
         foreach ($GLOBALS['TL_HOOKS']['afterGlossarTags'] as $type => $callback) {
           $this->import($callback[0]);
           $strContent = $this->$callback[0]->$callback[1]($strContent,$strTemplate);
@@ -71,8 +80,9 @@ class RebuildGlossar extends \Backend implements \executable {
       }
     }
 
-    if (!isset($_GET['items']) && \Config::get('useAutoItem') && isset($_GET['auto_item']))
+    if(!isset($_GET['items']) && \Config::get('useAutoItem') && isset($_GET['auto_item'])) {
       \Input::setGet('items', \Input::get('auto_item'));
+    }
 
     $Glossar = \GlossarModel::findAll();
     if(empty($Glossar)) {
@@ -104,7 +114,7 @@ class RebuildGlossar extends \Backend implements \executable {
 
 
     // HOOK: take additional pages
-    if (isset($GLOBALS['TL_HOOKS']['cacheGlossarTerms']) && is_array($GLOBALS['TL_HOOKS']['cacheGlossarTerms'])) {
+    if(isset($GLOBALS['TL_HOOKS']['cacheGlossarTerms']) && is_array($GLOBALS['TL_HOOKS']['cacheGlossarTerms'])) {
       foreach ($GLOBALS['TL_HOOKS']['cacheGlossarTerms'] as $type => $callback) {
         if(\Input::get('rebuild_'.$type.'_glossar') == '1') {
           $this->import($callback[0]);
@@ -115,21 +125,26 @@ class RebuildGlossar extends \Backend implements \executable {
 
     if(\Input::get('rebuild_regular_glossar') == 1) {
 
+
       $strFallback = $strGlossar = '';
       if(!empty($arrTerms['glossar'])) {
         $matches = array();
-        foreach($arrTerms['glossar'] as $key => $term)
-          if(preg_match('#'.$term.'#is',$strContent))
+        foreach($arrTerms['glossar'] as $key => $term) {
+          if(preg_match('#'.str_replace('.','\.',$term).'#is',strip_tags($strContent))) {
             $matches[] = $term;
+          }
+        }
         $matches = array_unique(array_map("strtolower",$matches));
         $strGlossar = implode('|',$matches);
       }
 
       if(!empty($arrTerms['fallback'])) {
         $matches = array();
-        foreach($arrTerms['fallback'] as $key => $term)
-          if(preg_match('#'.$term.'#is',$strContent))
+        foreach($arrTerms['fallback'] as $key => $term) {
+          if(preg_match('#'.str_replace('.','\.',$term).'#is',strip_tags($strContent))) {
             $matches[] = $term;
+          }
+        }
         $matches = array_unique(array_map("strtolower",$matches));
         $strFallback = implode('|',$matches);
       }
@@ -158,8 +173,9 @@ class RebuildGlossar extends \Backend implements \executable {
    * @return string
    */
   public function run() {
-    if (!\Config::get('enableGlossar'))
+    if(!\Config::get('enableGlossar')) {
       return '';
+    }
 
     $time = time();
     $objTemplate = new \BackendTemplate('be_rebuild_glossar');
@@ -168,15 +184,14 @@ class RebuildGlossar extends \Backend implements \executable {
     $objTemplate->isActive = $this->isActive();
 
     // Add the error message
-    if ($_SESSION['REBUILD_INDEX_ERROR'] != '') {
+    if($_SESSION['REBUILD_INDEX_ERROR'] != '') {
       $objTemplate->indexMessage = $_SESSION['REBUILD_INDEX_ERROR'];
       $_SESSION['REBUILD_INDEX_ERROR'] = '';
     }
 
     // Rebuild the index
-    if (\Input::get('act') == 'glossar') {
-      // Check the request token (see #4007)
-      if (!isset($_GET['rt']) || !\RequestToken::validate(\Input::get('rt'))) {
+    if(\Input::get('act') == 'glossar') {
+      if(!isset($_GET['rt']) || !\RequestToken::validate(\Input::get('rt'))) {
         $this->Session->set('INVALID_TOKEN_URL', \Environment::get('request'));
         $this->redirect('contao/confirm.php');
       }
@@ -186,15 +201,20 @@ class RebuildGlossar extends \Backend implements \executable {
 
       // HOOK: take additional pages
       $InactiveArchives = (array)deserialize(\Config::get('glossar_archive'));
-      if (isset($GLOBALS['TL_HOOKS']['getGlossarPages']) && is_array($GLOBALS['TL_HOOKS']['getGlossarPages'])) {
-        foreach ($GLOBALS['TL_HOOKS']['getGlossarPages'] as $type => $callback) {
-          if(in_array($type,$InactiveArchives))
+      if(isset($GLOBALS['TL_HOOKS']['getGlossarPages']) && is_array($GLOBALS['TL_HOOKS']['getGlossarPages'])) {
+        foreach($GLOBALS['TL_HOOKS']['getGlossarPages'] as $type => $callback) {
+
+          if(in_array($type,$InactiveArchives)) {
             continue;
+          }
+
           $this->import($callback[0]);
           $cb_return = $this->$callback[0]->$callback[1]($arrPages);
-          if(is_numeric($type))
+          if(is_numeric($type)) {
             $arrPages[] = $cb_return;
-          else $arrPages[$type] = $cb_return;
+          } else {
+            $arrPages[$type] = $cb_return;
+          }
         }
       }
 
@@ -213,7 +233,7 @@ class RebuildGlossar extends \Backend implements \executable {
                ->execute(($time - \Config::get('sessionTimeout')), $strHash);
 
       // Log in the front end user
-      if (is_numeric(\Input::get('user')) && \Input::get('user') > 0) {
+      if(is_numeric(\Input::get('user')) && \Input::get('user') > 0) {
         // Insert a new session
         $this->Database->prepare("INSERT INTO tl_session (pid, tstamp, name, sessionID, ip, hash) VALUES (?, ?, ?, ?, ?, ?)")
                  ->execute(\Input::get('user'), $time, 'FE_USER_AUTH', session_id(), \Environment::get('ip'), $strHash);
@@ -234,7 +254,7 @@ class RebuildGlossar extends \Backend implements \executable {
         foreach($pages as $lang => $arrPage) {
           for ($i=0, $c=count($arrPage); $i<$c; $i++) {
             $strBuffer .= '<span class="get_'.$type.'_url" data-time="'.$time.'" data-type="'.$type.'" data-language="'.$lang.'" data-url="' . $arrPage[$i] . '#' . $rand . $i . '">' . \String::substr($arrPage[$i], 100) . '</span><br>';
-            unset($arrPages[$type][$lang][$i]); // see #5681
+            unset($arrPages[$type][$lang][$i]);
           }
         }
       }
@@ -270,8 +290,9 @@ class RebuildGlossar extends \Backend implements \executable {
 
   private function getRootPage($id) {
     $Page = \PageModel::findByPk($id);
-    if($Page->type !== 'root')
+    if($Page->type !== 'root') {
       $Page = $this->getRootPage($Page->pid);
+    }
     return $Page;
   }
 
@@ -280,27 +301,34 @@ class RebuildGlossar extends \Backend implements \executable {
     $arrPages = array();
     $objPages = \GlossarPageModel::findActiveAndEnabledGlossarPages();
     $domain = rtrim(\Environment::get('base'),'/').'/';
-    if(!empty($objPages))
+    if(!empty($objPages)) {
       while($objPages->next()) {
-        if($objPages->pid)
+        if($objPages->pid) {
           $RootPage = $this->getRootPage($objPages->pid);
+        }
 
-        if($RootPage->dns)
+        if($RootPage->dns) {
           $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
-        else $domain = rtrim(\Environment::get('base'),'/').'/';
+        } else {
+          $domain = rtrim(\Environment::get('base'),'/').'/';
+        }
         
         $strLanguage = $RootPage->language;
 
-        if ((!$objPages->start || $objPages->start < $time) && (!$objPages->stop || $objPages->stop > $time)) {
+        if((!$objPages->start || $objPages->start < $time) && (!$objPages->stop || $objPages->stop > $time)) {
           $arrPages[$strLanguage][] = $domain . static::generateFrontendUrl($objPages->row(), null, $strLanguage);
 
           $objArticle = \ArticleModel::findBy(array("tl_article.pid=? AND (tl_article.start='' OR tl_article.start<$time) AND (tl_article.stop='' OR tl_article.stop>$time) AND tl_article.published=1 AND tl_article.showTeaser=1"),array($objPages->id),array('order'=>'sorting'));
 
-          if(!empty($objArticle))
-            while ($objArticle->next())
+          if(!empty($objArticle)) {
+            while ($objArticle->next()) {
               $arrPages[$strLanguage][] = $domain . static::generateFrontendUrl($objPages->row(), '/articles/' . (($objArticle->alias != '' && !\Config::get('disableAlias')) ? $objArticle->alias : $objArticle->id), $strLanguage);
+            }
+          }
         }
       }
+    }
+
     return $arrPages;
   }
 

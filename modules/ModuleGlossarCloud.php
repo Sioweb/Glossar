@@ -25,28 +25,7 @@ class ModuleGlossarCloud extends \Module {
   protected $strTemplate = 'ce_glossar_cloud';
   private $pages = array();
   private $countTerms = array();
-
-	/**
-	 * Display a wildcard in the back end
-	 *
-	 * @return string
-	 */
-	// public function generate() {
-	// 	if (TL_MODE == 'BE') {
-	// 		/** @var \BackendTemplate|object $objTemplate */
-	// 		$objTemplate = new \BackendTemplate('be_wildcard');
-
-	// 		$objTemplate->wildcard = '### Glossar Cloud ###';
-	// 		$objTemplate->title = $this->headline;
-	// 		$objTemplate->id = $this->id;
-	// 		$objTemplate->link = $this->name;
-	// 		$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
-
-	// 		return $objTemplate->parse();
-	// 	}
-
-	// 	return parent::generate();
-	// }
+  private $maxLevel = 4;
 
   /**
    * Return if there are no files
@@ -55,63 +34,149 @@ class ModuleGlossarCloud extends \Module {
   public function generate() {
     global $objPage;
 
-    $pageGlossar = explode('|',$objPage->glossar);
-    $Page = \PageModel::findBy(array("glossar LIKE '%|".implode("|%' OR glossar LIKE '%|",$pageGlossar)."|%'"),array());
-    if(empty($Page))
-      return;
+    // $this->import('Database');
+    // if(!isset($_GET['admin'])) {
+    //   return;
+    // }
 
-    $countTerms = array();
-    $arrPages = array();
-    while($Page->next()) {
-      $ap = array(
-        'id' => $Page->id,
-        'weight' => 0,
-        'title' => $Page->title,
-        'description' => $Page->description,
-        'glossar' => explode('|',$Page->glossar),
-        'fallback_glossar' => explode('|',$Page->fallback_glossar),
-        'url' => $this->generateFrontendUrl($Page->row())
-      );
+    $this->glossar_disable_domains = deserialize($this->glossar_disable_domains);
 
-      foreach($ap['glossar'] as $term)
-        if($term != '')
-          $countTerms[$term] = !empty($term)?($countTerms[$term]+1):1;
+    $arrLevels = $this->loadPagesByTerms(array_filter((explode('|',$objPage->glossar))));
 
-      if($ap['id'] != $objPage->id)
-        $arrPages[] = $ap;
-    }
-    asort($countTerms);
-    $this->countTerms = $countTerms;
+    // print_r($arrPages);
+    // die();
 
-    $max = 0;
-    foreach($arrPages as &$p_page) {
-      foreach($countTerms as $term => $count) {
-        if(in_array($term,$p_page['glossar']))
-          $p_page['weight']++;
+    foreach($arrLevels as $level => $arrPages) {
+      // Max ist die Anzahl gefundener Seiten pro Begriff
+      $max = 0;
+      foreach($arrPages as &$p_page) {
+
+        foreach($this->countTerms as $term => $count) {
+          if(in_array($term,$p_page['glossar'])) {
+            $p_page['weight']++;
+          }
+        }
+
+        if($p_page['weight'] > $max) {
+          $max = $p_page['weight'];
+        }
+
       }
-      if($p_page['weight'] > $max)
-        $max = $p_page['weight'];
+
+
+      $this->max = $max;
+
+      foreach($arrPages as &$p_page) {
+        $x = $p_page['weight'] / $max;
+        $p_page['weight'] = 1 + $x;
+      }
+
+      usort($arrPages, function($a,$b) {
+        return $a['weight']<$b['weight'];
+      });
+
+      if(!empty($this->glossar_items)) {
+        $arrPages = array_slice($arrPages,0,$this->glossar_items);
+      }
+
+      $this->pages = array_merge($this->pages,$arrPages);
     }
 
-    $this->max = $max;
-
-    foreach($arrPages as &$p_page) {
-      $x = $p_page['weight']/$max;
-      $p_page['weight'] = 1+$x;
-    }
-
-    $this->pages = $arrPages;
-
-    if (!isset($_GET['items']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item']))
+    if(!isset($_GET['items']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item'])) {
       \Input::setGet('items', \Input::get('auto_item'));
+    }
 
-    if (!isset($_GET['alpha']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item']))
+    if(!isset($_GET['alpha']) && $GLOBALS['TL_CONFIG']['useAutoItem'] && isset($_GET['auto_item'])) {
       \Input::setGet('alpha', \Input::get('auto_item'));
+    }
 
     return parent::generate();
   }
+
+  private function loadPagesByTerms($pageGlossar,$level = 0,&$idNotIn = array()) {
+    global $objPage;
+    // print_r($idNotIn);
+
+    if(empty($pageGlossar)) {
+      return array();
+    }
+
+    $idNotIn[] = $objPage->id;
+    if(!empty($this->glossar_disable_domains)) {
+      $idNotIn = array_merge($idNotIn,$this->glossar_disable_domains);
+    }
+
+    $idNotIn = array_unique($idNotIn);
+    $sql = "id NOT IN (".str_repeat("?,",count($idNotIn)-1)."?) AND disableGlossarCloud != 1 AND (glossar LIKE '%%".implode("%%' OR tl_page.glossar LIKE '%%",$pageGlossar)."%%')";
+    // echo $sql."\n\n";
+    // $Page = $this->Database->prepare("SELECT * FROM tl_page WHERE ".$sql[0])->execute($idNotIn);
+    $Page = \PageModel::findBy(array($sql),$idNotIn);
+    if(empty($Page)) {
+      return array();
+    }
+
+    $countTerms = array();
+    $termLevel = array();
+    $arrPages = array();
+    if(empty($arrPages[$level])) {
+      $arrPages[$level] = array();
+    }
+
+    while($Page->next()) {
+      $_Page = $Page->current()->loadDetails();
+
+      if(!empty($this->glossar_disable_domains)) {
+        if(in_array($_Page->rootId,$this->glossar_disable_domains)) {
+          continue;
+        }
+      }
+
+      $idNotIn[] = $_Page->id;
+
+      $ap = array(
+        'id' => $_Page->id,
+        'weight' => 0,
+        'title' => $_Page->title,
+        'description' => $_Page->description,
+        'glossar' => explode('|',$_Page->glossar),
+        'fallback_glossar' => explode('|',$_Page->fallback_glossar),
+        'url' => $this->generateFrontendUrl($_Page->row()),
+        'level' => $level
+      );
+
+      foreach($ap['glossar'] as $term) {
+        if($term != '') {
+          $countTerms[$term] = !empty($term)?($countTerms[$term]+1):1;
+        }
+      }
+
+      if($ap['id'] != $objPage->id) {
+        $arrPages[$level][] = $ap;
+      }
+
+    }
+
+    asort($countTerms);
+    $this->countTerms = array_merge($this->countTerms,$countTerms);
+
+    foreach($arrPages[$level] as $key => $Page) {
+      $termLevel = array_merge($termLevel,$Page['glossar']);
+    }
+
+    $termLevel = array_diff(array_unique((array_filter($termLevel))),$pageGlossar);
+
+    if($level < $this->glossar_max_level) {
+      // $nextLevelResult = $this->loadPagesByTerms($termLevel,($level+1),$idNotIn);
+      if(!empty($nextLevelResult)) {
+        $arrPages = array_merge($arrPages,$nextLevelResult);
+      }
+    }
+
+    return array_filter($arrPages);
+  }
   
   public function compile()  {
+
     if($this->glossar_terms) {
       echo 'Terms: '.$this->glossar_terms;
     } elseif(\Input::get('items') != '') {
@@ -126,10 +191,15 @@ class ModuleGlossarCloud extends \Module {
 
   private function getRootPage($id) {
     $Page = \PageModel::findByPk($id);
-    if(empty($Page))
+
+    if(empty($Page)) {
       return;
-    if($Page->type == 'root')
+    }
+
+    if($Page->type == 'root') {
       return $Page;
-    else return $this->getRootPage($Page->pid);
+    }
+
+    return $this->getRootPage($Page->pid);
   }
 }
