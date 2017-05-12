@@ -250,11 +250,11 @@ class Glossar extends \Frontend {
     while($Term->next()) {
       $this->term = $Term;
 
-      if(($maxWidth = \Config::get('glossarMaxWidth'))) {
-        $this->term->maxWidth = $maxWidth;
+      if(!$this->term->maxWidth) {
+        $this->term->maxWidth = \Config::get('glossarMaxWidth');
       }
-      if(($maxHeigth = \Config::get('glossarMaxHeight'))) {
-        $this->term->maxWidth = $maxHeight;
+      if(!$this->term->maxHeight) {
+        $this->term->maxHeight = \Config::get('glossarMaxHeight');
       }
 
       if(!$this->term->maxWidth) {
@@ -263,6 +263,7 @@ class Glossar extends \Frontend {
       if(!$this->term->maxHeight) {
         $this->term->maxHeight = $GLOBALS['glossar']['css']['maxHeight'];
       }
+
 
       $Content = \GlossarContentModel::findPublishedByPidAndTable($Term->id,'tl_sw_glossar');
 
@@ -472,9 +473,10 @@ class Glossar extends \Frontend {
     $linkObj = new \FrontendTemplate('term_link');
     $linkObj->setData(array(
         'lang' => $lang,
-        'class' => 'glossar glossar_'.$this->term->pid,
+        'class' => 'glossar glossar_link glossar_'.$this->term->pid,
         'id' => $this->term->id,
         'label' => $treffer[2],
+        'link' => $link,
         'maxWidth' => $this->term->maxWidth,
         'maxHeight' => $this->term->maxHeight,
     ));

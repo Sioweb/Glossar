@@ -45,9 +45,9 @@
 		});
 
 		$('span.glossar,a.glossar').each(function(key, elem) {
-			$(elem).mouseenter(function() {
+			$(elem).mouseenter(function(e) {
 				var glossar = $(this);
-
+				
 				clearTimeout(preOpenTimeout);
 
 				removeLayer();
@@ -100,7 +100,7 @@
 					glossar_id = glossar.data('glossar');
 					loaded = true;
 					layer.addClass('layer_loaded').append($($.parseJSON(result).content));
-					layer.append('<div class="ce_glossar_close">X</div>').children('.ce_glossar_close')
+					layer.append('<div class="ce_glossar_close">×</div>').children('.ce_glossar_close')
 						.click(function(){
 							removeLayer();
 						});

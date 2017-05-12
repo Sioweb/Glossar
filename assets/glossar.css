@@ -28,7 +28,7 @@
 	left: 10%;
 	width: 30px;
 	height: 30px;
-  z-index:99999;
+  z-index: 9999;
 	display: none;
   overflow: auto;
 	position: absolute;
@@ -48,16 +48,16 @@
 	padding: 1em 1.5em;
   border-radius: 10px;
 	border: 1px solid #ccc;
-	border-top-right-radius: 0;
 	box-shadow: 2px 2px 15px rgba(150,150,150,.7);
 }
 .ce_glossar_close {
-	top: 5px;
-	right: 20px;
-	color: red;
+  top: 23px;
+  right: 33px;
 	opacity: .4;
+	color: #005ba9;
 	display: block;
 	cursor: pointer;
+	font-size: 35px;
 	padding: 2px 5px;
 	background: white;
 	position: absolute;

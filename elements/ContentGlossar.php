@@ -66,16 +66,18 @@ class ContentGlossar extends \ContentElement {
     $filledLetters = array();
     if($Glossar) {
 
-      
-
       if(\Input::get('items') == '') {
         $arrGlossarIDs = array();
         while($Glossar->next()) {
           $arrGlossarIDs[] = $Glossar->id;
         }
-        $arrTags = $this->Database->prepare("SELECT * FROM tl_tag WHERE from_table = ? AND tid IN ('".implode("','",$arrGlossarIDs)."') ORDER BY tag ASC");
+        if(in_array('tags', \Config::getInstance()->getActiveModules())) {
+          $arrTags = $this->Database->prepare("SELECT * FROM tl_tag WHERE from_table = ? AND tid IN ('".implode("','",$arrGlossarIDs)."') ORDER BY tag ASC");
+        }
       } else {
-        $arrTags = $this->Database->prepare("SELECT * FROM tl_tag WHERE from_table = ? AND tid = ".intval($Glossar->id)." ORDER BY tag ASC");
+        if(in_array('tags', \Config::getInstance()->getActiveModules())) {
+          $arrTags = $this->Database->prepare("SELECT * FROM tl_tag WHERE from_table = ? AND tid = ".intval($Glossar->id)." ORDER BY tag ASC");
+        }
       }
       if(!empty($arrTags)) {
         $arrTags = $arrTags->execute('tl_sw_glossar')

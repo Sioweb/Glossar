@@ -178,9 +178,9 @@ class ModuleGlossarCloud extends \Module {
   public function compile()  {
 
     if($this->glossar_terms) {
-      echo 'Terms: '.$this->glossar_terms;
+      // echo 'Terms: '.$this->glossar_terms;
     } elseif(\Input::get('items') != '') {
-      echo 'Items: '.\Input::get('items');
+      // echo 'Items: '.\Input::get('items');
     } else {
       $this->Template->pages = $this->pages;
     }
