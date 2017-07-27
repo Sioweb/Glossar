@@ -1,16 +1,16 @@
 (function($){
 
 	var preOpenTimeout= false,
-			openLayerTimeout = false,
-			glossarTimeout = false,
-			LayerAjaxRequest = false,
-			layer = false,
-			loaded = false,
-			glossar_id = false;
+		openLayerTimeout = false,
+		glossarTimeout = false,
+		LayerAjaxRequest = false,
+		layer = false,
+		loaded = false,
+		glossar_id = false;
 
 	function followTerm() {
 		var href = this.href,
-				gid = $(this).data('glossar');
+			gid = $(this).data('glossar');
 
 		$.ajax({
 			type: "POST",
@@ -74,9 +74,9 @@
 
 	function loadLayer(glossar) {
 		var left = false,
-				top = false,
-				maxWidth = glossar.data('maxwidth'),
-				maxHeight = glossar.data('maxheight');
+			top = false,
+			maxWidth = glossar.data('maxwidth'),
+			maxHeight = glossar.data('maxheight');
 
 		left = ((glossar.offset().left + maxWidth) < $(window).width() ? true : false);
 

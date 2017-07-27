@@ -1,6 +1,6 @@
-<head/><div class="glossar_alpha_pagination">
-<a href="<?php echo $this->showAllHref;?>" title=""><?php echo $this->showAllLabel;?></a>
-<?php foreach($this->alphaPagination as $pKey => $pagination) {?>
-<a class="alpha_pagination<?php echo ($pagination['active']?' active':'');?><?php echo ($pagination['trueLink']?' trueLink':'');?>" href="<?php echo $pagination['href'];?>" title=""><?php echo $pagination['initial'];?><?php if($pagination['trueLink']) {?><span>*</span><?php }?></a>
-<?php }?>
+<div class="glossar_alpha_pagination">
+	<a href="<?php echo $this->showAllHref;?>" title=""><?php echo $this->showAllLabel;?></a>
+	<?php foreach($this->alphaPagination as $pKey => $pagination) {?>
+	<a class="alpha_pagination<?php echo ($pagination['active']?' active':'');?><?php echo ($pagination['trueLink']?' trueLink':'');?>" href="<?php echo $pagination['href'];?>" title=""><?php echo $pagination['initial'];?><?php if($pagination['trueLink']) {?><span>*</span><?php }?></a>
+	<?php }?>
 </div>
