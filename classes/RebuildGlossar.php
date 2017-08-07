@@ -315,7 +315,7 @@ class RebuildGlossar extends \Backend implements \executable {
         }
 
         if($RootPage->dns) {
-          $domain = rtrim('http://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
+          $domain = rtrim('http'.($RootPage->useSSL?'s':'').'://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
         } else {
           $domain = rtrim(\Environment::get('base'),'/').'/';
         }

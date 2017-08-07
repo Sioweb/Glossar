@@ -12,8 +12,9 @@
   echo implode("\n",$this->glossar);
 }
 
-if($this->errors)
+if($this->errors) {
   echo $this->errors;
+}
 
 if($this->showTags && !empty($this->tags)) {?>
 <!-- glossar::ignore -->
@@ -26,9 +27,9 @@ if($this->showTags && !empty($this->tags)) {?>
 <?php }
 
 if($this->alphaPagination && !$this->content && (empty($this->ppos) || $this->ppos == 'after' || $this->ppos == 'both')) echo $this->alphaPagination;?>
-<?php if($this->content) {?><a href="javascript:history.back();">Zurück</a><?php }?>
+<?php if($this->content) {?><a href="javascript:history.back();" class="glossar_back"><?php echo $this->back;?></a><?php }?>
 
-<?php if ($this->allowComments): ?>
+<?php if($this->allowComments): ?>
   <!-- glossar::ignore -->
   <div class="ce_comments block">
     <<?= $this->hlc ?>><?= $this->addComment ?></<?= $this->hlc ?>>

@@ -12,10 +12,10 @@
  * @copyright Sascha Weidner, Sioweb
  */
 
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = rtrim($GLOBALS['TL_DCA']['tl_settings']['palettes']['default'],';').'{glossar_legend},enableGlossar';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = rtrim($GLOBALS['TL_DCA']['tl_settings']['palettes']['default'],';').';{glossar_legend},enableGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'enableGlossar';
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarPurgable,termAsHeadline,noPlural,glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,glossar_archive,strictSearch,glossarMaxWidth,glossarMaxHeight,ignoreInTags,illegalChars,jumpToGlossar';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['enableGlossar'] = 'glossarPurgable,disableToolTips,acceptTeasersAsContent,termAsHeadline,noPlural,glossarIncludeUnsearchable,activateGlossarTags,disableGlossarCache,glossar_no_fallback,glossar_archive,strictSearch,glossarMaxWidth,glossarMaxHeight,ignoreInTags,illegalChars,jumpToGlossar';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['ignoreInTags'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['ignoreInTags'],
@@ -45,6 +45,20 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['jumpToGlossar'] = array(
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['glossarPurgable'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['glossarPurgable'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
+  'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['disableToolTips'] = array(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['disableToolTips'],
+  'exclude'                 => true,
+  'inputType'               => 'checkbox',
+  'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['acceptTeasersAsContent'] = array(
+  'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['acceptTeasersAsContent'],
   'exclude'                 => true,
   'inputType'               => 'checkbox',
   'sql'                     => "char(1) NOT NULL default ''"

@@ -45,6 +45,11 @@ class ContentGlossar extends \ContentElement {
     $this->loadLanguageFile('glossar_errors');
     $glossarErrors = array();
 
+
+    if(empty($this->headlineUnit)) {
+      $this->headlineUnit = 'h2';
+    }
+
     if(!$this->sortGlossarBy) {
       $this->sortGlossarBy = 'alias';
     }
@@ -101,6 +106,7 @@ class ContentGlossar extends \ContentElement {
         $filledLetters[] = $initial;
         if(\Input::get('items') != '' || (!$this->showAfterChoose || !$this->addAlphaPagination) || ($this->addAlphaPagination && $this->showAfterChoose && \Input::get('pag') != '')) {
           if(\Input::get('pag') == '' || $initial == \Input::get('pag') ) {
+
             $newGlossarObj = new \FrontendTemplate('glossar_default');
             $newGlossarObj->setData($Glossar->row());
 
@@ -109,13 +115,13 @@ class ContentGlossar extends \ContentElement {
               $newGlossarObj->tags = $arrTags[$newGlossarObj->id];
             }
 
-            if(\Input::get('items') != '') {
-              $newGlossarObj->teaser = null;
-            }
+            // if(\Input::get('items') != '') {
+            //   $newGlossarObj->teaser = null;
+            // }
 
             $link = null;
             $Content = \ContentModel::findPublishedByPidAndTable($newGlossarObj->id,'tl_sw_glossar');
-            if(!empty($Content)) {
+            if(!empty($Content) || (!empty($Glossar->teaser) && $GLOBALS['TL_CONFIG']['acceptTeasersAsContent'])) {
               if(!$newGlossarObj->jumpTo) {
                 $newGlossarObj->jumpTo = $GLOBALS['TL_CONFIG']['jumpToGlossar'];
               }
@@ -147,6 +153,9 @@ class ContentGlossar extends \ContentElement {
                 $descriptionObj->content = $Glossar->description;
                 $elements = array($descriptionObj->parse());
               }
+              if(empty($elements)) {
+                $elements = [$Glossar->teaser];
+              }
               $arrGlossar[] = $elements;
             }
           }
@@ -163,11 +172,15 @@ class ContentGlossar extends \ContentElement {
             'href' => $this->addToUrl('pag='.strtolower(chr($c)).'&amp;alpha=&amp;items=&amp;auto_item='),
             'initial' => chr($c),
             'active'=>(\Input::get('pag') == strtolower(chr($c))),
-            'trueLink'=>(in_array(strtolower(chr($c)),$filledLetters) && !$this->addOnlyTrueLinks)
+            'trueLink'=>(in_array(strtolower(chr($c)),$filledLetters)),
+            'onlyTrueLinks'=>$this->addOnlyTrueLinks
           );
         }
       }
     }
+
+    $letters[0]['class'] = 'first';
+    $letters[count($letters)-1]['class'] = 'last';
 
     $objPagination = new \FrontendTemplate('glossar_pagination');
 
@@ -221,6 +234,7 @@ class ContentGlossar extends \ContentElement {
 
     $this->Template->ppos = $this->paginationPosition;
     $this->Template->glossar = $arrGlossar;
+    $this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
 
     if($glossarErrors) {
       $errorObj = new \FrontendTemplate('glossar_error');

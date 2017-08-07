@@ -19,6 +19,24 @@
         <target>Der Glossar kann im Bereich "Daten bereinigen" ausgegeben werden. Diese Option verhindert dass der Glossar versehentlich geleert wird.</target>
       </trans-unit>
 
+      <trans-unit id="tl_settings.disableToolTips.0">
+        <source>Tooltips deaktivieren</source>
+        <target>Tooltips deaktivieren</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.disableToolTips.1">
+        <source>Es werden keine Vorschaufenster mehr ausgegeben, wenn der Besucher über einen Begriff fährt. Die Statistiken werden ebenfalls deaktiviert.</source>
+        <target>Es werden keine Vorschaufenster mehr ausgegeben, wenn der Besucher über einen Begriff fährt. Die Statistiken werden ebenfalls deaktiviert.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.acceptTeasersAsContent.0">
+        <source>Begriffe immer verlinken</source>
+        <target>Begriffe immer verlinken</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.acceptTeasersAsContent.1">
+        <source>Begriffe werden ebenfalls verlinkt, wenn nur der Teaser und kein Content vorhanden sind. Bildet ggf. duplicate content.</source>
+        <target>Begriffe werden ebenfalls verlinkt, wenn nur der Teaser und kein Content vorhanden sind. Bildet ggf. duplicate content.</target>
+      </trans-unit>
+
       <trans-unit id="tl_settings.termAsHeadline.0">
         <source>Begriffe als Headline aktivieren</source>
         <target>Begriffe als Headline aktivieren</target>

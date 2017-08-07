@@ -270,7 +270,7 @@ class Glossar extends \Frontend {
 
       $replaceFunction = 'replaceTitle2Link';
 
-      if((!$Term->jumpTo && !$GLOBALS['TL_CONFIG']['jumpToGlossar']) || empty($Content)) {
+      if((!$Term->jumpTo && !$GLOBALS['TL_CONFIG']['jumpToGlossar']) || (empty($Content) && empty($GLOBALS['TL_CONFIG']['disableToolTips']))) {
         $replaceFunction = 'replaceTitle2Span';
       }
 
