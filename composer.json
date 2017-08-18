@@ -1,7 +1,7 @@
 {
     "name": "sioweb/glossar",
+    "type": "contao-bundle",
     "description": "Glossar for Contao",
-    "type": "git",
     "license": "MIT",
     "authors": [
         {
@@ -9,5 +9,7 @@
             "email": "support@sioweb.de"
         }
     ],
-    "minimum-stability": "stable"
+    "require": {
+        "php": "^5.6|^7.0"
+    }
 }
