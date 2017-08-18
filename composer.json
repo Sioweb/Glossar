@@ -1,0 +1,14 @@
+{
+    "name": "sioweb/glossar",
+    "description": "Glossar for Contao",
+    "type": "git",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sascha Weidner",
+            "email": "support@sioweb.de"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
