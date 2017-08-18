@@ -9,6 +9,5 @@
             "email": "support@sioweb.de"
         }
     ],
-    "minimum-stability": "dev",
     "require": {}
 }
