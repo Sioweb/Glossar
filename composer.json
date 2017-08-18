@@ -8,5 +8,6 @@
             "name": "Sascha Weidner",
             "email": "support@sioweb.de"
         }
-    ]
+    ],
+    "minimum-stability": "stable"
 }
