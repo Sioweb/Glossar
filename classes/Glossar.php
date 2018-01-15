@@ -502,7 +502,7 @@ class Glossar extends \Frontend {
     $Glossar = \SwGlossarModel::findAll();
 
     if($Glossar === null) {
-      return false;
+      return [];
     }
 
     while($Glossar->next()) {
