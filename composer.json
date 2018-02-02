@@ -13,7 +13,7 @@
         "php": ">=5.5.0"
     },
     "conflict": {
-        "contao/core-bundle": "*",
+        "contao/core-bundle": "*"
     },
     "config": {
         "preferred-install": "dist"
