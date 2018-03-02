@@ -4,7 +4,7 @@
  * Contao Open Source CMS
  */
 
-namespace sioweb\contao\extensions\glossar;
+namespace Sioweb;
 use Contao;
 
 /**

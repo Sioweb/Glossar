@@ -1,7 +1,7 @@
 {
     "name": "sioweb/glossar3",
     "type": "contao-bundle",
-    "description": "Glossar for Contao 3.5",
+    "description": "Glossar for Contao 3",
     "license": "MIT",
     "authors": [
         {
@@ -10,12 +10,6 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0"
-    },
-    "conflict": {
-        "contao/core-bundle": "*"
-    },
-    "config": {
-        "preferred-install": "dist"
+        "php": ">=5.5.0",
     }
 }
