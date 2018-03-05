@@ -33,12 +33,8 @@ class GlossarLog extends \BackendModule {
 		$db = &$this->Database;
 		$ext = $db->prepare("select * from `tl_repository_installs` where `extension`='SWGlossar'")->execute();
 
-		if($ext->lickey == false || $ext->lickey == 'free2use') {
-			$this->Template->lickey = false;
-		} else {
-			$this->Template->lickey = true;
-		}
-
+		$this->Template->lickey = $this->license;
+		
 		$Log = \GlossarLogModel::findBy(array("tl_glossar_log.tstamp >= ?"),array(time()-(86400*7*31)),array('order'=>'tstamp DESC','limit'=>500));
 		$arrTerms = $arrLog = array();
 
