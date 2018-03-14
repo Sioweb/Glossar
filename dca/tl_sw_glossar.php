@@ -431,6 +431,123 @@ class tl_sw_glossar extends Backend {
     $this->import('BackendUser', 'User');
   }
 
+
+  /**
+   * Check permissions to edit table tl_sw_glossar
+   */
+  public function checkPermission()
+  {
+    // HOOK: comments extension required
+    if (!in_array('comments', ModuleLoader::getActive()))
+    {
+      $key = array_search('allowComments', $GLOBALS['TL_DCA']['tl_sw_glossar']['list']['sorting']['headerFields']);
+      unset($GLOBALS['TL_DCA']['tl_sw_glossar']['list']['sorting']['headerFields'][$key]);
+    }
+
+    if ($this->User->isAdmin)
+    {
+      return;
+    }
+
+    // Set the root IDs
+    if (!is_array($this->User->glossar) || empty($this->User->glossar))
+    {
+      $root = array(0);
+    }
+    else
+    {
+      $root = $this->User->glossar;
+    }
+
+    $id = strlen(Input::get('id')) ? Input::get('id') : CURRENT_ID;
+
+    // Check current action
+    switch (Input::get('act'))
+    {
+      case 'paste':
+        // Allow
+        break;
+
+      case 'create':
+        if (!strlen(Input::get('pid')) || !in_array(Input::get('pid'), $root))
+        {
+          $this->log('Not enough permissions to create glossar items in glossar archive ID "'.Input::get('pid').'"', __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+        break;
+
+      case 'cut':
+      case 'copy':
+        if (!in_array(Input::get('pid'), $root))
+        {
+          $this->log('Not enough permissions to '.Input::get('act').' glossar item ID "'.$id.'" to glossar archive ID "'.Input::get('pid').'"', __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+        // NO BREAK STATEMENT HERE
+
+      case 'edit':
+      case 'show':
+      case 'delete':
+      case 'toggle':
+      case 'feature':
+        $objArchive = $this->Database->prepare("SELECT pid FROM tl_sw_glossar WHERE id=?")
+                       ->limit(1)
+                       ->execute($id);
+
+        if ($objArchive->numRows < 1)
+        {
+          $this->log('Invalid glossar item ID "'.$id.'"', __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+
+        if (!in_array($objArchive->pid, $root))
+        {
+          $this->log('Not enough permissions to '.Input::get('act').' glossar item ID "'.$id.'" of glossar archive ID "'.$objArchive->pid.'"', __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+        break;
+
+      case 'select':
+      case 'editAll':
+      case 'deleteAll':
+      case 'overrideAll':
+      case 'cutAll':
+      case 'copyAll':
+        if (!in_array($id, $root))
+        {
+          $this->log('Not enough permissions to access glossar archive ID "'.$id.'"', __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+
+        $objArchive = $this->Database->prepare("SELECT id FROM tl_sw_glossar WHERE pid=?")
+                       ->execute($id);
+
+        if ($objArchive->numRows < 1)
+        {
+          $this->log('Invalid glossar archive ID "'.$id.'"', __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+
+        $session = $this->Session->getData();
+        $session['CURRENT']['IDS'] = array_intersect($session['CURRENT']['IDS'], $objArchive->fetchEach('id'));
+        $this->Session->setData($session);
+        break;
+
+      default:
+        if (strlen(Input::get('act')))
+        {
+          $this->log('Invalid command "'.Input::get('act').'"', __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+        elseif (!in_array($id, $root))
+        {
+          $this->log('Not enough permissions to access glossar archive ID ' . $id, __METHOD__, TL_ERROR);
+          $this->redirect('contao/main.php?act=error');
+        }
+        break;
+    }
+  }
+
   public function editTerm($row, $href, $label, $title, $icon, $attributes) {
     if(empty($row['type']) || $row['type'] == 'default' || $row['type'] == 'glossar') {
       return '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
@@ -486,24 +603,28 @@ class tl_sw_glossar extends Backend {
    *
    * @return string
    */
-  public function toggleIcon($row, $href, $label, $title, $icon, $attributes) {
-    if(\strlen(Input::get('tid'))) {
+  public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+  {
+    if (strlen(Input::get('tid')))
+    {
       $this->toggleVisibility(Input::get('tid'), (Input::get('state') == 1), (@func_get_arg(12) ?: null));
       $this->redirect($this->getReferer());
     }
 
     // Check permissions AFTER checking the tid, so hacking attempts are logged
-    if(!$this->User->hasAccess('tl_sw_glossar::published', 'alexf')) {
+    if (!$this->User->hasAccess('tl_sw_glossar::published', 'alexf'))
+    {
       return '';
     }
 
     $href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
 
-    if(!$row['published']) {
+    if (!$row['published'])
+    {
       $icon = 'invisible.gif';
     }
 
-    return '<a href="'.$this->addToUrl($href).'" title="'.StringUtil::specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"').'</a> ';
+    return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"').'</a> ';
   }
 
 
