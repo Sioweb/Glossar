@@ -9,12 +9,14 @@
 </ul>
 <?php } else {
   if($this->termAsHeadline) echo $this->termAsHeadline;
-  echo implode("\n",$this->glossar);
+  echo implode("\n", $this->glossar);
 }
 
 if($this->errors) {
   echo $this->errors;
 }
+
+echo $this->pagination;
 
 if($this->showTags && !empty($this->tags)) {?>
 <!-- glossar::ignore -->
