@@ -78,5 +78,7 @@ TemplateLoader::addFiles(array
 
 	'term_link'           => 'system/modules/Glossar/templates/replacement',
 	'term_span'           => 'system/modules/Glossar/templates/replacement',
-	'term_abbr'           => 'system/modules/Glossar/templates/replacement'
+	'term_abbr'           => 'system/modules/Glossar/templates/replacement',
+
+	'j_glossar'           => 'system/modules/Glossar/templates',
 ));
