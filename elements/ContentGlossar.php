@@ -5,7 +5,7 @@
  */
 namespace Sioweb;
 use Contao;
-use Sioweb\License\Glossar3as GlossarLicense;
+use Sioweb\License\Glossar3 GlossarLicense;
 
 /**
  * @file ContentGlossar.php
