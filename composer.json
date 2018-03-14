@@ -1,7 +1,7 @@
 {
     "name": "sioweb/glossar3",
     "type": "contao-module",
-    "version": "4.5.1",
+    "version": "4.6.1",
     "description": "Glossar for Contao 3",
     "license": "MIT",
     "authors": [
