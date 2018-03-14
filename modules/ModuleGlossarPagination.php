@@ -60,18 +60,18 @@ class ModuleGlossarPagination extends \Module {
         $filledLetters = array();
         if($Glossar) {
             while ($Glossar->next()) {
-                $filledLetters[] = substr($Glossar->alias,0,1);
+                $filledLetters[] = substr($Glossar->alias, 0, 1);
             }
         }
 
         $letters = array();
         for($c=65;$c<=90;$c++) {
-            if(($this->addOnlyTrueLinks && in_array(strtolower(chr($c)),$filledLetters)) || !$this->addOnlyTrueLinks)
+            if(($this->addOnlyTrueLinks && in_array(strtolower(chr($c)), $filledLetters)) || !$this->addOnlyTrueLinks)
                 $letters[] = array(
                     'href' => $this->addToUrl('pag='.strtolower(chr($c)).'&amp;alpha=&amp;items=&amp;auto_item='),
                     'initial' => chr($c),
                     'active'=>(\Input::get('pag') == strtolower(chr($c))),
-                    'trueLink'=>(in_array(strtolower(chr($c)),$filledLetters) && !$this->addOnlyTrueLinks)
+                    'trueLink'=>(in_array(strtolower(chr($c)), $filledLetters) && !$this->addOnlyTrueLinks)
                 );
         }
 

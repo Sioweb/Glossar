@@ -22,10 +22,10 @@ class GlossarEvents extends \Events {
 
 	public function clearGlossar($time) {
 		$this->import('Database');
-		$this->Database->prepare("UPDATE tl_calendar_events SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+		$this->Database->prepare("UPDATE tl_calendar_events SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time, $time);
 	}
 
-	public function glossarContent($item,$strContent,$template) {
+	public function glossarContent($item, $strContent, $template) {
 		if(empty($item)) {
 			return array();
 		}
@@ -34,8 +34,8 @@ class GlossarEvents extends \Events {
 		return $Event->glossar;
 	}
 
-	public function updateCache($item,$arrTerms,$strContent) {
-		preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
+	public function updateCache($item, $arrTerms, $strContent) {
+		preg_match_all('#'.implode('|', $arrTerms['both']).'#is', $strContent, $matches);
 		$matches = array_unique($matches[0]);
 
 		if(empty($matches)) {
@@ -43,7 +43,7 @@ class GlossarEvents extends \Events {
 		}
 
 		$Event = \CalendarEventsModel::findByAlias($item);
-		$Event->glossar = implode('|',$matches);
+		$Event->glossar = implode('|', $matches);
 		$Event->save();
 	}
 
@@ -59,7 +59,7 @@ class GlossarEvents extends \Events {
 		while($Event->next()) {
 			$objCalendar = \CalendarModel::findByPk($Event->pid);
 			if ($objCalendar !== null && $objCalendar->jumpTo && ($objTarget = $objCalendar->getRelated('jumpTo')) !== null) {
-				$arrEvent[$Event->pid][] = $this->generateEventUrl($Event,$this->generateFrontendUrl($objTarget->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/events/%s')));
+				$arrEvent[$Event->pid][] = $this->generateEventUrl($Event, $this->generateFrontendUrl($objTarget->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/events/%s')));
 			}
 		}
 
@@ -97,7 +97,7 @@ class GlossarEvents extends \Events {
 			$arrContent[$Content->module] = $Content->pid;
 		}
 
-		$Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$arrContent)."')"),array());
+		$Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','", $arrContent)."')"),array());
 
 		if(empty($Article)) {
 			return array();
@@ -118,13 +118,13 @@ class GlossarEvents extends \Events {
 			}
 
 			foreach($arrReader[$ReaderId] as $event_id) {
-				if(in_array($event_id,$finishedIDs)) {
+				if(in_array($event_id, $finishedIDs)) {
 					continue;
 				}
 
 				if(!empty($arrEvent[$event_id])) {
 					foreach($arrEvent[$event_id] as $event_domain) {
-						$event_domain = end((explode('/',str_replace('.html','',$event_domain))));
+						$event_domain = end((explode('/',str_replace('.html','', $event_domain))));
 						$arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), '/'.$event_domain, $strLanguage);
 					}
 				}

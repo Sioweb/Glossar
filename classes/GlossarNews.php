@@ -22,10 +22,10 @@ class GlossarNews extends \ModuleNews {
 
 	public function clearGlossar($time) {
 		$this->import('Database');
-		$this->Database->prepare("UPDATE tl_news SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+		$this->Database->prepare("UPDATE tl_news SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time, $time);
 	}
 
-	public function glossarContent($item,$strContent,$template) {
+	public function glossarContent($item, $strContent, $template) {
 		if(empty($item)) {
 			return array();
 		}
@@ -34,10 +34,10 @@ class GlossarNews extends \ModuleNews {
 		return $News->glossar;
 	}
 
-	public function updateCache($item,$arrTerms,$strContent) {
+	public function updateCache($item, $arrTerms, $strContent) {
 		$matches = array();
 		foreach($arrTerms['both'] as $term) {
-			if(preg_match('#('.$term.')#is',$strContent,$match)) {
+			if(preg_match('#('.$term.')#is', $strContent, $match)) {
 				$matches[] = $match[1];
 			}
 		}
@@ -49,7 +49,7 @@ class GlossarNews extends \ModuleNews {
 		}
 
 		$News = \NewsModel::findByIdOrAlias($item);
-		$News->glossar = implode('|',$matches);
+		$News->glossar = implode('|', $matches);
 		$News->save();
 	}
 
@@ -105,7 +105,7 @@ class GlossarNews extends \ModuleNews {
 		}
 
 
-		$Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$_content)."')"),array());
+		$Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','", $_content)."')"),array());
 
 		if(empty($Article)) {
 			return array();
@@ -117,7 +117,7 @@ class GlossarNews extends \ModuleNews {
 			$RootPage = $this->getRootPage($Article->pid);
 
 			if($RootPage->dns) {
-				$domain = rtrim('http://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
+				$domain = rtrim('http://'.str_replace(array('http://','https://'),'', $RootPage->dns),'/').'/';
 			} else {
 				$domain = rtrim(\Environment::get('base'),'/').'/';
 			}
@@ -129,7 +129,7 @@ class GlossarNews extends \ModuleNews {
 			$ReaderId = false;
 
 			foreach($arrContent as $module => $mid) {
-				if(in_array($Article->id,$mid)) {
+				if(in_array($Article->id, $mid)) {
 					$ReaderId = $module;
 				}
 			}
@@ -137,7 +137,7 @@ class GlossarNews extends \ModuleNews {
 			foreach($arrReader[$ReaderId] as $news_id) {
 				if(!empty($arrNews[$news_id])) {
 					foreach($arrNews[$news_id] as $news_domain) {
-						$news_domain = end((explode('/',str_replace('.html','',$news_domain))));
+						$news_domain = end((explode('/',str_replace('.html','', $news_domain))));
 						$arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), '/'.$news_domain, $strLanguage);
 					}
 				}

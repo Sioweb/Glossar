@@ -112,7 +112,7 @@ class GlossarStatus extends \BackendModule {
 										$Data = \PageModel::findByPk($SQL->$fieldData['field']);
 										if(!empty($Data)) {
 											if(empty($fieldData['data'][$table][$Data->id])) {
-												$fieldData['data'][$table][$Data->id] = $this->loadTemplate($fieldData['type'],$Data->row(),$table);
+												$fieldData['data'][$table][$Data->id] = $this->loadTemplate($fieldData['type'], $Data->row(), $table);
 											}
 										}
 									}
@@ -127,7 +127,7 @@ class GlossarStatus extends \BackendModule {
 										if(!empty($GLOBALS['glossar'][$fieldData['field']][$Data])) {
 											$Data = $GLOBALS['glossar'][$fieldData['field']][$Data];
 										}
-										$fieldData['data'][$table][$SQL->id] = $this->loadTemplate($fieldData['type'],$Data,$table,$table.': '.$SQL->title);
+										$fieldData['data'][$table][$SQL->id] = $this->loadTemplate($fieldData['type'], $Data, $table, $table.': '.$SQL->title);
 									}
 							break;
 						}
@@ -144,8 +144,8 @@ class GlossarStatus extends \BackendModule {
 						break;
 					}
 
-					$fieldData['data']['tl_settings'][0] = $this->loadTemplate($fieldData['type'],$Data,'tl_settings','Allgemeine Einstellungen');
-				} elseif(in_array('tl_settings',$fieldData['tables'])) {
+					$fieldData['data']['tl_settings'][0] = $this->loadTemplate($fieldData['type'], $Data,'tl_settings','Allgemeine Einstellungen');
+				} elseif(in_array('tl_settings', $fieldData['tables'])) {
 					$fieldData['data']['tl_settings'][0] = $this->loadTemplate($fieldData['type'],0,'tl_settings','Allgemeine Einstellungen');
 				}
 			}
@@ -187,7 +187,7 @@ class GlossarStatus extends \BackendModule {
 				continue;
 			}
 
-			$config = explode(';',$palette);
+			$config = explode(';', $palette);
 
 			foreach($config as $key => $fieldset) {
 				if(strpos($fieldset,'glossar_legend') !== false || $table === 'tl_sw_glossar') {
@@ -201,7 +201,7 @@ class GlossarStatus extends \BackendModule {
 						}
 					}
 
-					$arrConfig = array_merge($arrConfig,$arrFields);
+					$arrConfig = array_merge($arrConfig, $arrFields);
 				}
 			}
 		}
@@ -210,10 +210,10 @@ class GlossarStatus extends \BackendModule {
 			return array();
 		}
 
-		return array_merge($arrConfig,$this->loadSubFields($arrConfig,$table));
+		return array_merge($arrConfig, $this->loadSubFields($arrConfig, $table));
 	}
 
-	private function loadSubFields($arr,$table) {
+	private function loadSubFields($arr, $table) {
 		$arrSubConfig = array();
 		foreach($arr as $key => $field) {
 			if(empty($GLOBALS['TL_DCA'][$table]['fields'][$field]['label']) || $GLOBALS['TL_DCA'][$table]['fields'][$field]['eval']['gsIgnore']) {
@@ -222,13 +222,13 @@ class GlossarStatus extends \BackendModule {
 		}
 
 		if(!empty($GLOBALS['TL_DCA'][$table]['subpalettes'][$field])) {
-			$arrSubConfig = explode(',',$GLOBALS['TL_DCA'][$table]['subpalettes'][$field]);
-			$arrSubConfig = array_merge($arrSubConfig,$this->loadSubFields($arrSubConfig,$table));
+			$arrSubConfig = explode(',', $GLOBALS['TL_DCA'][$table]['subpalettes'][$field]);
+			$arrSubConfig = array_merge($arrSubConfig, $this->loadSubFields($arrSubConfig, $table));
 		}
 		return $arrSubConfig;
 	}
 
-	private function loadTemplate($type,$data,$table,$headline = false) {
+	private function loadTemplate($type, $data, $table, $headline = false) {
 		$template = 'be_glossar_type_valid';
 
 		switch($type) {
@@ -246,7 +246,7 @@ class GlossarStatus extends \BackendModule {
 		$objGlossar = new \BackendTemplate($template);
 
 		if(!is_array($data)) {
-			$objGlossar->data = preg_replace('|,(?! )|',', ',$data);
+			$objGlossar->data = preg_replace('|,(?! )|',', ', $data);
 		} else {
 			$objGlossar->data = $data;
 		}

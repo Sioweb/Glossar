@@ -37,7 +37,7 @@ class ModuleGlossarCloud extends \Module {
     global $objPage;
 
     $this->glossar_disable_domains = deserialize($this->glossar_disable_domains);
-    $arrLevels = $this->loadPagesByTerms(array_filter((explode('|',$objPage->glossar))));
+    $arrLevels = $this->loadPagesByTerms(array_filter((explode('|', $objPage->glossar))));
 
     foreach($arrLevels as $level => $arrPages) {
       // Max ist die Anzahl gefundener Seiten pro Begriff
@@ -45,7 +45,7 @@ class ModuleGlossarCloud extends \Module {
 
       foreach($arrPages as &$p_page) {
         foreach($this->countTerms as $term => $count) {
-          if(in_array($term,$p_page['glossar'])) {
+          if(in_array($term, $p_page['glossar'])) {
             $p_page['weight']++;
           }
         }
@@ -62,16 +62,16 @@ class ModuleGlossarCloud extends \Module {
         $p_page['weight'] = 1 + $x;
       }
 
-      usort($arrPages, function($a,$b) {
+      usort($arrPages, function($a, $b) {
         return $a['weight']<$b['weight'];
       });
 
 
       if(!empty($this->glossar_items)) {
-        $arrPages = array_slice($arrPages,0,$this->glossar_items);
+        $arrPages = array_slice($arrPages,0, $this->glossar_items);
       }
 
-      $this->pages = array_merge($this->pages,$arrPages);
+      $this->pages = array_merge($this->pages, $arrPages);
     }
 
 
@@ -86,7 +86,7 @@ class ModuleGlossarCloud extends \Module {
     return parent::generate();
   }
 
-  private function loadPagesByTerms($pageGlossar,$level = 0,&$idNotIn = array()) {
+  private function loadPagesByTerms($pageGlossar, $level = 0, &$idNotIn = array()) {
 
     global $objPage;
 
@@ -96,13 +96,13 @@ class ModuleGlossarCloud extends \Module {
 
     $idNotIn[] = $objPage->id;
     if(!empty($this->glossar_disable_domains)) {
-      $idNotIn = array_merge($idNotIn,$this->glossar_disable_domains);
+      $idNotIn = array_merge($idNotIn, $this->glossar_disable_domains);
     }
 
     $idNotIn = array_unique($idNotIn);
-    $sql = "id NOT IN (".str_repeat("?,",count($idNotIn)-1)."?) AND disableGlossarCloud != 1 AND (glossar LIKE '%%".implode("%%' OR tl_page.glossar LIKE '%%",$pageGlossar)."%%')";
+    $sql = "id NOT IN (".str_repeat("?,",count($idNotIn)-1)."?) AND disableGlossarCloud != 1 AND (glossar LIKE '%%".implode("%%' OR tl_page.glossar LIKE '%%", $pageGlossar)."%%')";
 
-    $Page = \PageModel::findBy(array($sql),$idNotIn);
+    $Page = \PageModel::findBy(array($sql), $idNotIn);
 
     if(empty($Page)) {
       return array();
@@ -120,7 +120,7 @@ class ModuleGlossarCloud extends \Module {
       $_Page = $Page->current()->loadDetails();
 
       if(!empty($this->glossar_disable_domains)) {
-        if(in_array($_Page->rootId,$this->glossar_disable_domains)) {
+        if(in_array($_Page->rootId, $this->glossar_disable_domains)) {
           continue;
         }
       }
@@ -132,15 +132,15 @@ class ModuleGlossarCloud extends \Module {
         'weight' => 0,
         'title' => $_Page->title,
         'description' => $_Page->description,
-        'glossar' => explode('|',$_Page->glossar),
-        'fallback_glossar' => explode('|',$_Page->fallback_glossar),
+        'glossar' => explode('|', $_Page->glossar),
+        'fallback_glossar' => explode('|', $_Page->fallback_glossar),
         'url' => $this->generateFrontendUrl($_Page->row()),
         'level' => $level
       );
 
       foreach($ap['glossar'] as $term) {
         if($term != '') {
-          $countTerms[$term] = !empty($term)?($countTerms[$term]+1):1;
+          $countTerms[$term] = !empty($term) ? ($countTerms[$term]+1) : 1;
         }
       }
 
@@ -150,17 +150,17 @@ class ModuleGlossarCloud extends \Module {
     }
 
     asort($countTerms);
-    $this->countTerms = array_merge($this->countTerms,$countTerms);
+    $this->countTerms = array_merge($this->countTerms, $countTerms);
 
     foreach($arrPages[$level] as $key => $Page) {
-      $termLevel = array_merge($termLevel,$Page['glossar']);
+      $termLevel = array_merge($termLevel, $Page['glossar']);
     }
 
-    $termLevel = array_diff(array_unique((array_filter($termLevel))),$pageGlossar);
+    $termLevel = array_diff(array_unique((array_filter($termLevel))), $pageGlossar);
 
     if($level < $this->glossar_max_level) {
       if(!empty($nextLevelResult)) {
-        $arrPages = array_merge($arrPages,$nextLevelResult);
+        $arrPages = array_merge($arrPages, $nextLevelResult);
       }
     }
 

@@ -35,8 +35,8 @@ class ContentGlossarCloud extends \ContentElement {
   public function generate() {
     global $objPage;
 
-    $pageGlossar = explode('|',$objPage->glossar);
-    $Page = \PageModel::findBy(array("glossar LIKE '%|".implode("|%' OR glossar LIKE '%|",$pageGlossar)."|%'"),array());
+    $pageGlossar = explode('|', $objPage->glossar);
+    $Page = \PageModel::findBy(array("glossar LIKE '%|".implode("|%' OR glossar LIKE '%|", $pageGlossar)."|%'"),array());
     
     if(empty($Page)) {
       return;
@@ -50,8 +50,8 @@ class ContentGlossarCloud extends \ContentElement {
         'weight' => 0,
         'title' => $Page->title,
         'description' => $Page->description,
-        'glossar' => explode('|',$Page->glossar),
-        'fallback_glossar' => explode('|',$Page->fallback_glossar),
+        'glossar' => explode('|', $Page->glossar),
+        'fallback_glossar' => explode('|', $Page->fallback_glossar),
         'url' => $this->generateFrontendUrl($Page->row())
       );
 
@@ -72,7 +72,7 @@ class ContentGlossarCloud extends \ContentElement {
     $max = 0;
     foreach($arrPages as &$p_page) {
       foreach($countTerms as $term => $count) {
-        if(in_array($term,$p_page['glossar'])) {
+        if(in_array($term, $p_page['glossar'])) {
           $p_page['weight']++;
         }
       }

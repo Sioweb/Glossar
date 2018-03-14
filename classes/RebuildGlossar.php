@@ -17,7 +17,7 @@ use Contao;
 
 class RebuildGlossar extends \Backend implements \executable {
 
-	private function replaceGlossarTags($strContent,$tags = array()) {
+	private function replaceGlossarTags($strContent, $tags = array()) {
 		// Strip non-indexable areas
 		while (($intStart = strpos($strContent, $tags[1])) !== false) {
 			if(($intEnd = strpos($strContent, $tags[0], $intStart)) !== false) {
@@ -42,11 +42,11 @@ class RebuildGlossar extends \Backend implements \executable {
 		return $strContent;
 	}
 
-	public function prepareRebuild($strContent,$strTemplate) {
-		return str_replace(array('<!-- indexer::stop -->','<!-- indexer::continue -->'),array('',''),$strContent);
+	public function prepareRebuild($strContent, $strTemplate) {
+		return str_replace(array('<!-- indexer::stop -->','<!-- indexer::continue -->'),array('',''), $strContent);
 	}
 
-	public function rebuild($strContent,$arrData) {
+	public function rebuild($strContent, $arrData) {
 		global $objPage;
 
 		$time = \Input::get('time');
@@ -54,7 +54,7 @@ class RebuildGlossar extends \Backend implements \executable {
 		$strContent = preg_replace('#<style(.*?)>(.*?)</style>#is', '', $strContent);
 
 		$this->import('Database');
-		$this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+		$this->Database->prepare("UPDATE tl_page SET glossar = NULL, fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time, $time);
 
 		if(isset($GLOBALS['TL_HOOKS']['clearGlossar']) && is_array($GLOBALS['TL_HOOKS']['clearGlossar'])) {
 			foreach ($GLOBALS['TL_HOOKS']['clearGlossar'] as $type => $callback) {
@@ -67,7 +67,7 @@ class RebuildGlossar extends \Backend implements \executable {
 			if(isset($GLOBALS['TL_HOOKS']['beforeGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['beforeGlossarTags'])) {
 				foreach ($GLOBALS['TL_HOOKS']['beforeGlossarTags'] as $type => $callback) {
 					$this->import($callback[0]);
-					$strContent = $this->{$callback[0]}->{$callback[1]}($strContent,$strTemplate);
+					$strContent = $this->{$callback[0]}->{$callback[1]}($strContent, $strTemplate);
 				}
 			}
 
@@ -76,7 +76,7 @@ class RebuildGlossar extends \Backend implements \executable {
 			if(isset($GLOBALS['TL_HOOKS']['afterGlossarTags']) && is_array($GLOBALS['TL_HOOKS']['afterGlossarTags'])) {
 				foreach ($GLOBALS['TL_HOOKS']['afterGlossarTags'] as $type => $callback) {
 					$this->import($callback[0]);
-					$strContent = $this->{$callback[0]}->{$callback[1]}($strContent,$strTemplate);
+					$strContent = $this->{$callback[0]}->{$callback[1]}($strContent, $strTemplate);
 				}
 			}
 		}
@@ -125,38 +125,38 @@ class RebuildGlossar extends \Backend implements \executable {
 			foreach ($GLOBALS['TL_HOOKS']['cacheGlossarTerms'] as $type => $callback) {
 				if(\Input::get('rebuild_'.$type.'_glossar') == '1') {
 					$this->import($callback[0]);
-					$this->{$callback[0]}->{$callback[1]}(\Input::get('items'),$arrTerms,$strContent,$type);
+					$this->{$callback[0]}->{$callback[1]}(\Input::get('items'), $arrTerms, $strContent, $type);
 				}
 			}
 		}
 
-		if(\Input::get('rebuild_regular_glossar') == 1) {
+		if(\Input::get('rebuild_glossar') == 1) {
 			$strFallback = $strGlossar = '';
 			if(!empty($arrTerms['glossar'])) {
 				$matches = array();
 				foreach($arrTerms['glossar'] as $key => $term) {
-					if(preg_match('#'.str_replace('.','\.',$term).'#is',strip_tags($strContent))) {
+					if(preg_match('#'.str_replace('.','\.',html_entity_decode($term)).'#is',strip_tags($strContent))) {
 						$matches[] = $term;
 					}
 				}
 
-				$matches = array_unique(array_map("strtolower",$matches));
-				$strGlossar = implode('|',$matches);
+				$matches = array_unique(array_map("strtolower", $matches));
+				$strGlossar = implode('|', $matches);
 			}
 
 			if(!empty($arrTerms['fallback'])) {
 				$matches = array();
 				foreach($arrTerms['fallback'] as $key => $term) {
-					if(preg_match('#'.str_replace('.','\.',$term).'#is',strip_tags($strContent))) {
+					if(preg_match('#'.str_replace('.','\.', $term).'#is',strip_tags($strContent))) {
 						$matches[] = $term;
 					}
 				}
 
-				$matches = array_unique(array_map("strtolower",$matches));
-				$strFallback = implode('|',$matches);
+				$matches = array_unique(array_map("strtolower", $matches));
+				$strFallback = implode('|', $matches);
 			}
 
-			$this->Database->prepare("UPDATE tl_page SET glossar = ?, fallback_glossar = ?,glossar_time = ? WHERE id = ?")->execute($strGlossar,$strFallback,$time,$objPage->id);
+			$this->Database->prepare("UPDATE tl_page SET glossar = ?, fallback_glossar = ?,glossar_time = ? WHERE id = ?")->execute($strGlossar, $strFallback, $time, $objPage->id);
 		}
 
 		return $strContent;
@@ -208,7 +208,7 @@ class RebuildGlossar extends \Backend implements \executable {
 			$InactiveArchives = (array)deserialize(\Config::get('glossar_archive'));
 			if(isset($GLOBALS['TL_HOOKS']['getGlossarPages']) && is_array($GLOBALS['TL_HOOKS']['getGlossarPages'])) {
 				foreach($GLOBALS['TL_HOOKS']['getGlossarPages'] as $type => $callback) {
-					if(in_array($type,$InactiveArchives)) {
+					if(in_array($type, $InactiveArchives)) {
 						continue;
 					}
 
@@ -287,7 +287,7 @@ class RebuildGlossar extends \Backend implements \executable {
 		// Default variables
 		$objTemplate->user = $arrUser;
 		$objTemplate->indexLabel = $GLOBALS['TL_LANG']['tl_maintenance']['frontendUser'][0];
-		$objTemplate->indexHelp = (\Config::get('showHelp') && strlen($GLOBALS['TL_LANG']['tl_maintenance']['frontendUser'][1])) ? $GLOBALS['TL_LANG']['tl_maintenance']['frontendUser'][1] : '';
+		$objTemplate->indexHelp = (\Config::get('showHelp') && strlen($GLOBALS['TL_LANG']['tl_maintenance']['rebuildGlossarHelp'][1])) ? $GLOBALS['TL_LANG']['tl_maintenance']['rebuildGlossarHelp'][1] : '';
 		$objTemplate->indexSubmit = $GLOBALS['TL_LANG']['tl_maintenance']['glossarSubmit'];
 
 		return $objTemplate->parse();
@@ -315,7 +315,7 @@ class RebuildGlossar extends \Backend implements \executable {
 				}
 
 				if($RootPage->dns) {
-					$domain = rtrim('http'.($RootPage->useSSL?'s':'').'://'.str_replace(array('http://','https://'),'',$RootPage->dns),'/').'/';
+					$domain = rtrim('http'.($RootPage->useSSL?'s':'').'://'.str_replace(array('http://','https://'),'', $RootPage->dns),'/').'/';
 				} else {
 					$domain = rtrim(\Environment::get('base'),'/').'/';
 				}

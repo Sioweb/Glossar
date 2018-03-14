@@ -22,10 +22,10 @@ class GlossarFAQ extends \ModuleFaqList {
 
 	public function clearGlossar($time) {
 		$this->import('Database');
-		$this->Database->prepare("UPDATE tl_faq SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time,$time);
+		$this->Database->prepare("UPDATE tl_faq SET glossar = NULL,fallback_glossar = NULL,glossar_time = ? WHERE glossar_time != ?")->execute($time, $time);
 	}
 
-	public function glossarContent($item,$strContent,$template) {
+	public function glossarContent($item, $strContent, $template) {
 		if(empty($item)) {
 			return array();
 		}
@@ -34,8 +34,8 @@ class GlossarFAQ extends \ModuleFaqList {
 		return $Faq->glossar;
 	}
 
-	public function updateCache($item,$arrTerms,$strContent) {
-		preg_match_all('#'.implode('|',$arrTerms['both']).'#is', $strContent, $matches);
+	public function updateCache($item, $arrTerms, $strContent) {
+		preg_match_all('#'.implode('|', $arrTerms['both']).'#is', $strContent, $matches);
 		$matches = array_unique($matches[0]);
 
 		if(empty($matches)) {
@@ -43,7 +43,7 @@ class GlossarFAQ extends \ModuleFaqList {
 		}
 
 		$Faq = \FaqModel::findByAlias($item);
-		$Faq->glossar = implode('|',$matches);
+		$Faq->glossar = implode('|', $matches);
 		$Faq->save();
 	}
 
@@ -97,7 +97,7 @@ class GlossarFAQ extends \ModuleFaqList {
 			$arrContent[$Content->module] = $Content->pid;
 		}
 
-		$Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','",$arrContent)."')"),array());
+		$Article = \ArticleModel::findBy(array("tl_article.id IN ('".implode("','", $arrContent)."')"),array());
 
 		if(empty($Article)) {
 			return array();
@@ -118,13 +118,13 @@ class GlossarFAQ extends \ModuleFaqList {
 			}
 
 			foreach($arrReader[$ReaderId] as $faq_id) {
-				if(in_array($faq_id,$finishedIDs)) {
+				if(in_array($faq_id, $finishedIDs)) {
 					continue;
 				}
 
 				if(!empty($arrFaq[$faq_id])) {
 					foreach($arrFaq[$faq_id] as $faq_domain) {
-						$faq_domain = str_replace('.html','',$faq_domain);
+						$faq_domain = str_replace('.html','', $faq_domain);
 						$arrPages['de'][] = $domain . static::generateFrontendUrl($objPages->row(), substr($faq_domain,strpos($faq_domain,'/')), $strLanguage);
 					}
 				}
