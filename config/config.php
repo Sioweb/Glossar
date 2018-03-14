@@ -165,9 +165,9 @@ if(\Config::get('enableGlossar') == 1) {
 	}
 
 	if(TL_MODE == 'FE') {
-		$GLOBALS['TL_CSS'][] = 'web/bundles/siowebglossar/css/glossar.css|static';
+		$GLOBALS['TL_CSS'][] = 'system/modules/Glossar/assets/glossar.css|static';
 		if(empty($GLOBALS['TL_CONFIG']['disableToolTips'])) {
-			$GLOBALS['TL_JAVASCRIPT'][] = 'web/bundles/siowebglossar/js/glossar.js|static';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/Glossar/assets/glossar.js|static';
 		}
 	}
 
