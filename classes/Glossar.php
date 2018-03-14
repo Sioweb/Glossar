@@ -284,11 +284,11 @@ class Glossar extends \Frontend {
 
 			$ignoredTags = array('a');
 			if(\Config::get('ignoreInTags')) {
-				$ignoredTags = explode(', ', \Config::get('ignoreInTags'));
+				$ignoredTags = explode(',', str_replace(' ','',\Config::get('ignoreInTags')));
 			}
 
 			if($this->term->ignoreInTags) {
-				$ignoredTags = explode(', ', $this->term->ignoreInTags);
+				$ignoredTags = explode(',', str_replace(' ','',$this->term->ignoreInTags));
 			}
 
 			if(\Config::get('strictSearch') !== null && empty($Term->strictSearch)) {
