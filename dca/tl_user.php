@@ -12,13 +12,7 @@
 /**
  * Extend the default palettes
  */
-Contao\CoreBundle\DataContainer\PaletteManipulator::create()
-    ->addLegend('glossar_legend', 'amg_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_BEFORE)
-    ->addField(array('glossar', 'glossarp'), 'glossar_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND)
-    ->applyToPalette('extend', 'tl_user')
-    ->applyToPalette('custom', 'tl_user')
-;
-
+$GLOBALS['TL_DCA']['tl_user']['palettes']['extend'] = str_replace('fop;', 'fop;{glossar_legend},glossar,glossarp;', $GLOBALS['TL_DCA']['tl_user']['palettes']['extend']);
 
 /**
  * Add fields to tl_user_group

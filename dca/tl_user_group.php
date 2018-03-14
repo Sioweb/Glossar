@@ -8,11 +8,8 @@
 /**
  * Extend default palette
  */
-Contao\CoreBundle\DataContainer\PaletteManipulator::create()
-    ->addLegend('glossar_legend', 'news_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_BEFORE)
-    ->addField(array('glossar','glossarp'), 'glossar_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND)
-    ->applyToPalette('default', 'tl_user_group')
-;
+$GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = str_replace('fop;', 'fop;{glossar_legend},glossar,glossarp;', $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default']);
+
 
 /**
  * Add fields to tl_user_group
