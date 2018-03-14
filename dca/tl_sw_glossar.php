@@ -64,37 +64,37 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['edit'],
         'href'                => 'table=tl_content',
-        'icon'                => 'edit.svg'
+        'icon'                => 'edit.gif'
       ),
       'editheader' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['editmeta'],
         'href'                => 'act=edit',
-        'icon'                => 'header.svg'
+        'icon'                => 'header.gif'
       ),
       'copy' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['copy'],
         'href'                => 'act=paste&amp;mode=copy',
-        'icon'                => 'copy.svg'
+        'icon'                => 'copy.gif'
       ),
       'cut' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['cut'],
         'href'                => 'act=paste&amp;mode=cut',
-        'icon'                => 'cut.svg'
+        'icon'                => 'cut.gif'
       ),
       'delete' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['delete'],
         'href'                => 'act=delete',
-        'icon'                => 'delete.svg',
+        'icon'                => 'delete.gif',
         'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
       ),
       'toggle' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['toggle'],
-        'icon'                => 'visible.svg',
+        'icon'                => 'visible.gif',
         'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
         'button_callback'     => array('tl_sw_glossar', 'toggleIcon')
       ),
@@ -102,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_sw_glossar']['show'],
         'href'                => 'act=show',
-        'icon'                => 'show.svg'
+        'icon'                => 'show.gif'
       )
     )
   ),

@@ -73,27 +73,27 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_glossar']['edit'],
         'href'                => 'table=tl_sw_glossar',
-        'icon'                => 'edit.svg'
+        'icon'                => 'edit.gif'
       ),
       'editheader' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_glossar']['editheader'],
         'href'                => 'act=edit',
-        'icon'                => 'header.svg',
+        'icon'                => 'header.gif',
         'button_callback'     => array('tl_glossar', 'editHeader')
       ),
       'copy' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_glossar']['copy'],
         'href'                => 'act=copy',
-        'icon'                => 'copy.svg',
+        'icon'                => 'copy.gif',
         'button_callback'     => array('tl_glossar', 'copyArchive')
       ),
       'delete' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_glossar']['delete'],
         'href'                => 'act=delete',
-        'icon'                => 'delete.svg',
+        'icon'                => 'delete.gif',
         'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
         'button_callback'     => array('tl_glossar', 'deleteArchive')
       ),
@@ -101,13 +101,13 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
       (
         'label'               => &$GLOBALS['TL_LANG']['tl_glossar']['show'],
         'href'                => 'act=show',
-        'icon'                => 'show.svg'
+        'icon'                => 'show.gif'
       ),
       'export' => array
       (
         'label'               => &$GLOBALS['TL_LANG']['MSC']['export'],
         'href'                => 'key=exportTerms',
-        'icon'                => 'theme_export.svg',
+        'icon'                => 'theme_export.gif',
         'class'               => 'header_edit_all',
       )
     )
