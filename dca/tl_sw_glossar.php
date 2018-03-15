@@ -25,6 +25,10 @@ $GLOBALS['TL_DCA']['tl_sw_glossar'] = array(
     'enableVersioning'            => true,
     'ptable'                      => 'tl_glossar',
     'ctable'                      => array('tl_content'),
+    'onload_callback' => array
+    (
+      array('tl_sw_glossar', 'checkPermission')
+    ),
     'sql' => array
     (
       'keys' => array

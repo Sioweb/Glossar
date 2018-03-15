@@ -21,6 +21,10 @@ $GLOBALS['TL_DCA']['tl_glossar'] = array(
     'ctable'                      => array('tl_sw_glossar'),
     'switchToEdit'                => true,
     'enableVersioning'            => true,
+    'onload_callback' => array
+    (
+      array('tl_glossar', 'checkPermission')
+    ),
     'sql' => array
     (
       'keys' => array
@@ -295,7 +299,7 @@ class tl_glossar extends Backend {
     {
       $GLOBALS['TL_DCA']['tl_glossar']['config']['closed'] = true;
     }
-
+    
     // Check current action
     switch (Input::get('act'))
     {

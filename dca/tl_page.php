@@ -12,7 +12,7 @@
  * @copyright Sascha Weidner, Sioweb
  */
 
-$GLOBALS['TL_DCA']['tl_page']['palettes']['regular'] = rtrim($GLOBALS['TL_DCA']['tl_page']['palettes']['regular'],';').'{glossar_legend},disableGlossar,disableGlossarCloud,glossar_no_fallback';
+$GLOBALS['TL_DCA']['tl_page']['palettes']['regular'] = rtrim($GLOBALS['TL_DCA']['tl_page']['palettes']['regular'],';').';{glossar_legend},disableGlossar,disableGlossarCloud,glossar_no_fallback';
 
 $GLOBALS['TL_DCA']['tl_page']['fields']['disableGlossar'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_page']['disableGlossar'],
