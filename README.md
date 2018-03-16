@@ -1,5 +1,9 @@
 # Contao Glossar
 
+## Änderungen seit Version 4.6
+
+Das Javascript j_glossar muss nun im Seitenlayout eingefügt werden! Damit ist es möglich die Öffnungs- und Schließungszeiten des Layers zu verändern.
+
 ## Vorwort
 
 Der Glossar ist speziell für Contao entwickelt und dient dazu, eine Interne Verlinkung zu erstellen und Besuchern einen Mehrwert der Informationen zu bieten. 
