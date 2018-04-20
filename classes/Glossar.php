@@ -5,7 +5,7 @@
  */
 namespace Sioweb;
 use Contao;
-use Sioweb\License\Glossar3 as GlossarLicense;
+use Sioweb\License\Glossar as GlossarLicense;
 
 /**
  * @file Glossar.php
@@ -310,6 +310,10 @@ class Glossar extends \Frontend {
 				}
 
 				$IllegalPlural = html_entity_decode($IllegalPlural);
+
+				if($Term->strictSearch == 1) {
+					$Term->noPlural = true;
+				}
 
 				$plural = preg_replace('/[.]+(?<!\\.)/is', '\\.', $IllegalPlural.(!$Term->noPlural ? $GLOBALS['glossar']['illegal']:'')).'<';
 				$preg_query = '/(?!(?:[^<]+>|[^>]+(<\/'.implode('>|<\/', $ignoredTags).'>)))('.($Term->strictSearch==1||$Term->strictSearch==3?'\b':'') . $Term->title . (!$Term->noPlural?'[^ '.$plural.']*':'') . ($Term->strictSearch==1?'\b':'').')/is';
